@@ -169,7 +169,7 @@ const TeacherViewStudent = () => {
                         Add Attendance
                     </Button>
                     <br /><br /><br />
-                    <h3>Subject Marks:</h3>
+                    <h3>Project Marks:</h3>
 
                     {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0 &&
                         <>
@@ -179,7 +179,7 @@ const TeacherViewStudent = () => {
                                         <Table key={index}>
                                             <TableHead>
                                                 <StyledTableRow>
-                                                    <StyledTableCell>Subject</StyledTableCell>
+                                                    <StyledTableCell>Project</StyledTableCell>
                                                     <StyledTableCell>Marks</StyledTableCell>
                                                 </StyledTableRow>
                                             </TableHead>
