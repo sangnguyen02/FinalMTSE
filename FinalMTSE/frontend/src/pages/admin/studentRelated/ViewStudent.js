@@ -344,7 +344,7 @@ const ViewStudent = () => {
             <div>
                 Name: {userDetails.name}
                 <br />
-                Roll Number: {userDetails.rollNum}
+                Student ID: {userDetails.studentID}
                 <br />
                 Class: {sclassName.sclassName}
                 <br />

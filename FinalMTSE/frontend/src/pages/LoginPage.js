@@ -27,24 +27,24 @@ const LoginPage = ({ role }) => {
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
-    const [rollNumberError, setRollNumberError] = useState(false);
+    const [studentIDError, setStudentIDError] = useState(false);
     const [studentNameError, setStudentNameError] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         if (role === "Student") {
-            const rollNum = event.target.rollNumber.value;
+            const studentID = event.target.studentID.value;
             const studentName = event.target.studentName.value;
             const password = event.target.password.value;
 
-            if (!rollNum || !studentName || !password) {
-                if (!rollNum) setRollNumberError(true);
+            if (!studentID || !studentName || !password) {
+                if (!studentID) setStudentIDError(true);
                 if (!studentName) setStudentNameError(true);
                 if (!password) setPasswordError(true);
                 return;
             }
-            const fields = { rollNum, studentName, password }
+            const fields = { studentID, studentName, password }
             setLoader(true)
             dispatch(loginUser(fields, role))
         }
@@ -69,7 +69,7 @@ const LoginPage = ({ role }) => {
         const { name } = event.target;
         if (name === 'email') setEmailError(false);
         if (name === 'password') setPasswordError(false);
-        if (name === 'rollNumber') setRollNumberError(false);
+        if (name === 'studentID') setStudentIDError(false);
         if (name === 'studentName') setStudentNameError(false);
     };
 
@@ -83,9 +83,9 @@ const LoginPage = ({ role }) => {
             dispatch(loginUser(fields, role))
         }
         else if (role === "Student") {
-            const rollNum = "1"
+            const studentID = "1"
             const studentName = "Dipesh Awasthi"
-            const fields = { rollNum, studentName, password }
+            const fields = { studentID, studentName, password }
             setGuestLoader(true)
             dispatch(loginUser(fields, role))
         }
@@ -148,14 +148,13 @@ const LoginPage = ({ role }) => {
                                         margin="normal"
                                         required
                                         fullWidth
-                                        id="rollNumber"
-                                        label="Enter your Roll Number"
-                                        name="rollNumber"
+                                        id="studentID"
+                                        label="Enter your Student ID"
+                                        name="studentID"
                                         autoComplete="off"
-                                        type="number"
                                         autoFocus
-                                        error={rollNumberError}
-                                        helperText={rollNumberError && 'Roll Number is required'}
+                                        error={studentIDError}
+                                        helperText={studentIDError && 'Student ID is required'}
                                         onChange={handleInputChange}
                                     />
                                     <TextField

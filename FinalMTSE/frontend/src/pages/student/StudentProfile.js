@@ -34,7 +34,7 @@ const StudentProfile = () => {
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="subtitle1" component="p" textAlign="center">
-                  Student Roll No: {currentUser.rollNum}
+                  Student Roll No: {currentUser.studentID}
                 </Typography>
               </Box>
             </Grid>
