@@ -17,7 +17,7 @@ const Homepage = () => {
                         <StyledTitle>
                             Welcome to
                             <br />
-                            IT Department Management
+                            IT Department Project Management
                             <br />
                             System
                         </StyledTitle>
