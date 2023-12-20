@@ -6,8 +6,8 @@ import { addStuff } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
 import Popup from '../../../components/Popup';
 
-const SubjectForm = () => {
-    const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+const ProjectForm = () => {
+    const [projects, setProjects] = useState([{ projectName: "", projectCode: "", sessions: "" }]);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -18,46 +18,46 @@ const SubjectForm = () => {
 
     const sclassName = params.id
     const adminID = currentUser._id
-    const address = "Subject"
+    const address = "Project"
 
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
     const [loader, setLoader] = useState(false)
 
-    const handleSubjectNameChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].subName = event.target.value;
-        setSubjects(newSubjects);
+    const handleProjectNameChange = (index) => (event) => {
+        const newProjects = [...projects];
+        newProjects[index].projectName = event.target.value;
+        setProjects(newProjects);
     };
 
-    const handleSubjectCodeChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].subCode = event.target.value;
-        setSubjects(newSubjects);
+    const handleProjectCodeChange = (index) => (event) => {
+        const newProjects = [...projects];
+        newProjects[index].projectCode = event.target.value;
+        setProjects(newProjects);
     };
 
     const handleSessionsChange = (index) => (event) => {
-        const newSubjects = [...subjects];
-        newSubjects[index].sessions = event.target.value || 0;
-        setSubjects(newSubjects);
+        const newProjects = [...projects];
+        newProjects[index].sessions = event.target.value || 0;
+        setProjects(newProjects);
     };
 
-    const handleAddSubject = () => {
-        setSubjects([...subjects, { subName: "", subCode: "" }]);
+    const handleAddProject = () => {
+        setProjects([...projects, { projectName: "", projectCode: "" }]);
     };
 
-    const handleRemoveSubject = (index) => () => {
-        const newSubjects = [...subjects];
-        newSubjects.splice(index, 1);
-        setSubjects(newSubjects);
+    const handleRemoveProject = (index) => () => {
+        const newProjects = [...projects];
+        newProjects.splice(index, 1);
+        setProjects(newProjects);
     };
 
     const fields = {
         sclassName,
-        subjects: subjects.map((subject) => ({
-            subName: subject.subName,
-            subCode: subject.subCode,
-            sessions: subject.sessions,
+        projects: projects.map((project) => ({
+            projectName: project.projectName,
+            projectCode: project.projectCode,
+            sessions: project.sessions,
         })),
         adminID,
     };
@@ -70,7 +70,7 @@ const SubjectForm = () => {
 
     useEffect(() => {
         if (status === 'added') {
-            navigate("/Admin/subjects");
+            navigate("/Admin/projects");
             dispatch(underControl())
             setLoader(false)
         }
@@ -92,15 +92,15 @@ const SubjectForm = () => {
                 <Typography variant="h6" >Add Projects</Typography>
             </Box>
             <Grid container spacing={2}>
-                {subjects.map((subject, index) => (
+                {projects.map((project, index) => (
                     <React.Fragment key={index}>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
                                 label="Project Name"
                                 variant="outlined"
-                                value={subject.subName}
-                                onChange={handleSubjectNameChange(index)}
+                                value={project.projectName}
+                                onChange={handleProjectNameChange(index)}
                                 sx={styles.inputField}
                                 required
                             />
@@ -110,8 +110,8 @@ const SubjectForm = () => {
                                 fullWidth
                                 label="Project Code"
                                 variant="outlined"
-                                value={subject.subCode}
-                                onChange={handleSubjectCodeChange(index)}
+                                value={project.projectCode}
+                                onChange={handleProjectCodeChange(index)}
                                 sx={styles.inputField}
                                 required
                             />
@@ -123,7 +123,7 @@ const SubjectForm = () => {
                                 variant="outlined"
                                 type="number"
                                 inputProps={{ min: 0 }}
-                                value={subject.sessions}
+                                value={project.sessions}
                                 onChange={handleSessionsChange(index)}
                                 sx={styles.inputField}
                                 required
@@ -135,7 +135,7 @@ const SubjectForm = () => {
                                     <Button
                                         variant="outlined"
                                         color="primary"
-                                        onClick={handleAddSubject}
+                                        onClick={handleAddProject}
                                     >
                                         Add Project
                                     </Button>
@@ -143,7 +143,7 @@ const SubjectForm = () => {
                                     <Button
                                         variant="outlined"
                                         color="error"
-                                        onClick={handleRemoveSubject(index)}
+                                        onClick={handleRemoveProject(index)}
                                     >
                                         Remove
                                     </Button>
@@ -169,7 +169,7 @@ const SubjectForm = () => {
     );
 }
 
-export default SubjectForm
+export default ProjectForm
 
 const styles = {
     inputField: {

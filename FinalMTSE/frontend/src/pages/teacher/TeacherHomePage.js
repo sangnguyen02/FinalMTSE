@@ -6,7 +6,7 @@ import Students from "../../assets/img1.png";
 import Projects from "../../assets/img4.png";
 import Tests from "../../assets/assignment.svg";
 import Time from "../../assets/time.svg";
-import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
+import { getClassStudents, getProjectDetails } from '../../redux/sclassRelated/sclassHandle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -14,18 +14,18 @@ const TeacherHomePage = () => {
     const dispatch = useDispatch();
 
     const { currentUser } = useSelector((state) => state.user);
-    const { subjectDetails, sclassStudents } = useSelector((state) => state.sclass);
+    const { projectDetails, sclassStudents } = useSelector((state) => state.sclass);
 
     const classID = currentUser.teachSclass?._id
-    const subjectID = currentUser.teachSubject?._id
+    const projectID = currentUser.teachProject?._id
 
     useEffect(() => {
-        dispatch(getSubjectDetails(subjectID, "Subject"));
+        dispatch(getProjectDetails(projectID, "Project"));
         dispatch(getClassStudents(classID));
-    }, [dispatch, subjectID, classID]);
+    }, [dispatch, projectID, classID]);
 
     const numberOfStudents = sclassStudents && sclassStudents.length;
-    const numberOfSessions = subjectDetails && subjectDetails.sessions
+    const numberOfSessions = projectDetails && projectDetails.sessions
 
     return (
         <>

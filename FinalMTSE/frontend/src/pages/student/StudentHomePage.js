@@ -9,7 +9,7 @@ import SeeNotice from '../../components/SeeNotice';
 import CountUp from 'react-countup';
 import Project from "../../assets/img4.png";
 import Assignment from "../../assets/assignment.svg";
-import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../redux/sclassRelated/sclassHandle';
 
 const StudentHomePage = () => {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const StudentHomePage = () => {
 
     useEffect(() => {
         dispatch(getUserDetails(currentUser._id, "Student"));
-        dispatch(getSubjectList(classID, "ClassSubjects"));
+        dispatch(getProjectList(classID, "ClassSubjects"));
     }, [dispatch, currentUser._id, classID]);
 
     const numberOfSubjects = subjectsList && subjectsList.length;

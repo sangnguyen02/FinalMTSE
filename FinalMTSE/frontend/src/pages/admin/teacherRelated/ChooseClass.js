@@ -23,10 +23,10 @@ const ChooseClass = ({ situation }) => {
 
     const navigateHandler = (classID) => {
         if (situation === "Teacher") {
-            navigate("/Admin/teachers/choosesubject/" + classID)
+            navigate("/Admin/teachers/chooseproject/" + classID)
         }
-        else if (situation === "Subject") {
-            navigate("/Admin/addsubject/" + classID)
+        else if (situation === "Project") {
+            navigate("/Admin/addproject/" + classID)
         }
     }
 

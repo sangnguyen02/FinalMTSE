@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getUserDetails } from '../../../redux/userRelated/userHandle';
-import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
 import { updateStudentFields } from '../../../redux/studentRelated/studentHandle';
 
 import {
@@ -17,13 +17,13 @@ import Popup from '../../../components/Popup';
 const StudentAttendance = ({ situation }) => {
     const dispatch = useDispatch();
     const { currentUser, userDetails, loading } = useSelector((state) => state.user);
-    const { subjectsList } = useSelector((state) => state.sclass);
+    const { projectsList } = useSelector((state) => state.sclass);
     const { response, error, statestatus } = useSelector((state) => state.student);
     const params = useParams()
 
     const [studentID, setStudentID] = useState("");
-    const [subjectName, setSubjectName] = useState("");
-    const [chosenSubName, setChosenSubName] = useState("");
+    const [projectName, setProjectName] = useState("");
+    const [chosenProjectName, setChosenProjectName] = useState("");
     const [status, setStatus] = useState('');
     const [date, setDate] = useState('');
 
@@ -37,29 +37,29 @@ const StudentAttendance = ({ situation }) => {
             const stdID = params.id
             dispatch(getUserDetails(stdID, "Student"));
         }
-        else if (situation === "Subject") {
-            const { studentID, subjectID } = params
+        else if (situation === "Project") {
+            const { studentID, projectID } = params
             setStudentID(studentID);
             dispatch(getUserDetails(studentID, "Student"));
-            setChosenSubName(subjectID);
+            setChosenProjectName(projectID);
         }
     }, [situation]);
 
     useEffect(() => {
         if (userDetails && userDetails.sclassName && situation === "Student") {
-            dispatch(getSubjectList(userDetails.sclassName._id, "ClassSubjects"));
+            dispatch(getProjectList(userDetails.sclassName._id, "ClassProjects"));
         }
     }, [dispatch, userDetails]);
 
     const changeHandler = (event) => {
-        const selectedSubject = subjectsList.find(
-            (subject) => subject.subName === event.target.value
+        const selectedProject = projectsList.find(
+            (project) => project.projectName === event.target.value
         );
-        setSubjectName(selectedSubject.subName);
-        setChosenSubName(selectedSubject._id);
+        setProjectName(selectedProject.projectName);
+        setChosenProjectName(selectedProject._id);
     }
 
-    const fields = { subName: chosenSubName, status, date }
+    const fields = { projectName: chosenProjectName, status, date }
 
     const submitHandler = (event) => {
         event.preventDefault()
@@ -114,9 +114,9 @@ const StudentAttendance = ({ situation }) => {
                                 <Typography variant="h4">
                                     Student Name: {userDetails.name}
                                 </Typography>
-                                {currentUser.teachSubject &&
+                                {currentUser.teachProject &&
                                     <Typography variant="h4">
-                                        Subject Name: {currentUser.teachSubject?.subName}
+                                        Project Name: {currentUser.teachProject?.projectName}
                                     </Typography>
                                 }
                             </Stack>
@@ -125,23 +125,23 @@ const StudentAttendance = ({ situation }) => {
                                     {
                                         situation === "Student" &&
                                         <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Select Subject</InputLabel>
+                                            <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
                                             <Select
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={subjectName}
+                                                value={projectName}
                                                 label="Choose an option"
                                                 onChange={changeHandler} required
                                             >
-                                                {subjectsList ?
-                                                    subjectsList.map((subject, index) => (
-                                                        <MenuItem key={index} value={subject.subName}>
-                                                            {subject.subName}
+                                                {projectsList ?
+                                                    projectsList.map((project, index) => (
+                                                        <MenuItem key={index} value={project.projectName}>
+                                                            {project.projectName}
                                                         </MenuItem>
                                                     ))
                                                     :
-                                                    <MenuItem value="Select Subject">
-                                                        Add Subjects For Attendance
+                                                    <MenuItem value="Select Project">
+                                                        Add Projects For Attendance
                                                     </MenuItem>
                                                 }
                                             </Select>

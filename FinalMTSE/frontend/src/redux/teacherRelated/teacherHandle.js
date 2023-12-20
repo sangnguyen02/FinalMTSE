@@ -36,11 +36,11 @@ export const getTeacherDetails = (id) => async (dispatch) => {
     }
 }
 
-export const updateTeachSubject = (teacherId, teachSubject) => async (dispatch) => {
+export const updateTeachProject = (teacherId, teachProject) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        await axios.put(`${process.env.REACT_APP_BASE_URL}/TeacherSubject`, { teacherId, teachSubject }, {
+        await axios.put(`${process.env.REACT_APP_BASE_URL}/TeacherProject`, { teacherId, teachProject }, {
             headers: { 'Content-Type': 'application/json' },
         });
         dispatch(postDone());

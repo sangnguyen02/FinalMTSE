@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getClassStudents, getSubjectDetails } from '../../../redux/sclassRelated/sclassHandle';
+import { getClassStudents, getProjectDetails } from '../../../redux/sclassRelated/sclassHandle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Tab, Container, Typography, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
@@ -14,18 +14,18 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 
-const ViewSubject = () => {
+const ViewProject = () => {
   const navigate = useNavigate()
   const params = useParams()
   const dispatch = useDispatch();
-  const { subloading, subjectDetails, sclassStudents, getresponse, error } = useSelector((state) => state.sclass);
+  const { subloading, projectDetails, sclassStudents, getresponse, error } = useSelector((state) => state.sclass);
 
-  const { classID, subjectID } = params
+  const { classID, projectID } = params
 
   useEffect(() => {
-    dispatch(getSubjectDetails(subjectID, "Subject"));
+    dispatch(getProjectDetails(projectID, "Project"));
     dispatch(getClassStudents(classID));
-  }, [dispatch, subjectID, classID]);
+  }, [dispatch, projectID, classID]);
 
   if (error) {
     console.log(error)
@@ -67,10 +67,10 @@ const ViewSubject = () => {
         <PurpleButton
           variant="contained"
           onClick={() =>
-            navigate(`/Admin/subject/student/attendance/${row.id}/${subjectID}`)
+            navigate(`/Admin/project/student/attendance/${row.id}/${projectID}`)
           }
         >
-          Take Attendance
+          Take Attendancestudent
         </PurpleButton>
       </>
     );
@@ -86,14 +86,14 @@ const ViewSubject = () => {
           View
         </BlueButton>
         <PurpleButton variant="contained"
-          onClick={() => navigate(`/Admin/subject/student/marks/${row.id}/${subjectID}`)}>
+          onClick={() => navigate(`/Admin/project/student/marks/${row.id}/${projectID}`)}>
           Provide Marks
         </PurpleButton>
       </>
     );
   };
 
-  const SubjectStudentsSection = () => {
+  const ProjectStudentsSection = () => {
     return (
       <>
         {getresponse ? (
@@ -141,37 +141,37 @@ const ViewSubject = () => {
     )
   }
 
-  const SubjectDetailsSection = () => {
+  const ProjectDetailsSection = () => {
     const numberOfStudents = sclassStudents.length;
 
     return (
       <>
         <Typography variant="h4" align="center" gutterBottom>
-          Subject Details
+          Project Details
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Subject Name : {subjectDetails && subjectDetails.subName}
+          Project Name : {projectDetails && projectDetails.projectName}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Subject Code : {subjectDetails && subjectDetails.subCode}
+          Project Code : {projectDetails && projectDetails.projectCode}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Subject Sessions : {subjectDetails && subjectDetails.sessions}
+          Project Sessions : {projectDetails && projectDetails.sessions}
         </Typography>
         <Typography variant="h6" gutterBottom>
           Number of Students: {numberOfStudents}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Class Name : {subjectDetails && subjectDetails.sclassName && subjectDetails.sclassName.sclassName}
+          Class Name : {projectDetails && projectDetails.sclassName && projectDetails.sclassName.sclassName}
         </Typography>
-        {subjectDetails && subjectDetails.teacher ?
+        {projectDetails && projectDetails.teacher ?
           <Typography variant="h6" gutterBottom>
-            Teacher Name : {subjectDetails.teacher.name}
+            Teacher Name : {projectDetails.teacher.name}
           </Typography>
           :
           <GreenButton variant="contained"
-            onClick={() => navigate("/Admin/teachers/addteacher/" + subjectDetails._id)}>
-            Add Subject Teacher
+            onClick={() => navigate("/Admin/teachers/addteacher/" + projectDetails._id)}>
+            Add Project Teacher
           </GreenButton>
         }
       </>
@@ -194,10 +194,10 @@ const ViewSubject = () => {
               </Box>
               <Container sx={{ marginTop: "3rem", marginBottom: "4rem" }}>
                 <TabPanel value="1">
-                  <SubjectDetailsSection />
+                  <ProjectDetailsSection />
                 </TabPanel>
                 <TabPanel value="2">
-                  <SubjectStudentsSection />
+                  <ProjectStudentsSection />
                 </TabPanel>
               </Container>
             </TabContext>
@@ -208,4 +208,4 @@ const ViewSubject = () => {
   )
 }
 
-export default ViewSubject
+export default ViewProject

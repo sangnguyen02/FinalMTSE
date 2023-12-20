@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
-import { getClassDetails, getClassStudents, getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
+import { getClassDetails, getClassStudents, getProjectList } from "../../../redux/sclassRelated/sclassHandle";
 import { deleteUser } from '../../../redux/userRelated/userHandle';
 import {
     Box, Container, Typography, Tab, IconButton
@@ -9,7 +9,7 @@ import {
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { resetSubjects } from "../../../redux/sclassRelated/sclassSlice";
+import { resetProjects } from "../../../redux/sclassRelated/sclassSlice";
 import { BlueButton, GreenButton, PurpleButton } from "../../../components/buttonStyles";
 import TableTemplate from "../../../components/TableTemplate";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -23,13 +23,13 @@ const ClassDetails = () => {
     const params = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { subjectsList, sclassStudents, sclassDetails, loading, error, response, getresponse } = useSelector((state) => state.sclass);
+    const { projectsList, sclassStudents, sclassDetails, loading, error, response, getresponse } = useSelector((state) => state.sclass);
 
     const classID = params.id
 
     useEffect(() => {
         dispatch(getClassDetails(classID, "Sclass"));
-        dispatch(getSubjectList(classID, "ClassSubjects"))
+        dispatch(getProjectList(classID, "ClassSubjects"))
         dispatch(getClassStudents(classID));
     }, [dispatch, classID])
 
@@ -54,34 +54,34 @@ const ClassDetails = () => {
         // dispatch(deleteUser(deleteID, address))
         //     .then(() => {
         //         dispatch(getClassStudents(classID));
-        //         dispatch(resetSubjects())
-        //         dispatch(getSubjectList(classID, "ClassSubjects"))
+        //         dispatch(resetProjects())
+        //         dispatch(getProjectList(classID, "ClassProjects"))
         //     })
     }
 
-    const subjectColumns = [
-        { id: 'name', label: 'Subject Name', minWidth: 170 },
-        { id: 'code', label: 'Subject Code', minWidth: 100 },
+    const projectColumns = [
+        { id: 'name', label: 'Project Name', minWidth: 170 },
+        { id: 'code', label: 'Project Code', minWidth: 100 },
     ]
 
-    const subjectRows = subjectsList && subjectsList.length > 0 && subjectsList.map((subject) => {
+    const projectRows = projectsList && projectsList.length > 0 && projectsList.map((project) => {
         return {
-            name: subject.subName,
-            code: subject.subCode,
-            id: subject._id,
+            name: project.subName,
+            code: project.subCode,
+            id: project._id,
         };
     })
 
-    const SubjectsButtonHaver = ({ row }) => {
+    const ProjectsButtonHaver = ({ row }) => {
         return (
             <>
-                <IconButton onClick={() => deleteHandler(row.id, "Subject")}>
+                <IconButton onClick={() => deleteHandler(row.id, "Project")}>
                     <DeleteIcon color="error" />
                 </IconButton>
                 <BlueButton
                     variant="contained"
                     onClick={() => {
-                        navigate(`/Admin/class/subject/${classID}/${row.id}`)
+                        navigate(`/Admin/class/project/${classID}/${row.id}`)
                     }}
                 >
                     View
@@ -90,27 +90,27 @@ const ClassDetails = () => {
         );
     };
 
-    const subjectActions = [
+    const projectActions = [
         {
-            icon: <PostAddIcon color="primary" />, name: 'Add New Subject',
-            action: () => navigate("/Admin/addsubject/" + classID)
+            icon: <PostAddIcon color="primary" />, name: 'Add New Project',
+            action: () => navigate("/Admin/addproject/" + classID)
         },
         {
-            icon: <DeleteIcon color="error" />, name: 'Delete All Subjects',
-            action: () => deleteHandler(classID, "SubjectsClass")
+            icon: <DeleteIcon color="error" />, name: 'Delete All Projects',
+            action: () => deleteHandler(classID, "ProjectsClass")
         }
     ];
 
-    const ClassSubjectsSection = () => {
+    const ClassProjectsSection = () => {
         return (
             <>
                 {response ?
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                         <GreenButton
                             variant="contained"
-                            onClick={() => navigate("/Admin/addsubject/" + classID)}
+                            onClick={() => navigate("/Admin/addproject/" + classID)}
                         >
-                            Add Subjects
+                            Add Projects
                         </GreenButton>
                     </Box>
                     :
@@ -119,8 +119,8 @@ const ClassDetails = () => {
                             Subjects List:
                         </Typography>
 
-                        <TableTemplate buttonHaver={SubjectsButtonHaver} columns={subjectColumns} rows={subjectRows} />
-                        <SpeedDialTemplate actions={subjectActions} />
+                        <TableTemplate buttonHaver={ProjectsButtonHaver} columns={projectColumns} rows={projectRows} />
+                        <SpeedDialTemplate actions={projectActions} />
                     </>
                 }
             </>
@@ -212,7 +212,7 @@ const ClassDetails = () => {
     }
 
     const ClassDetailsSection = () => {
-        const numberOfSubjects = subjectsList.length;
+        const numberOfProjects = projectsList.length;
         const numberOfStudents = sclassStudents.length;
 
         return (
@@ -224,7 +224,7 @@ const ClassDetails = () => {
                     This is Class {sclassDetails && sclassDetails.sclassName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    Number of Subjects: {numberOfSubjects}
+                    Number of Subjects: {numberOfProjects}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     Number of Students: {numberOfStudents}
@@ -240,9 +240,9 @@ const ClassDetails = () => {
                 {response &&
                     <GreenButton
                         variant="contained"
-                        onClick={() => navigate("/Admin/addsubject/" + classID)}
+                        onClick={() => navigate("/Admin/addproject/" + classID)}
                     >
-                        Add Subjects
+                        Add Projects
                     </GreenButton>
                 }
             </>
@@ -260,7 +260,7 @@ const ClassDetails = () => {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <TabList onChange={handleChange} sx={{ position: 'fixed', width: '100%', bgcolor: 'background.paper', zIndex: 1 }}>
                                     <Tab label="Details" value="1" />
-                                    <Tab label="Subjects" value="2" />
+                                    <Tab label="Projects" value="2" />
                                     <Tab label="Students" value="3" />
                                     <Tab label="Teachers" value="4" />
                                 </TabList>
@@ -270,7 +270,7 @@ const ClassDetails = () => {
                                     <ClassDetailsSection />
                                 </TabPanel>
                                 <TabPanel value="2">
-                                    <ClassSubjectsSection />
+                                    <ClassProjectsSection />
                                 </TabPanel>
                                 <TabPanel value="3">
                                     <ClassStudentsSection />

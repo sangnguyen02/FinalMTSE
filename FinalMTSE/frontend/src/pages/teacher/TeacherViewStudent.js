@@ -4,7 +4,7 @@ import { getUserDetails } from '../../redux/userRelated/userHandle';
 import { useNavigate, useParams } from 'react-router-dom'
 import { Box, Button, Collapse, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { calculateOverallAttendancePercentage, calculateSubjectAttendancePercentage, groupAttendanceBySubject } from '../../components/attendanceCalculator';
+import { calculateOverallAttendancePercentage, calculateProjectAttendancePercentage, groupAttendanceByProject } from '../../components/attendanceCalculator';
 import CustomPieChart from '../../components/CustomPieChart'
 import { PurpleButton } from '../../components/buttonStyles';
 import { StyledTableCell, StyledTableRow } from '../../components/styles';
@@ -18,8 +18,8 @@ const TeacherViewStudent = () => {
 
     const address = "Student"
     const studentID = params.id
-    const teachSubject = currentUser.teachSubject?.subName
-    const teachSubjectID = currentUser.teachSubject?._id
+    const teachProject = currentUser.teachProject?.projectName
+    const teachProjectID = currentUser.teachProject?._id
 
     useEffect(() => {
         dispatch(getUserDetails(studentID, address));
@@ -30,15 +30,15 @@ const TeacherViewStudent = () => {
 
     const [sclassName, setSclassName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
-    const [subjectMarks, setSubjectMarks] = useState('');
-    const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [projectMarks, setProjectMarks] = useState('');
+    const [projectAttendance, setProjectAttendance] = useState([]);
 
     const [openStates, setOpenStates] = useState({});
 
-    const handleOpen = (subId) => {
+    const handleOpen = (projectId) => {
         setOpenStates((prevState) => ({
             ...prevState,
-            [subId]: !prevState[subId],
+            [projectId]: !prevState[projectId],
         }));
     };
 
@@ -46,12 +46,12 @@ const TeacherViewStudent = () => {
         if (userDetails) {
             setSclassName(userDetails.sclassName || '');
             setStudentSchool(userDetails.school || '');
-            setSubjectMarks(userDetails.examResult || '');
-            setSubjectAttendance(userDetails.attendance || []);
+            setProjectMarks(userDetails.examResult || '');
+            setProjectAttendance(userDetails.attendance || []);
         }
     }, [userDetails]);
 
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    const overallAttendancePercentage = calculateOverallAttendancePercentage(projectAttendance);
     const overallAbsentPercentage = 100 - overallAttendancePercentage;
 
     const chartData = [
@@ -78,18 +78,18 @@ const TeacherViewStudent = () => {
                     <br /><br />
 
                     <h3>Attendance:</h3>
-                    {subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0
+                    {projectAttendance && Array.isArray(projectAttendance) && projectAttendance.length > 0
                         &&
                         <>
-                            {Object.entries(groupAttendanceBySubject(subjectAttendance)).map(([subName, { present, allData, subId, sessions }], index) => {
-                                if (subName === teachSubject) {
-                                    const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+                            {Object.entries(groupAttendanceByProject(projectAttendance)).map(([projectName, { present, allData, projectId, sessions }], index) => {
+                                if (projectName === teachProject) {
+                                    const projectAttendancePercentage = calculateProjectAttendancePercentage(present, sessions);
 
                                     return (
                                         <Table key={index}>
                                             <TableHead>
                                                 <StyledTableRow>
-                                                    <StyledTableCell>Subject</StyledTableCell>
+                                                    <StyledTableCell>Project</StyledTableCell>
                                                     <StyledTableCell>Present</StyledTableCell>
                                                     <StyledTableCell>Total Sessions</StyledTableCell>
                                                     <StyledTableCell>Attendance Percentage</StyledTableCell>
@@ -99,19 +99,19 @@ const TeacherViewStudent = () => {
 
                                             <TableBody>
                                                 <StyledTableRow>
-                                                    <StyledTableCell>{subName}</StyledTableCell>
+                                                    <StyledTableCell>{projectName}</StyledTableCell>
                                                     <StyledTableCell>{present}</StyledTableCell>
                                                     <StyledTableCell>{sessions}</StyledTableCell>
-                                                    <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
+                                                    <StyledTableCell>{projectAttendancePercentage}%</StyledTableCell>
                                                     <StyledTableCell align="center">
-                                                        <Button variant="contained" onClick={() => handleOpen(subId)}>
-                                                            {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
+                                                        <Button variant="contained" onClick={() => handleOpen(projectId)}>
+                                                            {openStates[projectId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
                                                         </Button>
                                                     </StyledTableCell>
                                                 </StyledTableRow>
                                                 <StyledTableRow>
                                                     <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                                        <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
+                                                        <Collapse in={openStates[projectId]} timeout="auto" unmountOnExit>
                                                             <Box sx={{ margin: 1 }}>
                                                                 <Typography variant="h6" gutterBottom component="div">
                                                                     Attendance Details
@@ -162,7 +162,7 @@ const TeacherViewStudent = () => {
                         variant="contained"
                         onClick={() =>
                             navigate(
-                                `/Teacher/class/student/attendance/${studentID}/${teachSubjectID}`
+                                `/Teacher/class/student/attendance/${studentID}/${teachProjectID}`
                             )
                         }
                     >
@@ -171,10 +171,10 @@ const TeacherViewStudent = () => {
                     <br /><br /><br />
                     <h3>Project Marks:</h3>
 
-                    {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0 &&
+                    {projectMarks && Array.isArray(projectMarks) && projectMarks.length > 0 &&
                         <>
-                            {subjectMarks.map((result, index) => {
-                                if (result.subName.subName === teachSubject) {
+                            {projectMarks.map((result, index) => {
+                                if (result.projectName.projectName === teachProject) {
                                     return (
                                         <Table key={index}>
                                             <TableHead>
@@ -185,14 +185,14 @@ const TeacherViewStudent = () => {
                                             </TableHead>
                                             <TableBody>
                                                 <StyledTableRow>
-                                                    <StyledTableCell>{result.subName.subName}</StyledTableCell>
+                                                    <StyledTableCell>{result.projectName.projectName}</StyledTableCell>
                                                     <StyledTableCell>{result.marksObtained}</StyledTableCell>
                                                 </StyledTableRow>
                                             </TableBody>
                                         </Table>
                                     )
                                 }
-                                else if (!result.subName || !result.marksObtained) {
+                                else if (!result.projectName || !result.marksObtained) {
                                     return null;
                                 }
                                 return null
@@ -202,7 +202,7 @@ const TeacherViewStudent = () => {
                     <PurpleButton variant="contained"
                         onClick={() =>
                             navigate(
-                                `/Teacher/class/student/marks/${studentID}/${teachSubjectID}`
+                                `/Teacher/class/student/marks/${studentID}/${teachProjectID}`
                             )}>
                         Add Marks
                     </PurpleButton>

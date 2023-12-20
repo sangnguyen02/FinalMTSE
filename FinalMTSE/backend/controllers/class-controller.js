@@ -1,6 +1,6 @@
 const Sclass = require('../models/sclassSchema.js');
 const Student = require('../models/studentSchema.js');
-const Subject = require('../models/subjectSchema.js');
+const Project = require('../models/projectSchema.js');
 const Teacher = require('../models/teacherSchema.js');
 
 const sclassCreate = async (req, res) => {
@@ -78,7 +78,7 @@ const deleteSclass = async (req, res) => {
             return res.send({ message: "Class not found" });
         }
         const deletedStudents = await Student.deleteMany({ sclassName: req.params.id });
-        const deletedSubjects = await Subject.deleteMany({ sclassName: req.params.id });
+        const deletedProjects = await Project.deleteMany({ sclassName: req.params.id });
         const deletedTeachers = await Teacher.deleteMany({ teachSclass: req.params.id });
         res.send(deletedClass);
     } catch (error) {
@@ -93,7 +93,7 @@ const deleteSclasses = async (req, res) => {
             return res.send({ message: "No classes found to delete" });
         }
         const deletedStudents = await Student.deleteMany({ school: req.params.id });
-        const deletedSubjects = await Subject.deleteMany({ school: req.params.id });
+        const deletedProjects = await Project.deleteMany({ school: req.params.id });
         const deletedTeachers = await Teacher.deleteMany({ school: req.params.id });
         res.send(deletedClasses);
     } catch (error) {

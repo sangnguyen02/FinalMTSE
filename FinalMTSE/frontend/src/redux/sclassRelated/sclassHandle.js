@@ -7,9 +7,9 @@ import {
     getStudentsSuccess,
     detailsSuccess,
     getFailedTwo,
-    getSubjectsSuccess,
-    getSubDetailsSuccess,
-    getSubDetailsRequest
+    getProjectsSuccess,
+    getProjectDetailsSuccess,
+    getProjectDetailsRequest
 } from './sclassSlice';
 
 export const getAllSclasses = (id, address) => async (dispatch) => {
@@ -55,7 +55,7 @@ export const getClassDetails = (id, address) => async (dispatch) => {
     }
 }
 
-export const getSubjectList = (id, address) => async (dispatch) => {
+export const getProjectList = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
@@ -63,35 +63,35 @@ export const getSubjectList = (id, address) => async (dispatch) => {
         if (result.data.message) {
             dispatch(getFailed(result.data.message));
         } else {
-            dispatch(getSubjectsSuccess(result.data));
+            dispatch(getProjectsSuccess(result.data));
         }
     } catch (error) {
         dispatch(getError(error));
     }
 }
 
-export const getTeacherFreeClassSubjects = (id) => async (dispatch) => {
+export const getTeacherFreeClassProjects = (id) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/FreeSubjectList/${id}`);
+        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/FreeProjectList/${id}`);
         if (result.data.message) {
             dispatch(getFailed(result.data.message));
         } else {
-            dispatch(getSubjectsSuccess(result.data));
+            dispatch(getProjectsSuccess(result.data));
         }
     } catch (error) {
         dispatch(getError(error));
     }
 }
 
-export const getSubjectDetails = (id, address) => async (dispatch) => {
-    dispatch(getSubDetailsRequest());
+export const getProjectDetails = (id, address) => async (dispatch) => {
+    dispatch(getProjectDetailsRequest());
 
     try {
         const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
         if (result.data) {
-            dispatch(getSubDetailsSuccess(result.data));
+            dispatch(getProjectDetailsSuccess(result.data));
         }
     } catch (error) {
         dispatch(getError(error));
