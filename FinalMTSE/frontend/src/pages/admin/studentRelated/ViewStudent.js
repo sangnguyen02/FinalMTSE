@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getUserDetails, updateUser } from '../../../redux/userRelated/userHandle';
 import { useNavigate, useParams } from 'react-router-dom'
 import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
-import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container } from '@mui/material';
+import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container, Grid, RadioGroup, FormControl, FormLabel, FormControlLabel, Radio } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -22,17 +22,17 @@ import Popup from '../../../components/Popup';
 
 const ViewStudent = () => {
     const [showTab, setShowTab] = useState(false);
-
+    const [editMode, setEditMode] = useState(false);
     const navigate = useNavigate()
     const params = useParams()
     const dispatch = useDispatch()
     const { userDetails, response, loading, error } = useSelector((state) => state.user);
 
     const studentID = params.id
-    const address = "Student"
+    const Address = "Student"
 
     useEffect(() => {
-        dispatch(getUserDetails(studentID, address));
+        dispatch(getUserDetails(studentID, Address));
     }, [dispatch, studentID])
 
     useEffect(() => {
@@ -50,9 +50,9 @@ const ViewStudent = () => {
     const [sclassName, setSclassName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
     const [email, setEmail] = useState('');
-    const [location, setLocation] = useState('');
+    const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
+    const [gender, setGender] = useState('female');
     const [subjectMarks, setSubjectMarks] = useState('');
     const [subjectAttendance, setSubjectAttendance] = useState([]);
 
@@ -80,7 +80,7 @@ const ViewStudent = () => {
     };
 
     const fields = password === ""
-        ? { name, studentId }
+        ? { name, studentId, email, phone, address, gender }
         : { name, studentId, password }
 
     useEffect(() => {
@@ -90,7 +90,7 @@ const ViewStudent = () => {
             setSclassName(userDetails.sclassName || '');
             setStudentSchool(userDetails.school || '');
             setEmail(userDetails.email || '');
-            setLocation(userDetails.location || '');
+            setAddress(userDetails.address || '');
             setPhone(userDetails.phone || '');
             setGender(userDetails.gender || '');
             setSubjectMarks(userDetails.examResult || '');
@@ -100,9 +100,9 @@ const ViewStudent = () => {
 
     const submitHandler = (event) => {
         event.preventDefault()
-        dispatch(updateUser(fields, studentID, address))
+        dispatch(updateUser(fields, studentID, Address))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
             .catch((error) => {
                 console.error(error)
@@ -122,16 +122,24 @@ const ViewStudent = () => {
     const removeHandler = (id, deladdress) => {
         dispatch(removeStuff(id, deladdress))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
     }
 
     const removeSubAttendance = (subId) => {
         dispatch(updateStudentFields(studentID, { subId }, "RemoveStudentSubAtten"))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
     }
+
+    const handleEditClick = () => {
+        setEditMode(true);
+      };
+    
+      const handleCancelEdit = () => {
+        setEditMode(false);
+      };
 
     const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
     const overallAbsentPercentage = 100 - overallAttendancePercentage;
@@ -358,7 +366,7 @@ const ViewStudent = () => {
                 <br />
                 Email: {userDetails.email}
                 <br />
-                Address: {userDetails.location}
+                Address: {userDetails.address}
                 <br />
                 Phone: {userDetails.phone}
                 <br />
@@ -371,44 +379,84 @@ const ViewStudent = () => {
                     )
                 }
                 
-                <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
-                    Delete
-                </Button>
-                <br />
-                <Button variant="contained" sx={styles.styledButton} className="show-tab" onClick={() => { setShowTab(!showTab) }}>
-                    {
-                        showTab
-                            ? <KeyboardArrowUp />
-                            : <KeyboardArrowDown />
-                    }
-                    Edit Student
-                </Button>
-                <Collapse in={showTab} timeout="auto" unmountOnExit>
-                    <div className="register">
-                        <form className="registerForm" onSubmit={submitHandler}>
-                            <span className="registerTitle">Edit Details</span>
-                            <label>Name</label>
-                            <input className="registerInput" type="text" placeholder="Enter user's name..."
-                                value={name}
-                                onChange={(event) => setName(event.target.value)}
-                                autoComplete="name" required />
+                <Box display="flex" flexDirection="row">
+                    {editMode ? (
+                        <Button variant="contained" sx={styles.styledButton} color="secondary" onClick={handleCancelEdit}>
+                        Cancel Edit
+                        </Button>
+                    ) : (
+                        <Button variant="contained" sx={styles.styledButton} color="primary" onClick={handleEditClick}>
+                        Edit
+                        </Button>
+                    )}
 
-                            <label>Student ID</label>
-                            <input className="registerInput" type="number" placeholder="Enter user's Student ID..."
-                                value={studentId}
-                                onChange={(event) => setStudentID(event.target.value)}
-                                required />
+                    <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
+                        Delete
+                    </Button>
+                </Box>
 
-                            <label>Email</label>
-                            <input className="registerInput" type="text" placeholder="Enter user's email..."
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                required/>
+                <br/>
+                {editMode && (
+                    <Grid item xs={12}>
+                        <div className="register">
+                            <form className="registerForm" onSubmit={submitHandler}>
+                                <span className="registerTitle">Edit Details</span>
+                                <label>Name</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's name..."
+                                    value={name}
+                                    onChange={(event) => setName(event.target.value)}
+                                    autoComplete="name" required />
 
-                            <button className="registerButton" type="submit" >Update</button>
-                        </form>
-                    </div>
-                </Collapse>
+                                <FormControl>
+                                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="Male"
+                                        name="radio-buttons-group"
+                                        value={gender}
+                                        onChange={(event) => setGender(event.target.value)}
+                                    >
+                                        <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    </RadioGroup>
+                                </FormControl>
+
+                                <label>Student ID</label>
+                                <input className="registerInput" type="number" placeholder="Enter user's Student ID..."
+                                    value={studentId}
+                                    onChange={(event) => setStudentID(event.target.value)}
+                                    required />
+
+                                <label>Student Email</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's email..."
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    required />
+
+                                <label>Student Phone</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's phone..."
+                                    value={phone}
+                                    onChange={(event) => setPhone(event.target.value)}
+                                    required />
+
+
+                                <label>Student Address</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's address..."
+                                    value={address}
+                                    onChange={(event) => setAddress(event.target.value)}
+                                    required />
+
+                                <label>Password</label>
+                                <input className="registerInput" type="password" placeholder="Enter user's password..."
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                    autoComplete="new-password" />
+
+                                <button className="registerButton" type="submit" >Update</button>
+                            </form>
+                        </div>
+                    </Grid>
+                  )}
             </div>
         )
     }

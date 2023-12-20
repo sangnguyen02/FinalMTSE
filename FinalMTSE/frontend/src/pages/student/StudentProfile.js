@@ -62,11 +62,6 @@ const StudentProfile = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Date of Birth:</strong> {currentUser.DoB}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
                   <strong>Gender:</strong> {currentUser.gender}
                 </Typography>
               </Grid>
@@ -82,7 +77,7 @@ const StudentProfile = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Address:</strong> {currentUser.location}
+                  <strong>Address:</strong> {currentUser.address}
                 </Typography>
               </Grid>
             </Grid>

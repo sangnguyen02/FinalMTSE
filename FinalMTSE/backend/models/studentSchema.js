@@ -15,18 +15,14 @@ const studentSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    DoB: {
-        type: Date,
-        default: Date.now
-    },
     address: {
         type: String,
         default: ""
     },
     gender: {
         type: String,
-        enum: ["male", "female"],
-        default: "male"
+        enum: ["Male", "Female"],
+        default: "Male"
     },
     phone: {
         type: String,
