@@ -27,24 +27,20 @@ const LoginPage = ({ role }) => {
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
-    const [studentIDError, setStudentIDError] = useState(false);
-    const [studentNameError, setStudentNameError] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         if (role === "Student") {
-            const studentID = event.target.studentID.value;
-            const studentName = event.target.studentName.value;
             const password = event.target.password.value;
+            const email = event.target.email.value;
 
-            if (!studentID || !studentName || !password) {
-                if (!studentID) setStudentIDError(true);
-                if (!studentName) setStudentNameError(true);
+            if (!email || !password) {
+                if (!email) setEmailError(true);
                 if (!password) setPasswordError(true);
                 return;
             }
-            const fields = { studentID, studentName, password }
+            const fields = { email, password }
             setLoader(true)
             dispatch(loginUser(fields, role))
         }
@@ -69,8 +65,6 @@ const LoginPage = ({ role }) => {
         const { name } = event.target;
         if (name === 'email') setEmailError(false);
         if (name === 'password') setPasswordError(false);
-        if (name === 'studentID') setStudentIDError(false);
-        if (name === 'studentName') setStudentNameError(false);
     };
 
     const guestModeHandler = () => {
@@ -145,30 +139,17 @@ const LoginPage = ({ role }) => {
                             {role === "Student" ? (
                                 <>
                                     <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        id="studentID"
-                                        label="Enter your Student ID"
-                                        name="studentID"
-                                        autoComplete="off"
-                                        autoFocus
-                                        error={studentIDError}
-                                        helperText={studentIDError && 'Student ID is required'}
-                                        onChange={handleInputChange}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        id="studentName"
-                                        label="Enter your name"
-                                        name="studentName"
-                                        autoComplete="name"
-                                        autoFocus
-                                        error={studentNameError}
-                                        helperText={studentNameError && 'Name is required'}
-                                        onChange={handleInputChange}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Enter your email"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    error={emailError}
+                                    helperText={emailError && 'Email is required'}
+                                    onChange={handleInputChange}
                                     />
                                 </>
                             ) : (

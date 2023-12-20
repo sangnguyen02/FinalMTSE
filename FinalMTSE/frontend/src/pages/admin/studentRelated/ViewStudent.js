@@ -45,10 +45,14 @@ const ViewStudent = () => {
     else if (error) { console.log(error) }
 
     const [name, setName] = useState('');
-    const [rollNum, setRollNum] = useState('');
+    const [studentId, setStudentID] = useState('');
     const [password, setPassword] = useState('');
     const [sclassName, setSclassName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
+    const [email, setEmail] = useState('');
+    const [location, setLocation] = useState('');
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
     const [subjectMarks, setSubjectMarks] = useState('');
     const [subjectAttendance, setSubjectAttendance] = useState([]);
 
@@ -76,15 +80,19 @@ const ViewStudent = () => {
     };
 
     const fields = password === ""
-        ? { name, rollNum }
-        : { name, rollNum, password }
+        ? { name, studentId }
+        : { name, studentId, password }
 
     useEffect(() => {
         if (userDetails) {
             setName(userDetails.name || '');
-            setRollNum(userDetails.rollNum || '');
+            setStudentID(userDetails.studentID || '');
             setSclassName(userDetails.sclassName || '');
             setStudentSchool(userDetails.school || '');
+            setEmail(userDetails.email || '');
+            setLocation(userDetails.location || '');
+            setPhone(userDetails.phone || '');
+            setGender(userDetails.gender || '');
             setSubjectMarks(userDetails.examResult || '');
             setSubjectAttendance(userDetails.attendance || []);
         }
@@ -348,17 +356,26 @@ const ViewStudent = () => {
                 <br />
                 Class: {sclassName.sclassName}
                 <br />
+                Email: {userDetails.email}
+                <br />
+                Address: {userDetails.location}
+                <br />
+                Phone: {userDetails.phone}
+                <br />
+                Gender: {userDetails.gender}
+                <br />
                 School: {studentSchool.schoolName}
                 {
                     subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 && (
                         <CustomPieChart data={chartData} />
                     )
                 }
+                
                 <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
                     Delete
                 </Button>
                 <br />
-                {/* <Button variant="contained" sx={styles.styledButton} className="show-tab" onClick={() => { setShowTab(!showTab) }}>
+                <Button variant="contained" sx={styles.styledButton} className="show-tab" onClick={() => { setShowTab(!showTab) }}>
                     {
                         showTab
                             ? <KeyboardArrowUp />
@@ -376,22 +393,22 @@ const ViewStudent = () => {
                                 onChange={(event) => setName(event.target.value)}
                                 autoComplete="name" required />
 
-                            <label>Roll Number</label>
-                            <input className="registerInput" type="number" placeholder="Enter user's Roll Number..."
-                                value={rollNum}
-                                onChange={(event) => setRollNum(event.target.value)}
+                            <label>Student ID</label>
+                            <input className="registerInput" type="number" placeholder="Enter user's Student ID..."
+                                value={studentId}
+                                onChange={(event) => setStudentID(event.target.value)}
                                 required />
 
-                            <label>Password</label>
-                            <input className="registerInput" type="password" placeholder="Enter user's password..."
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                autoComplete="new-password" />
+                            <label>Email</label>
+                            <input className="registerInput" type="text" placeholder="Enter user's email..."
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                required/>
 
                             <button className="registerButton" type="submit" >Update</button>
                         </form>
                     </div>
-                </Collapse> */}
+                </Collapse>
             </div>
         )
     }

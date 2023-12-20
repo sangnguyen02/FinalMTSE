@@ -8,7 +8,7 @@ const studentRegister = async (req, res) => {
         const hashedPass = await bcrypt.hash(req.body.password, salt);
 
         const existingStudent = await Student.findOne({
-            studetnID: req.body.studetnID,
+            studentID: req.body.studentID,
             email: req.body.email,
             school: req.body.adminID,
             sclassName: req.body.sclassName,
@@ -36,7 +36,7 @@ const studentRegister = async (req, res) => {
 
 const studentLogIn = async (req, res) => {
     try {
-        let student = await Student.findOne({ studentID: req.body.studentID, name: req.body.studentName });
+        let student = await Student.findOne({ email: req.body.email});
         if (student) {
             const validated = await bcrypt.compare(req.body.password, student.password);
             if (validated) {

@@ -27,7 +27,7 @@ import Popup from '../../../components/Popup';
 const ShowStudents = () => {
 
     const navigate = useNavigate()
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const { studentsList, loading, error, response } = useSelector((state) => state.student);
     const { currentUser } = useSelector(state => state.user)
 

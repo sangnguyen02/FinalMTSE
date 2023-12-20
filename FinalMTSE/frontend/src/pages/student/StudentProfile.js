@@ -34,7 +34,7 @@ const StudentProfile = () => {
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="subtitle1" component="p" textAlign="center">
-                  Student Roll No: {currentUser.studentID}
+                  Student ID: {currentUser.studentID}
                 </Typography>
               </Box>
             </Grid>
@@ -62,32 +62,27 @@ const StudentProfile = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Date of Birth:</strong> January 1, 2002
+                  <strong>Date of Birth:</strong> {currentUser.DoB}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Gender:</strong> Male
+                  <strong>Gender:</strong> {currentUser.gender}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Email:</strong> 20110405@student.hcmute.edu.vn
+                  <strong>Email:</strong> {currentUser.email}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Phone:</strong> 1234567890
+                  <strong>Phone:</strong> {currentUser.phone}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography variant="subtitle1" component="p">
-                  <strong>Address:</strong> 123 Main Street, City, Country
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="subtitle1" component="p">
-                  <strong>Emergency Contact:</strong> 9876543210
+                  <strong>Address:</strong> {currentUser.location}
                 </Typography>
               </Grid>
             </Grid>
