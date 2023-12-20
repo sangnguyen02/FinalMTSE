@@ -17,10 +17,15 @@ const AddStudent = ({ situation }) => {
     const { sclassesList } = useSelector((state) => state.sclass);
 
     const [name, setName] = useState('');
-    const [rollNum, setRollNum] = useState('');
+    const [studentID, setStudentID] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
     const [className, setClassName] = useState('')
     const [sclassName, setSclassName] = useState('')
+    const [DoB, setDoB] = useState('')
+    const [address, setAddress] = useState('')
+    const [gender, setGender] = useState('')
+    const [phone, setPhone] = useState('')
 
     const adminID = currentUser._id
     const role = "Student"
@@ -53,7 +58,7 @@ const AddStudent = ({ situation }) => {
         }
     }
 
-    const fields = { name, rollNum, password, sclassName, adminID, role, attendance }
+    const fields = { name, studentID, email, password, sclassName, adminID, role, attendance }
 
     const submitHandler = (event) => {
         event.preventDefault()
@@ -113,11 +118,17 @@ const AddStudent = ({ situation }) => {
                         </>
                     }
 
-                    <label>Roll Number</label>
-                    <input className="registerInput" type="number" placeholder="Enter student's Roll Number..."
-                        value={rollNum}
-                        onChange={(event) => setRollNum(event.target.value)}
+                    <label>Student ID</label>
+                    <input className="registerInput" type="text" placeholder="Enter student's Roll Number..."
+                        value={studentID}
+                        onChange={(event) => setStudentID(event.target.value)}
                         required />
+                    
+                    <label>Email</label>
+                    <input className="registerInput" type="text" placeholder="Enter student's email..."
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    required />
 
                     <label>Password</label>
                     <input className="registerInput" type="password" placeholder="Enter student's password..."

@@ -5,9 +5,32 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    rollNum: {
+    studentID: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    DoB: {
+        type: Date,
+        default: Date.now
+    },
+    address: {
+        type: String,
+        default: ""
+    },
+    gender: {
+        type: String,
+        enum: ["male", "female"],
+        default: "male"
+    },
+    phone: {
+        type: String,
+        default: ''
     },
     password: {
         type: String,

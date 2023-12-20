@@ -27,24 +27,20 @@ const LoginPage = ({ role }) => {
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
-    const [rollNumberError, setRollNumberError] = useState(false);
-    const [studentNameError, setStudentNameError] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         if (role === "Student") {
-            const rollNum = event.target.rollNumber.value;
-            const studentName = event.target.studentName.value;
             const password = event.target.password.value;
+            const email = event.target.email.value;
 
-            if (!rollNum || !studentName || !password) {
-                if (!rollNum) setRollNumberError(true);
-                if (!studentName) setStudentNameError(true);
+            if (!email || !password) {
+                if (!email) setEmailError(true);
                 if (!password) setPasswordError(true);
                 return;
             }
-            const fields = { rollNum, studentName, password }
+            const fields = { email, password }
             setLoader(true)
             dispatch(loginUser(fields, role))
         }
@@ -69,8 +65,6 @@ const LoginPage = ({ role }) => {
         const { name } = event.target;
         if (name === 'email') setEmailError(false);
         if (name === 'password') setPasswordError(false);
-        if (name === 'rollNumber') setRollNumberError(false);
-        if (name === 'studentName') setStudentNameError(false);
     };
 
     const guestModeHandler = () => {
@@ -83,9 +77,9 @@ const LoginPage = ({ role }) => {
             dispatch(loginUser(fields, role))
         }
         else if (role === "Student") {
-            const rollNum = "1"
+            const studentID = "1"
             const studentName = "Dipesh Awasthi"
-            const fields = { rollNum, studentName, password }
+            const fields = { studentID, studentName, password }
             setGuestLoader(true)
             dispatch(loginUser(fields, role))
         }
@@ -145,31 +139,17 @@ const LoginPage = ({ role }) => {
                             {role === "Student" ? (
                                 <>
                                     <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        id="rollNumber"
-                                        label="Enter your Roll Number"
-                                        name="rollNumber"
-                                        autoComplete="off"
-                                        type="number"
-                                        autoFocus
-                                        error={rollNumberError}
-                                        helperText={rollNumberError && 'Roll Number is required'}
-                                        onChange={handleInputChange}
-                                    />
-                                    <TextField
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        id="studentName"
-                                        label="Enter your name"
-                                        name="studentName"
-                                        autoComplete="name"
-                                        autoFocus
-                                        error={studentNameError}
-                                        helperText={studentNameError && 'Name is required'}
-                                        onChange={handleInputChange}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Enter your email"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                    error={emailError}
+                                    helperText={emailError && 'Email is required'}
+                                    onChange={handleInputChange}
                                     />
                                 </>
                             ) : (
