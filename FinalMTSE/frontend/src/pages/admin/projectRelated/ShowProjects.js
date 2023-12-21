@@ -16,7 +16,7 @@ import Popup from '../../../components/Popup';
 const ShowProjects = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { projectList, loading, error, response } = useSelector((state) => state.sclass);
+    const { projectsList, loading, error, response } = useSelector((state) => state.sclass);
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
@@ -48,24 +48,24 @@ const ShowProjects = () => {
         { id: 'sclassName', label: 'Class', minWidth: 170 },
     ]
 
-    const projectRows = projectList.map((project) => {
-        return {
-            projectName: project.projectName,
-            sessions: project.sessions,
-            sclassName: project.sclassName.sclassName,
-            sclassID: project.sclassName._id,
-            id: project._id,
-        };
-    })
-    // const projectRows = projectList ? (
-    //     projectList.map((project) => ({
-    //       projectName: project.projectName,
-    //       sessions: project.sessions,
-    //       sclassName: project.sclassName.sclassName,
-    //       sclassID: project.sclassName._id,
-    //       id: project._id,
-    //     }))
-    //   ) : [];
+    // const projectRows = projectList.map((project) => {
+    //     return {
+    //         projectName: project.projectName,
+    //         sessions: project.sessions,
+    //         sclassName: project.sclassName.sclassName,
+    //         sclassID: project.sclassName._id,
+    //         id: project._id,
+    //     };
+    // })
+    const projectRows = projectsList ? (
+        projectsList.map((project) => ({
+          projectName: project.projectName,
+          sessions: project.sessions,
+          sclassName: project.sclassName.sclassName,
+          sclassID: project.sclassName._id,
+          id: project._id,
+        }))
+      ) : [];
 
     const ProjectsButtonHaver = ({ row }) => {
         return (
@@ -107,7 +107,7 @@ const ShowProjects = () => {
                         </Box>
                         :
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            {Array.isArray(projectList) && projectList.length > 0 &&
+                            {Array.isArray(projectsList) && projectsList.length > 0 &&
                                 <TableTemplate buttonHaver={ProjectsButtonHaver} columns={projectColumns} rows={projectRows} />
                             }
                             <SpeedDialTemplate actions={actions} />
