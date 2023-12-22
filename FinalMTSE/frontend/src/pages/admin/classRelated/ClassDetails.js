@@ -29,7 +29,7 @@ const ClassDetails = () => {
 
     useEffect(() => {
         dispatch(getClassDetails(classID, "Sclass"));
-        dispatch(getProjectList(classID, "ClassSubjects"))
+        dispatch(getProjectList(classID, "ClassProjects"))
         dispatch(getClassStudents(classID));
     }, [dispatch, classID])
 
@@ -66,8 +66,8 @@ const ClassDetails = () => {
 
     const projectRows = projectsList && projectsList.length > 0 && projectsList.map((project) => {
         return {
-            name: project.subName,
-            code: project.subCode,
+            name: project.projectName,
+            code: project.projectCode,
             id: project._id,
         };
     })
@@ -116,7 +116,7 @@ const ClassDetails = () => {
                     :
                     <>
                         <Typography variant="h5" gutterBottom>
-                            Subjects List:
+                            Projects List:
                         </Typography>
 
                         <TableTemplate buttonHaver={ProjectsButtonHaver} columns={projectColumns} rows={projectRows} />
@@ -224,7 +224,7 @@ const ClassDetails = () => {
                     This is Class {sclassDetails && sclassDetails.sclassName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    Number of Subjects: {numberOfProjects}
+                    Number of Projects: {numberOfProjects}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     Number of Students: {numberOfStudents}

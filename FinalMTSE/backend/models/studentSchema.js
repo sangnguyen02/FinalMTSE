@@ -48,9 +48,9 @@ const studentSchema = new mongoose.Schema({
     },
     examResult: [
         {
-            subName: {
+            projectName: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'subject',
+                ref: 'project',
             },
             marksObtained: {
                 type: Number,
@@ -68,9 +68,9 @@ const studentSchema = new mongoose.Schema({
             enum: ['Present', 'Absent'],
             required: true
         },
-        subName: {
+        projectName: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'subject',
+            ref: 'project',
             required: true
         }
     }]
