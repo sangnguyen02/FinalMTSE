@@ -43,13 +43,13 @@ const ViewProject = () => {
   };
 
   const studentColumns = [
-    { id: 'rollNum', label: 'Roll No.', minWidth: 100 },
+    { id: 'studentID', label: 'StudentID', minWidth: 100 },
     { id: 'name', label: 'Name', minWidth: 170 },
   ]
 
   const studentRows = sclassStudents.map((student) => {
     return {
-      rollNum: student.rollNum,
+      studentID: student.studentID,
       name: student.name,
       id: student._id,
     };
