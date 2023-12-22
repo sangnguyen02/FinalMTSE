@@ -11,14 +11,15 @@ import { useEffect } from 'react';
 import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
+import { getAllProjects } from '../../redux/projectRelated/projectHandle';
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
     const { studentsList } = useSelector((state) => state.student);
     const { sclassesList } = useSelector((state) => state.sclass);
     const { teachersList } = useSelector((state) => state.teacher);
-
-    const { currentUser } = useSelector(state => state.user)
+    // const { projectsList }= useSelector((state)=>state.project);
+    const { currentUser } = useSelector(state => state.user);
 
     const adminID = currentUser._id
 
@@ -26,11 +27,14 @@ const AdminHomePage = () => {
         dispatch(getAllStudents(adminID));
         dispatch(getAllSclasses(adminID, "Sclass"));
         dispatch(getAllTeachers(adminID));
+        // dispatch(getAllProjects((adminID)));
     }, [adminID, dispatch]);
 
     const numberOfStudents = studentsList && studentsList.length;
     const numberOfClasses = sclassesList && sclassesList.length;
     const numberOfTeachers = teachersList && teachersList.length;
+    // const numberofProjects = projectsList&&projectsList.length;
+    
 
     return (
         <>
