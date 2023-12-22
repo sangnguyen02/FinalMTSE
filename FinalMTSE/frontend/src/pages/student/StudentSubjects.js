@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../redux/sclassRelated/sclassHandle';
 import { BottomNavigation, BottomNavigationAction, Container, Paper, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
@@ -11,10 +11,10 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { StyledTableCell, StyledTableRow } from '../../components/styles';
 
-const StudentSubjects = () => {
+const StudentProjects = () => {
 
     const dispatch = useDispatch();
-    const { subjectsList, sclassDetails } = useSelector((state) => state.sclass);
+    const { projectsList, sclassDetails } = useSelector((state) => state.sclass);
     const { userDetails, currentUser, loading, response, error } = useSelector((state) => state.user);
 
     useEffect(() => {
@@ -24,20 +24,20 @@ const StudentSubjects = () => {
     if (response) { console.log(response) }
     else if (error) { console.log(error) }
 
-    const [subjectMarks, setSubjectMarks] = useState([]);
+    const [projectMarks, setProjectMarks] = useState([]);
     const [selectedSection, setSelectedSection] = useState('table');
 
     useEffect(() => {
         if (userDetails) {
-            setSubjectMarks(userDetails.examResult || []);
+            setProjectMarks(userDetails.examResult || []);
         }
     }, [userDetails])
 
     useEffect(() => {
-        if (subjectMarks === []) {
-            dispatch(getSubjectList(currentUser.sclassName._id, "ClassSubjects"));
+        if (projectMarks === []) {
+            dispatch(getProjectList(currentUser.sclassName._id, "ClassProjects"));
         }
-    }, [subjectMarks, dispatch, currentUser.sclassName._id]);
+    }, [projectMarks, dispatch, currentUser.sclassName._id]);
 
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
@@ -47,17 +47,17 @@ const StudentSubjects = () => {
         return (
             <>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Subject Marks
+                    Project Marks
                 </Typography>
                 <Table>
                     <TableHead>
                         <StyledTableRow>
-                            <StyledTableCell>Subject</StyledTableCell>
+                            <StyledTableCell>Project</StyledTableCell>
                             <StyledTableCell>Marks</StyledTableCell>
                         </StyledTableRow>
                     </TableHead>
                     <TableBody>
-                        {subjectMarks.map((result, index) => {
+                        {projectMarks.map((result, index) => {
                             if (!result.subName || !result.marksObtained) {
                                 return null;
                             }
@@ -75,7 +75,7 @@ const StudentSubjects = () => {
     };
 
     const renderChartSection = () => {
-        return <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />;
+        return <CustomBarChart chartData={projectMarks} dataKey="marksObtained" />;
     };
 
     const renderClassDetailsSection = () => {
@@ -88,13 +88,13 @@ const StudentSubjects = () => {
                     You are currently in Class {sclassDetails && sclassDetails.sclassName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                    And these are the subjects:
+                    And these are the projects:
                 </Typography>
-                {subjectsList &&
-                    subjectsList.map((subject, index) => (
+                {projectsList &&
+                    projectsList.map((project, index) => (
                         <div key={index}>
                             <Typography variant="subtitle1">
-                                {subject.subName} ({subject.subCode})
+                                {project.projectName} ({project.projectCode})
                             </Typography>
                         </div>
                     ))}
@@ -108,7 +108,7 @@ const StudentSubjects = () => {
                 <div>Loading...</div>
             ) : (
                 <div>
-                    {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0
+                    {projectMarks && Array.isArray(projectMarks) && projectMarks.length > 0
                         ?
                         (<>
                             {selectedSection === 'table' && renderTableSection()}
@@ -140,4 +140,4 @@ const StudentSubjects = () => {
     );
 };
 
-export default StudentSubjects;
+export default StudentProjects;

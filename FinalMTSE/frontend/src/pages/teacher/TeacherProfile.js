@@ -10,7 +10,7 @@ const TeacherProfile = () => {
   else if (error) { console.log(error) }
 
   const teachSclass = currentUser.teachSclass
-  const teachSubject = currentUser.teachSubject
+  const teachProject = currentUser.teachProject
   const teachSchool = currentUser.school
 
   return (
@@ -20,7 +20,7 @@ const TeacherProfile = () => {
           <ProfileText>Name: {currentUser.name}</ProfileText>
           <ProfileText>Email: {currentUser.email}</ProfileText>
           <ProfileText>Class: {teachSclass.sclassName}</ProfileText>
-          <ProfileText>Subject: {teachSubject.subName}</ProfileText>
+          <ProfileText>Project: {teachProject.projectName}</ProfileText>
           <ProfileText>School: {teachSchool.schoolName}</ProfileText>
         </ProfileCardContent>
       </ProfileCard>

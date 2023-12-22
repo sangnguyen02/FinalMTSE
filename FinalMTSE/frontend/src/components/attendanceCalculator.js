@@ -1,4 +1,4 @@
-export const calculateSubjectAttendancePercentage = (presentCount, totalSessions) => {
+export const calculateProjectAttendancePercentage = (presentCount, totalSessions) => {
     if (totalSessions === 0 || presentCount === 0) {
         return 0;
     }
@@ -7,16 +7,16 @@ export const calculateSubjectAttendancePercentage = (presentCount, totalSessions
 };
 
 
-export const groupAttendanceBySubject = (subjectAttendance) => {
-    const attendanceBySubject = {};
+export const groupAttendanceByProject = (projectAttendance) => {
+    const attendanceByProject = {};
 
-    subjectAttendance.forEach((attendance) => {
-        const subName = attendance.subName.subName;
-        const sessions = attendance.subName.sessions;
-        const subId = attendance.subName._id;
+    projectAttendance.forEach((attendance) => {
+        const projectName = attendance.projectName.projectName;
+        const sessions = attendance.projectName.sessions;
+        const subId = attendance.projectName._id;
 
-        if (!attendanceBySubject[subName]) {
-            attendanceBySubject[subName] = {
+        if (!attendanceByProject[projectName]) {
+            attendanceByProject[projectName] = {
                 present: 0,
                 absent: 0,
                 sessions: sessions,
@@ -25,29 +25,29 @@ export const groupAttendanceBySubject = (subjectAttendance) => {
             };
         }
         if (attendance.status === "Present") {
-            attendanceBySubject[subName].present++;
+            attendanceByProject[projectName].present++;
         } else if (attendance.status === "Absent") {
-            attendanceBySubject[subName].absent++;
+            attendanceByProject[projectName].absent++;
         }
-        attendanceBySubject[subName].allData.push({
+        attendanceByProject[projectName].allData.push({
             date: attendance.date,
             status: attendance.status,
         });
     });
-    return attendanceBySubject;
+    return attendanceByProject;
 }
 
-export const calculateOverallAttendancePercentage = (subjectAttendance) => {
+export const calculateOverallAttendancePercentage = (projectAttendance) => {
     let totalSessionsSum = 0;
     let presentCountSum = 0;
     const uniqueSubIds = [];
 
-    subjectAttendance.forEach((attendance) => {
-        const subId = attendance.subName._id;
-        if (!uniqueSubIds.includes(subId)) {
-            const sessions = parseInt(attendance.subName.sessions);
+    projectAttendance.forEach((attendance) => {
+        const projectId = attendance.projectName._id;
+        if (!uniqueSubIds.includes(projectId)) {
+            const sessions = parseInt(attendance.projectName.sessions);
             totalSessionsSum += sessions;
-            uniqueSubIds.push(subId);
+            uniqueSubIds.push(projectId);
         }
         presentCountSum += attendance.status === "Present" ? 1 : 0;
     });

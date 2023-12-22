@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const subjectSchema = new mongoose.Schema({
-    subName: {
+const projectSchema = new mongoose.Schema({
+    projectName: {
         type: String,
         required: true,
     },
-    subCode: {
+    projectCode: {
         type: String,
         required: true,
     },
@@ -28,4 +28,4 @@ const subjectSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model("subject", subjectSchema);
+module.exports = mongoose.model("project", projectSchema);

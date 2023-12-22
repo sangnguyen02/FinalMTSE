@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getUserDetails, updateUser } from '../../../redux/userRelated/userHandle';
 import { useNavigate, useParams } from 'react-router-dom'
-import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
-import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container } from '@mui/material';
+import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container, Grid, RadioGroup, FormControl, FormLabel, FormControlLabel, Radio } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { KeyboardArrowUp, KeyboardArrowDown, Delete as DeleteIcon } from '@mui/icons-material';
 import { removeStuff, updateStudentFields } from '../../../redux/studentRelated/studentHandle';
-import { calculateOverallAttendancePercentage, calculateSubjectAttendancePercentage, groupAttendanceBySubject } from '../../../components/attendanceCalculator';
+import { calculateOverallAttendancePercentage, calculateProjectAttendancePercentage, groupAttendanceByProject } from '../../../components/attendanceCalculator';
 import CustomBarChart from '../../../components/CustomBarChart'
 import CustomPieChart from '../../../components/CustomPieChart'
 import { StyledTableCell, StyledTableRow } from '../../../components/styles';
@@ -22,22 +22,22 @@ import Popup from '../../../components/Popup';
 
 const ViewStudent = () => {
     const [showTab, setShowTab] = useState(false);
-
+    const [editMode, setEditMode] = useState(false);
     const navigate = useNavigate()
     const params = useParams()
     const dispatch = useDispatch()
     const { userDetails, response, loading, error } = useSelector((state) => state.user);
 
     const studentID = params.id
-    const address = "Student"
+    const Address = "Student"
 
     useEffect(() => {
-        dispatch(getUserDetails(studentID, address));
+        dispatch(getUserDetails(studentID, Address));
     }, [dispatch, studentID])
 
     useEffect(() => {
         if (userDetails && userDetails.sclassName && userDetails.sclassName._id !== undefined) {
-            dispatch(getSubjectList(userDetails.sclassName._id, "ClassSubjects"));
+            dispatch(getProjectList(userDetails.sclassName._id, "ClassProjects"));
         }
     }, [dispatch, userDetails]);
 
@@ -50,21 +50,21 @@ const ViewStudent = () => {
     const [sclassName, setSclassName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
     const [email, setEmail] = useState('');
-    const [location, setLocation] = useState('');
+    const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [subjectMarks, setSubjectMarks] = useState('');
-    const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [gender, setGender] = useState('Female');
+    const [projectMarks, setProjectMarks] = useState('');
+    const [projectAttendance, setProjectAttendance] = useState([]);
 
     const [openStates, setOpenStates] = useState({});
 
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
 
-    const handleOpen = (subId) => {
+    const handleOpen = (projectId) => {
         setOpenStates((prevState) => ({
             ...prevState,
-            [subId]: !prevState[subId],
+            [projectId]: !prevState[projectId],
         }));
     };
 
@@ -80,7 +80,7 @@ const ViewStudent = () => {
     };
 
     const fields = password === ""
-        ? { name, studentId }
+        ? { name, studentId, email, phone, address, gender }
         : { name, studentId, password }
 
     useEffect(() => {
@@ -90,19 +90,19 @@ const ViewStudent = () => {
             setSclassName(userDetails.sclassName || '');
             setStudentSchool(userDetails.school || '');
             setEmail(userDetails.email || '');
-            setLocation(userDetails.location || '');
+            setAddress(userDetails.address || '');
             setPhone(userDetails.phone || '');
             setGender(userDetails.gender || '');
-            setSubjectMarks(userDetails.examResult || '');
-            setSubjectAttendance(userDetails.attendance || []);
+            setProjectMarks(userDetails.examResult || '');
+            setProjectAttendance(userDetails.attendance || []);
         }
     }, [userDetails]);
 
     const submitHandler = (event) => {
         event.preventDefault()
-        dispatch(updateUser(fields, studentID, address))
+        dispatch(updateUser(fields, studentID, Address))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
             .catch((error) => {
                 console.error(error)
@@ -122,18 +122,26 @@ const ViewStudent = () => {
     const removeHandler = (id, deladdress) => {
         dispatch(removeStuff(id, deladdress))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
     }
 
-    const removeSubAttendance = (subId) => {
-        dispatch(updateStudentFields(studentID, { subId }, "RemoveStudentSubAtten"))
+    const removeProjectAttendance = (projectId) => {
+        dispatch(updateStudentFields(studentID, { projectId }, "RemoveStudentProjectAtten"))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentID, Address));
             })
     }
 
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    const handleEditClick = () => {
+        setEditMode(true);
+      };
+    
+      const handleCancelEdit = () => {
+        setEditMode(false);
+      };
+
+    const overallAttendancePercentage = calculateOverallAttendancePercentage(projectAttendance);
     const overallAbsentPercentage = 100 - overallAttendancePercentage;
 
     const chartData = [
@@ -141,11 +149,11 @@ const ViewStudent = () => {
         { name: 'Absent', value: overallAbsentPercentage }
     ];
 
-    const subjectData = Object.entries(groupAttendanceBySubject(subjectAttendance)).map(([subName, { subCode, present, sessions }]) => {
-        const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+    const projectData = Object.entries(groupAttendanceByProject(projectAttendance)).map(([projectName, { projectCode, present, sessions }]) => {
+        const projectAttendancePercentage = calculateProjectAttendancePercentage(present, sessions);
         return {
-            subject: subName,
-            attendancePercentage: subjectAttendancePercentage,
+            project: projectName,
+            attendancePercentage: projectAttendancePercentage,
             totalClasses: sessions,
             attendedClasses: present
         };
@@ -159,39 +167,39 @@ const ViewStudent = () => {
                     <Table>
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Subject</StyledTableCell>
+                                <StyledTableCell>Project</StyledTableCell>
                                 <StyledTableCell>Present</StyledTableCell>
                                 <StyledTableCell>Total Sessions</StyledTableCell>
                                 <StyledTableCell>Attendance Percentage</StyledTableCell>
                                 <StyledTableCell align="center">Actions</StyledTableCell>
                             </StyledTableRow>
                         </TableHead>
-                        {Object.entries(groupAttendanceBySubject(subjectAttendance)).map(([subName, { present, allData, subId, sessions }], index) => {
-                            const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+                        {Object.entries(groupAttendanceByProject(projectAttendance)).map(([projectName, { present, allData, projectId, sessions }], index) => {
+                            const projectAttendancePercentage = calculateProjectAttendancePercentage(present, sessions);
                             return (
                                 <TableBody key={index}>
                                     <StyledTableRow>
-                                        <StyledTableCell>{subName}</StyledTableCell>
+                                        <StyledTableCell>{projectName}</StyledTableCell>
                                         <StyledTableCell>{present}</StyledTableCell>
                                         <StyledTableCell>{sessions}</StyledTableCell>
-                                        <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
+                                        <StyledTableCell>{projectAttendancePercentage}%</StyledTableCell>
                                         <StyledTableCell align="center">
                                             <Button variant="contained"
-                                                onClick={() => handleOpen(subId)}>
-                                                {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
+                                                onClick={() => handleOpen(projectId)}>
+                                                {openStates[projectId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
                                             </Button>
-                                            <IconButton onClick={() => removeSubAttendance(subId)}>
+                                            <IconButton onClick={() => removeProjectAttendance(projectId)}>
                                                 <DeleteIcon color="error" />
                                             </IconButton>
                                             <Button variant="contained" sx={styles.attendanceButton}
-                                                onClick={() => navigate(`/Admin/subject/student/attendance/${studentID}/${subId}`)}>
+                                                onClick={() => navigate(`/Admin/project/student/attendance/${studentID}/${projectId}`)}>
                                                 Change
                                             </Button>
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     <StyledTableRow>
                                         <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                            <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
+                                            <Collapse in={openStates[projectId]} timeout="auto" unmountOnExit>
                                                 <Box sx={{ margin: 1 }}>
                                                     <Typography variant="h6" gutterBottom component="div">
                                                         Attendance Details
@@ -240,13 +248,13 @@ const ViewStudent = () => {
         const renderChartSection = () => {
             return (
                 <>
-                    <CustomBarChart chartData={subjectData} dataKey="attendancePercentage" />
+                    <CustomBarChart chartData={projectData} dataKey="attendancePercentage" />
                 </>
             )
         }
         return (
             <>
-                {subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0
+                {projectAttendance && Array.isArray(projectAttendance) && projectAttendance.length > 0
                     ?
                     <>
                         {selectedSection === 'table' && renderTableSection()}
@@ -280,22 +288,22 @@ const ViewStudent = () => {
         const renderTableSection = () => {
             return (
                 <>
-                    <h3>Subject Marks:</h3>
+                    <h3>Project Marks:</h3>
                     <Table>
                         <TableHead>
                             <StyledTableRow>
-                                <StyledTableCell>Subject</StyledTableCell>
+                                <StyledTableCell>Project</StyledTableCell>
                                 <StyledTableCell>Marks</StyledTableCell>
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                            {subjectMarks.map((result, index) => {
-                                if (!result.subName || !result.marksObtained) {
+                            {projectMarks.map((result, index) => {
+                                if (!result.projectName || !result.marksObtained) {
                                     return null;
                                 }
                                 return (
                                     <StyledTableRow key={index}>
-                                        <StyledTableCell>{result.subName.subName}</StyledTableCell>
+                                        <StyledTableCell>{result.projectName.projectName}</StyledTableCell>
                                         <StyledTableCell>{result.marksObtained}</StyledTableCell>
                                     </StyledTableRow>
                                 );
@@ -311,13 +319,13 @@ const ViewStudent = () => {
         const renderChartSection = () => {
             return (
                 <>
-                    <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />
+                    <CustomBarChart chartData={projectMarks} dataKey="marksObtained" />
                 </>
             )
         }
         return (
             <>
-                {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0
+                {projectMarks && Array.isArray(projectMarks) && projectMarks.length > 0
                     ?
                     <>
                         {selectedSection === 'table' && renderTableSection()}
@@ -358,7 +366,7 @@ const ViewStudent = () => {
                 <br />
                 Email: {userDetails.email}
                 <br />
-                Address: {userDetails.location}
+                Address: {userDetails.address}
                 <br />
                 Phone: {userDetails.phone}
                 <br />
@@ -366,49 +374,89 @@ const ViewStudent = () => {
                 <br />
                 School: {studentSchool.schoolName}
                 {
-                    subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 && (
+                    projectAttendance && Array.isArray(projectAttendance) && projectAttendance.length > 0 && (
                         <CustomPieChart data={chartData} />
                     )
                 }
                 
-                <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
-                    Delete
-                </Button>
-                <br />
-                <Button variant="contained" sx={styles.styledButton} className="show-tab" onClick={() => { setShowTab(!showTab) }}>
-                    {
-                        showTab
-                            ? <KeyboardArrowUp />
-                            : <KeyboardArrowDown />
-                    }
-                    Edit Student
-                </Button>
-                <Collapse in={showTab} timeout="auto" unmountOnExit>
-                    <div className="register">
-                        <form className="registerForm" onSubmit={submitHandler}>
-                            <span className="registerTitle">Edit Details</span>
-                            <label>Name</label>
-                            <input className="registerInput" type="text" placeholder="Enter user's name..."
-                                value={name}
-                                onChange={(event) => setName(event.target.value)}
-                                autoComplete="name" required />
+                <Box display="flex" flexDirection="row">
+                    {editMode ? (
+                        <Button variant="contained" sx={styles.styledButton} color="secondary" onClick={handleCancelEdit}>
+                        Cancel Edit
+                        </Button>
+                    ) : (
+                        <Button variant="contained" sx={styles.styledButton} color="primary" onClick={handleEditClick}>
+                        Edit
+                        </Button>
+                    )}
 
-                            <label>Student ID</label>
-                            <input className="registerInput" type="number" placeholder="Enter user's Student ID..."
-                                value={studentId}
-                                onChange={(event) => setStudentID(event.target.value)}
-                                required />
+                    <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
+                        Delete
+                    </Button>
+                </Box>
 
-                            <label>Email</label>
-                            <input className="registerInput" type="text" placeholder="Enter user's email..."
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                required/>
+                <br/>
+                {editMode && (
+                    <Grid item xs={12}>
+                        <div className="register">
+                            <form className="registerForm" onSubmit={submitHandler}>
+                                <span className="registerTitle">Edit Details</span>
+                                <label>Name</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's name..."
+                                    value={name}
+                                    onChange={(event) => setName(event.target.value)}
+                                    autoComplete="name" required />
 
-                            <button className="registerButton" type="submit" >Update</button>
-                        </form>
-                    </div>
-                </Collapse>
+                                <FormControl>
+                                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="Male"
+                                        name="radio-buttons-group"
+                                        value={gender}
+                                        onChange={(event) => setGender(event.target.value)}
+                                    >
+                                        <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                                    </RadioGroup>
+                                </FormControl>
+
+                                <label>Student ID</label>
+                                <input className="registerInput" type="number" placeholder="Enter user's Student ID..."
+                                    value={studentId}
+                                    onChange={(event) => setStudentID(event.target.value)}
+                                    required />
+
+                                <label>Student Email</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's email..."
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    required />
+
+                                <label>Student Phone</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's phone..."
+                                    value={phone}
+                                    onChange={(event) => setPhone(event.target.value)}
+                                    required />
+
+
+                                <label>Student Address</label>
+                                <input className="registerInput" type="text" placeholder="Enter user's address..."
+                                    value={address}
+                                    onChange={(event) => setAddress(event.target.value)}
+                                    required />
+
+                                <label>Password</label>
+                                <input className="registerInput" type="password" placeholder="Enter user's password..."
+                                    value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                    autoComplete="new-password" />
+
+                                <button className="registerButton" type="submit" >Update</button>
+                            </form>
+                        </div>
+                    </Grid>
+                  )}
             </div>
         )
     }

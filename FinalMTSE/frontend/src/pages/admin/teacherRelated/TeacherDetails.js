@@ -20,10 +20,10 @@ const TeacherDetails = () => {
         console.log(error);
     }
 
-    const isSubjectNamePresent = teacherDetails?.teachSubject?.subName;
+    const isProjectNamePresent = teacherDetails?.teachProject?.projectName;
 
-    const handleAddSubject = () => {
-        navigate(`/Admin/teachers/choosesubject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`);
+    const handleAddProject = () => {
+        navigate(`/Admin/teachers/chooseproject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`);
     };
 
     return (
@@ -41,17 +41,17 @@ const TeacherDetails = () => {
                     <Typography variant="h6" gutterBottom>
                         Class Name: {teacherDetails?.teachSclass?.sclassName}
                     </Typography>
-                    {isSubjectNamePresent ? (
+                    {isProjectNamePresent ? (
                         <>
                             <Typography variant="h6" gutterBottom>
-                                Project Name: {teacherDetails?.teachSubject?.subName}
+                                Project Name: {teacherDetails?.teachProject?.projectName}
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                Project Sessions: {teacherDetails?.teachSubject?.sessions}
+                                Project Sessions: {teacherDetails?.teachProject?.sessions}
                             </Typography>
                         </>
                     ) : (
-                        <Button variant="contained" onClick={handleAddSubject}>
+                        <Button variant="contained" onClick={handleAddProject}>
                             Add Project
                         </Button>
                     )}

@@ -27,13 +27,13 @@ import ViewStudent from './studentRelated/ViewStudent';
 import AddNotice from './noticeRelated/AddNotice';
 import ShowNotices from './noticeRelated/ShowNotices';
 
-import ShowSubjects from './subjectRelated/ShowSubjects';
-import SubjectForm from './subjectRelated/SubjectForm';
-import ViewSubject from './subjectRelated/ViewSubject';
+import ShowProjects from './projectRelated/ShowProjects';
+import ProjectForm from './projectRelated/ProjectForm';
+import ViewProject from './projectRelated/ViewProject';
 
 import AddTeacher from './teacherRelated/AddTeacher';
 import ChooseClass from './teacherRelated/ChooseClass';
-import ChooseSubject from './teacherRelated/ChooseSubject';
+import ChooseProject from './teacherRelated/ChooseProject';
 import ShowTeachers from './teacherRelated/ShowTeachers';
 import TeacherDetails from './teacherRelated/TeacherDetails';
 
@@ -102,16 +102,16 @@ const AdminDashboard = () => {
                         <Route path="/Admin/addnotice" element={<AddNotice />} />
                         <Route path="/Admin/notices" element={<ShowNotices />} />
 
-                        {/* Subject */}
-                        <Route path="/Admin/subjects" element={<ShowSubjects />} />
-                        <Route path="/Admin/subjects/subject/:classID/:subjectID" element={<ViewSubject />} />
-                        <Route path="/Admin/subjects/chooseclass" element={<ChooseClass situation="Subject" />} />
+                        {/* Project */}
+                        <Route path="/Admin/projects" element={<ShowProjects />} />
+                        <Route path="/Admin/projects/project/:classID/:projectID" element={<ViewProject />} />
+                        <Route path="/Admin/projects/chooseclass" element={<ChooseClass situation="Project" />} />
 
-                        <Route path="/Admin/addsubject/:id" element={<SubjectForm />} />
-                        <Route path="/Admin/class/subject/:classID/:subjectID" element={<ViewSubject />} />
+                        <Route path="/Admin/addproject/:id" element={<ProjectForm />} />
+                        <Route path="/Admin/class/project/:classID/:projectID" element={<ViewProject />} />
 
-                        <Route path="/Admin/subject/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
-                        <Route path="/Admin/subject/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
+                        <Route path="/Admin/project/student/attendance/:studentID/:projectID" element={<StudentAttendance situation="Project" />} />
+                        <Route path="/Admin/project/student/marks/:studentID/:projectID" element={<StudentExamMarks situation="Project" />} />
 
                         {/* Class */}
                         <Route path="/Admin/addclass" element={<AddClass />} />
@@ -130,8 +130,8 @@ const AdminDashboard = () => {
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
                         <Route path="/Admin/teachers/teacher/:id" element={<TeacherDetails />} />
                         <Route path="/Admin/teachers/chooseclass" element={<ChooseClass situation="Teacher" />} />
-                        <Route path="/Admin/teachers/choosesubject/:id" element={<ChooseSubject situation="Norm" />} />
-                        <Route path="/Admin/teachers/choosesubject/:classID/:teacherID" element={<ChooseSubject situation="Teacher" />} />
+                        <Route path="/Admin/teachers/chooseproject/:id" element={<ChooseProject situation="Norm" />} />
+                        <Route path="/Admin/teachers/chooseproject/:classID/:teacherID" element={<ChooseProject situation="Teacher" />} />
                         <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
 
                         <Route path="/logout" element={<Logout />} />

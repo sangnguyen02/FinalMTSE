@@ -57,14 +57,14 @@ const ShowTeachers = () => {
 
     const columns = [
         { id: 'name', label: 'Name', minWidth: 170 },
-        { id: 'teachSubject', label: 'Subject', minWidth: 100 },
+        { id: 'teachProject', label: 'Project', minWidth: 100 },
         { id: 'teachSclass', label: 'Class', minWidth: 170 },
     ];
 
     const rows = teachersList.map((teacher) => {
         return {
             name: teacher.name,
-            teachSubject: teacher.teachSubject?.subName || null,
+            teachProject: teacher.teachProject?.projectName || null,
             teachSclass: teacher.teachSclass.sclassName,
             teachSclassID: teacher.teachSclass._id,
             id: teacher._id,
@@ -110,7 +110,7 @@ const ShowTeachers = () => {
                                     <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
-                                            if (column.id === 'teachSubject') {
+                                            if (column.id === 'teachProject') {
                                                 return (
                                                     <StyledTableCell key={column.id} align={column.align}>
                                                         {value ? (
@@ -118,9 +118,9 @@ const ShowTeachers = () => {
                                                         ) : (
                                                             <Button variant="contained"
                                                                 onClick={() => {
-                                                                    navigate(`/Admin/teachers/choosesubject/${row.teachSclassID}/${row.id}`)
+                                                                    navigate(`/Admin/teachers/chooseproject/${row.teachSclassID}/${row.id}`)
                                                                 }}>
-                                                                Add Subject
+                                                                Add Project
                                                             </Button>
                                                         )}
                                                     </StyledTableCell>

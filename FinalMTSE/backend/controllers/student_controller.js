@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const Student = require('../models/studentSchema.js');
-const Subject = require('../models/subjectSchema.js');
+const Project = require('../models/projectSchema.js');
 
 const studentRegister = async (req, res) => {
     try {
@@ -78,8 +78,8 @@ const getStudentDetail = async (req, res) => {
         let student = await Student.findById(req.params.id)
             .populate("school", "schoolName")
             .populate("sclassName", "sclassName")
-            .populate("examResult.subName", "subName")
-            .populate("attendance.subName", "subName sessions");
+            .populate("examResult.projectName", "projectName")
+            .populate("attendance.projectName", "projectName sessions");
         if (student) {
             student.password = undefined;
             res.send(student);
@@ -145,7 +145,7 @@ const updateStudent = async (req, res) => {
 }
 
 const updateExamResult = async (req, res) => {
-    const { subName, marksObtained } = req.body;
+    const { projectName, marksObtained } = req.body;
 
     try {
         const student = await Student.findById(req.params.id);
@@ -155,13 +155,13 @@ const updateExamResult = async (req, res) => {
         }
 
         const existingResult = student.examResult.find(
-            (result) => result.subName.toString() === subName
+            (result) => result.projectName.toString() === projectName
         );
 
         if (existingResult) {
             existingResult.marksObtained = marksObtained;
         } else {
-            student.examResult.push({ subName, marksObtained });
+            student.examResult.push({ projectName, marksObtained });
         }
 
         const result = await student.save();
@@ -172,7 +172,7 @@ const updateExamResult = async (req, res) => {
 };
 
 const studentAttendance = async (req, res) => {
-    const { subName, status, date } = req.body;
+    const { projectName, status, date } = req.body;
 
     try {
         const student = await Student.findById(req.params.id);
@@ -181,12 +181,12 @@ const studentAttendance = async (req, res) => {
             return res.send({ message: 'Student not found' });
         }
 
-        const subject = await Subject.findById(subName);
+        const project = await Project.findById(projectName);
 
         const existingAttendance = student.attendance.find(
             (a) =>
                 a.date.toDateString() === new Date(date).toDateString() &&
-                a.subName.toString() === subName
+                a.projectName.toString() === projectName
         );
 
         if (existingAttendance) {
@@ -194,14 +194,14 @@ const studentAttendance = async (req, res) => {
         } else {
             // Check if the student has already attended the maximum number of sessions
             const attendedSessions = student.attendance.filter(
-                (a) => a.subName.toString() === subName
+                (a) => a.projectName.toString() === projectName
             ).length;
 
-            if (attendedSessions >= subject.sessions) {
+            if (attendedSessions >= project.sessions) {
                 return res.send({ message: 'Maximum attendance limit reached' });
             }
 
-            student.attendance.push({ date, status, subName });
+            student.attendance.push({ date, status, projectName });
         }
 
         const result = await student.save();
@@ -211,13 +211,13 @@ const studentAttendance = async (req, res) => {
     }
 };
 
-const clearAllStudentsAttendanceBySubject = async (req, res) => {
-    const subName = req.params.id;
+const clearAllStudentsAttendanceByProject = async (req, res) => {
+    const projectName = req.params.id;
 
     try {
         const result = await Student.updateMany(
-            { 'attendance.subName': subName },
-            { $pull: { attendance: { subName } } }
+            { 'attendance.projectName': projectName },
+            { $pull: { attendance: { projectName } } }
         );
         return res.send(result);
     } catch (error) {
@@ -240,14 +240,14 @@ const clearAllStudentsAttendance = async (req, res) => {
     }
 };
 
-const removeStudentAttendanceBySubject = async (req, res) => {
+const removeStudentAttendanceByProject = async (req, res) => {
     const studentId = req.params.id;
-    const subName = req.body.subId
+    const projectName = req.body.projectId
 
     try {
         const result = await Student.updateOne(
             { _id: studentId },
-            { $pull: { attendance: { subName: subName } } }
+            { $pull: { attendance: { projectName: projectName } } }
         );
 
         return res.send(result);
@@ -285,8 +285,8 @@ module.exports = {
     deleteStudentsByClass,
     updateExamResult,
 
-    clearAllStudentsAttendanceBySubject,
+    clearAllStudentsAttendanceByProject,
     clearAllStudentsAttendance,
-    removeStudentAttendanceBySubject,
+    removeStudentAttendanceByProject,
     removeStudentAttendance,
 };

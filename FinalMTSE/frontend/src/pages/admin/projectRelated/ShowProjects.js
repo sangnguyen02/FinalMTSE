@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
 import { deleteUser } from '../../../redux/userRelated/userHandle';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import {
@@ -13,14 +13,14 @@ import { BlueButton, GreenButton } from '../../../components/buttonStyles';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
 
-const ShowSubjects = () => {
+const ShowProjects = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { subjectsList, loading, error, response } = useSelector((state) => state.sclass);
+    const { projectsList, loading, error, response } = useSelector((state) => state.sclass);
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
-        dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+        dispatch(getProjectList(currentUser._id, "AllProjects"));
     }, [currentUser._id, dispatch]);
 
     if (error) {
@@ -38,34 +38,43 @@ const ShowSubjects = () => {
 
         // dispatch(deleteUser(deleteID, address))
         //     .then(() => {
-        //         dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+        //         dispatch(getProjectList(currentUser._id, "AllProjects"));
         //     })
     }
 
-    const subjectColumns = [
-        { id: 'subName', label: 'Sub Name', minWidth: 170 },
+    const projectColumns = [
+        { id: 'projectName', label: 'Project Name', minWidth: 170 },
         { id: 'sessions', label: 'Sessions', minWidth: 170 },
         { id: 'sclassName', label: 'Class', minWidth: 170 },
     ]
 
-    const subjectRows = subjectsList.map((subject) => {
-        return {
-            subName: subject.subName,
-            sessions: subject.sessions,
-            sclassName: subject.sclassName.sclassName,
-            sclassID: subject.sclassName._id,
-            id: subject._id,
-        };
-    })
+    // const projectRows = projectList.map((project) => {
+    //     return {
+    //         projectName: project.projectName,
+    //         sessions: project.sessions,
+    //         sclassName: project.sclassName.sclassName,
+    //         sclassID: project.sclassName._id,
+    //         id: project._id,
+    //     };
+    // })
+    const projectRows = projectsList ? (
+        projectsList.map((project) => ({
+          projectName: project.projectName,
+          sessions: project.sessions,
+          sclassName: project.sclassName.sclassName,
+          sclassID: project.sclassName._id,
+          id: project._id,
+        }))
+      ) : [];
 
-    const SubjectsButtonHaver = ({ row }) => {
+    const ProjectsButtonHaver = ({ row }) => {
         return (
             <>
-                <IconButton onClick={() => deleteHandler(row.id, "Subject")}>
+                <IconButton onClick={() => deleteHandler(row.id, "Project")}>
                     <DeleteIcon color="error" />
                 </IconButton>
                 <BlueButton variant="contained"
-                    onClick={() => navigate(`/Admin/subjects/subject/${row.sclassID}/${row.id}`)}>
+                    onClick={() => navigate(`/Admin/projects/project/${row.sclassID}/${row.id}`)}>
                     View
                 </BlueButton>
             </>
@@ -74,12 +83,12 @@ const ShowSubjects = () => {
 
     const actions = [
         {
-            icon: <PostAddIcon color="primary" />, name: 'Add New Subject',
-            action: () => navigate("/Admin/subjects/chooseclass")
+            icon: <PostAddIcon color="primary" />, name: 'Add New Project',
+            action: () => navigate("/Admin/projects/chooseclass")
         },
         {
-            icon: <DeleteIcon color="error" />, name: 'Delete All Subjects',
-            action: () => deleteHandler(currentUser._id, "Subjects")
+            icon: <DeleteIcon color="error" />, name: 'Delete All Projects',
+            action: () => deleteHandler(currentUser._id, "Projects")
         }
     ];
 
@@ -92,14 +101,14 @@ const ShowSubjects = () => {
                     {response ?
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"
-                                onClick={() => navigate("/Admin/subjects/chooseclass")}>
+                                onClick={() => navigate("/Admin/projects/chooseclass")}>
                                 Add Project
                             </GreenButton>
                         </Box>
                         :
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            {Array.isArray(subjectsList) && subjectsList.length > 0 &&
-                                <TableTemplate buttonHaver={SubjectsButtonHaver} columns={subjectColumns} rows={subjectRows} />
+                            {Array.isArray(projectsList) && projectsList.length > 0 &&
+                                <TableTemplate buttonHaver={ProjectsButtonHaver} columns={projectColumns} rows={projectRows} />
                             }
                             <SpeedDialTemplate actions={actions} />
                         </Paper>
@@ -112,4 +121,4 @@ const ShowSubjects = () => {
     );
 };
 
-export default ShowSubjects;
+export default ShowProjects;

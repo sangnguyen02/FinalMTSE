@@ -15,18 +15,14 @@ const studentSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    DoB: {
-        type: Date,
-        default: Date.now
-    },
     address: {
         type: String,
         default: ""
     },
     gender: {
         type: String,
-        enum: ["male", "female"],
-        default: "male"
+        enum: ["Male", "Female"],
+        default: "Male"
     },
     phone: {
         type: String,
@@ -52,9 +48,9 @@ const studentSchema = new mongoose.Schema({
     },
     examResult: [
         {
-            subName: {
+            projectName: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'subject',
+                ref: 'project',
             },
             marksObtained: {
                 type: Number,
@@ -72,9 +68,9 @@ const studentSchema = new mongoose.Schema({
             enum: ['Present', 'Absent'],
             required: true
         },
-        subName: {
+        projectName: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'subject',
+            ref: 'project',
             required: true
         }
     }]

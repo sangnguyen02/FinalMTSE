@@ -4,8 +4,8 @@ const initialState = {
     sclassesList: [],
     sclassStudents: [],
     sclassDetails: [],
-    subjectsList: [],
-    subjectDetails: [],
+    projectsList: [],
+    projectDetails: [],
     loading: false,
     subloading: false,
     error: null,
@@ -20,7 +20,7 @@ const sclassSlice = createSlice({
         getRequest: (state) => {
             state.loading = true;
         },
-        getSubDetailsRequest: (state) => {
+        getProjectDetailsRequest: (state) => {
             state.subloading = true;
         },
         getSuccess: (state, action) => {
@@ -35,14 +35,14 @@ const sclassSlice = createSlice({
             state.error = null;
             state.getresponse = null;
         },
-        getSubjectsSuccess: (state, action) => {
-            state.subjectsList = action.payload;
+        getProjectsSuccess: (state, action) => {
+            state.projectsList = action.payload;
             state.loading = false;
             state.error = null;
             state.response = null;
         },
         getFailed: (state, action) => {
-            state.subjectsList = [];
+            state.projectsList = [];
             state.response = action.payload;
             state.loading = false;
             state.error = null;
@@ -63,13 +63,13 @@ const sclassSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
-        getSubDetailsSuccess: (state, action) => {
-            state.subjectDetails = action.payload;
+        getProjectDetailsSuccess: (state, action) => {
+            state.projectDetails = action.payload;
             state.subloading = false;
             state.error = null;
         },
-        resetSubjects: (state) => {
-            state.subjectsList = [];
+        resetProjects: (state) => {
+            state.projectsList = [];
             state.sclassesList = [];
         },
     },
@@ -81,12 +81,12 @@ export const {
     getFailed,
     getError,
     getStudentsSuccess,
-    getSubjectsSuccess,
+    getProjectsSuccess,
     detailsSuccess,
     getFailedTwo,
-    resetSubjects,
-    getSubDetailsSuccess,
-    getSubDetailsRequest
+    resetProjects,
+    getProjectDetailsSuccess,
+    getProjectDetailsRequest
 } = sclassSlice.actions;
 
 export const sclassReducer = sclassSlice.reducer;

@@ -3,7 +3,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import { BottomNavigation, BottomNavigationAction, Box, Button, Collapse, Paper, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
-import { calculateOverallAttendancePercentage, calculateSubjectAttendancePercentage, groupAttendanceBySubject } from '../../components/attendanceCalculator';
+import { calculateOverallAttendancePercentage, calculateProjectAttendancePercentage, groupAttendanceByProject } from '../../components/attendanceCalculator';
 
 import CustomBarChart from '../../components/CustomBarChart'
 
@@ -18,10 +18,10 @@ const ViewStdAttendance = () => {
 
     const [openStates, setOpenStates] = useState({});
 
-    const handleOpen = (subId) => {
+    const handleOpen = (projectId) => {
         setOpenStates((prevState) => ({
             ...prevState,
-            [subId]: !prevState[subId],
+            [projectId]: !prevState[projectId],
         }));
     };
 
@@ -34,24 +34,24 @@ const ViewStdAttendance = () => {
     if (response) { console.log(response) }
     else if (error) { console.log(error) }
 
-    const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [projectAttendance, setProjectAttendance] = useState([]);
     const [selectedSection, setSelectedSection] = useState('table');
 
     useEffect(() => {
         if (userDetails) {
-            setSubjectAttendance(userDetails.attendance || []);
+            setProjectAttendance(userDetails.attendance || []);
         }
     }, [userDetails])
 
-    const attendanceBySubject = groupAttendanceBySubject(subjectAttendance)
+    const attendanceByProject = groupAttendanceByProject(projectAttendance)
 
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    const overallAttendancePercentage = calculateOverallAttendancePercentage(projectAttendance);
 
-    const subjectData = Object.entries(attendanceBySubject).map(([subName, { subCode, present, sessions }]) => {
-        const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+    const projectData = Object.entries(attendanceByProject).map(([projectName, { projectCode, present, sessions }]) => {
+        const projectAttendancePercentage = calculateProjectAttendancePercentage(present, sessions);
         return {
-            subject: subName,
-            attendancePercentage: subjectAttendancePercentage,
+            project: projectName,
+            attendancePercentage: projectAttendancePercentage,
             totalClasses: sessions,
             attendedClasses: present
         };
@@ -70,33 +70,33 @@ const ViewStdAttendance = () => {
                 <Table>
                     <TableHead>
                         <StyledTableRow>
-                            <StyledTableCell>Subject</StyledTableCell>
+                            <StyledTableCell>Project</StyledTableCell>
                             <StyledTableCell>Present</StyledTableCell>
                             <StyledTableCell>Total Sessions</StyledTableCell>
                             <StyledTableCell>Attendance Percentage</StyledTableCell>
                             <StyledTableCell align="center">Actions</StyledTableCell>
                         </StyledTableRow>
                     </TableHead>
-                    {Object.entries(attendanceBySubject).map(([subName, { present, allData, subId, sessions }], index) => {
-                        const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
+                    {Object.entries(attendanceByProject).map(([projectName, { present, allData, projectId, sessions }], index) => {
+                        const projectAttendancePercentage = calculateProjectAttendancePercentage(present, sessions);
 
                         return (
                             <TableBody key={index}>
                                 <StyledTableRow>
-                                    <StyledTableCell>{subName}</StyledTableCell>
+                                    <StyledTableCell>{projectName}</StyledTableCell>
                                     <StyledTableCell>{present}</StyledTableCell>
                                     <StyledTableCell>{sessions}</StyledTableCell>
-                                    <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
+                                    <StyledTableCell>{projectAttendancePercentage}%</StyledTableCell>
                                     <StyledTableCell align="center">
                                         <Button variant="contained"
-                                            onClick={() => handleOpen(subId)}>
-                                            {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
+                                            onClick={() => handleOpen(projectId)}>
+                                            {openStates[projectId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
                                         </Button>
                                     </StyledTableCell>
                                 </StyledTableRow>
                                 <StyledTableRow>
                                     <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                        <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
+                                        <Collapse in={openStates[projectId]} timeout="auto" unmountOnExit>
                                             <Box sx={{ margin: 1 }}>
                                                 <Typography variant="h6" gutterBottom component="div">
                                                     Attendance Details
@@ -142,7 +142,7 @@ const ViewStdAttendance = () => {
     const renderChartSection = () => {
         return (
             <>
-                <CustomBarChart chartData={subjectData} dataKey="attendancePercentage" />
+                <CustomBarChart chartData={projectData} dataKey="attendancePercentage" />
             </>
         )
     };
@@ -155,7 +155,7 @@ const ViewStdAttendance = () => {
                 )
                 :
                 <div>
-                    {subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ?
+                    {projectAttendance && Array.isArray(projectAttendance) && projectAttendance.length > 0 ?
                         <>
                             {selectedSection === 'table' && renderTableSection()}
                             {selectedSection === 'chart' && renderChartSection()}
