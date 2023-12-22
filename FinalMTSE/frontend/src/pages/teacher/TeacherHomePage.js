@@ -14,7 +14,7 @@ const TeacherHomePage = () => {
     const dispatch = useDispatch();
 
     const { currentUser } = useSelector((state) => state.user);
-    const { projectDetails, sclassStudents } = useSelector((state) => state.sclass);
+    const { projectLists, sclassStudents } = useSelector((state) => state.sclass);
 
     const classID = currentUser.teachSclass?._id
     const projectID = currentUser.teachProject?._id
@@ -25,7 +25,7 @@ const TeacherHomePage = () => {
     }, [dispatch, projectID, classID]);
 
     const numberOfStudents = sclassStudents && sclassStudents.length;
-    const numberOfSessions = projectDetails && projectDetails.sessions
+    const numberOfProjects = projectLists && projectLists.length;
 
     return (
         <>
@@ -46,7 +46,7 @@ const TeacherHomePage = () => {
                             <Title>
                                 Total Projects
                             </Title>
-                            <Data start={0} end={numberOfSessions} duration={5} />
+                            <Data start={0} end={numberOfProjects} duration={5} />
                         </StyledPaper>
                     </Grid>
                     
