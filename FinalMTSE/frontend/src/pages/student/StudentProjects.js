@@ -58,12 +58,12 @@ const StudentProjects = () => {
                     </TableHead>
                     <TableBody>
                         {projectMarks.map((result, index) => {
-                            if (!result.subName || !result.marksObtained) {
+                            if (!result.projectName || !result.marksObtained) {
                                 return null;
                             }
                             return (
                                 <StyledTableRow key={index}>
-                                    <StyledTableCell>{result.subName.subName}</StyledTableCell>
+                                    <StyledTableCell>{result.projectName.projectName}</StyledTableCell>
                                     <StyledTableCell>{result.marksObtained}</StyledTableCell>
                                 </StyledTableRow>
                             );

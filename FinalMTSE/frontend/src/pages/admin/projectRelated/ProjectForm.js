@@ -7,7 +7,7 @@ import { underControl } from '../../../redux/userRelated/userSlice';
 import Popup from '../../../components/Popup';
 
 const ProjectForm = () => {
-    const [projects, setProjects] = useState([{ projectName: "", projectCode: "", sessions: "" }]);
+    const [projects, setProjects] = useState([{ projectName: "", projectCode: "", sessions: "", description: ""}]);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -42,8 +42,14 @@ const ProjectForm = () => {
         setProjects(newProjects);
     };
 
+    const handleDescriptionChange = (index) => (event) => {
+        const newProjects = [...projects];
+        newProjects[index].description = event.target.value;
+        setProjects(newProjects);
+    };
+
     const handleAddProject = () => {
-        setProjects([...projects, { projectName: "", projectCode: "" }]);
+        setProjects([...projects, { projectName: "", projectCode: ""}]);
     };
 
     const handleRemoveProject = (index) => () => {
@@ -58,6 +64,7 @@ const ProjectForm = () => {
             projectName: project.projectName,
             projectCode: project.projectCode,
             sessions: project.sessions,
+            description: project.description
         })),
         adminID,
     };
@@ -125,6 +132,17 @@ const ProjectForm = () => {
                                 inputProps={{ min: 0 }}
                                 value={project.sessions}
                                 onChange={handleSessionsChange(index)}
+                                sx={styles.inputField}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                fullWidth
+                                label="Description"
+                                variant="outlined"
+                                value={project.description}
+                                onChange={handleDescriptionChange(index)}
                                 sx={styles.inputField}
                                 required
                             />

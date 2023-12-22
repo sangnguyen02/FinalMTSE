@@ -13,6 +13,10 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        require: true,
+    },
     majorName: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'major',
@@ -25,7 +29,8 @@ const projectSchema = new mongoose.Schema({
     teacher: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'teacher',
-    }
+    },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model("project", projectSchema);

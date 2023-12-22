@@ -15,26 +15,26 @@ const StudentHomePage = () => {
     const dispatch = useDispatch();
 
     const { userDetails, currentUser, loading, response } = useSelector((state) => state.user);
-    const { subjectsList } = useSelector((state) => state.major);
+    const { projectsList } = useSelector((state) => state.major);
 
-    const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [projectAttendance, setProjectAttendance] = useState([]);
 
     const majorID = currentUser.majorName._id
 
     useEffect(() => {
         dispatch(getUserDetails(currentUser._id, "Student"));
-        dispatch(getProjectList(majorID, "MajorSubjects"));
+        dispatch(getProjectList(majorID, "MajorProjects"));
     }, [dispatch, currentUser._id, majorID]);
 
-    const numberOfSubjects = subjectsList && subjectsList.length;
+    const numberOfProjects = projectsList && projectsList.length;
 
     useEffect(() => {
         if (userDetails) {
-            setSubjectAttendance(userDetails.attendance || []);
+            setProjectAttendance(userDetails.attendance || []);
         }
     }, [userDetails])
 
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    const overallAttendancePercentage = calculateOverallAttendancePercentage(projectAttendance);
     const overallAbsentPercentage = 100 - overallAttendancePercentage;
 
     const chartData = [
@@ -51,7 +51,7 @@ const StudentHomePage = () => {
                             <Title>
                                 Total Projects
                             </Title>
-                            <Data start={0} end={numberOfSubjects} duration={2.5} />
+                            <Data start={0} end={numberOfProjects} duration={2.5} />
                         </StyledPaper>
                     </Grid>
             
@@ -69,7 +69,7 @@ const StudentHomePage = () => {
                                             :
                                             <>
                                                 {
-                                                    subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 ? (
+                                                    projectAttendance && Array.isArray(projectAttendance) && projectAttendance.length > 0 ? (
                                                         <>
                                                             <CustomPieChart data={chartData} />
                                                         </>

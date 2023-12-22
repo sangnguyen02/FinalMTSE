@@ -159,6 +159,9 @@ const ViewProject = () => {
           Project Sessions : {projectDetails && projectDetails.sessions}
         </Typography>
         <Typography variant="h6" gutterBottom>
+          Project Description : {projectDetails && projectDetails.description}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
           Number of Students: {numberOfStudents}
         </Typography>
         <Typography variant="h6" gutterBottom>

@@ -8,6 +8,7 @@ const projectCreate = async (req, res) => {
             projectName: project.projectName,
             projectCode: project.projectCode,
             sessions: project.sessions,
+            description: project.description
         }));
 
         const existingProjectByProjectCode = await Project.findOne({
@@ -23,8 +24,8 @@ const projectCreate = async (req, res) => {
                 majorName: req.body.majorName,
                 school: req.body.adminID,
             }));
-
             const result = await Project.insertMany(newProjects);
+            
             res.send(result);
         }
     } catch (err) {

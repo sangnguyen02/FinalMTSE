@@ -9,6 +9,14 @@ const majorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admin'
     },
+    timeRegistrationStart: {
+        type: Date,
+        default: Date.now
+    },
+    timeRegistrationEnd: {
+        type: Date,
+        default: Date.now
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model("major", majorSchema);
