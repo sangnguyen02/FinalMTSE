@@ -17,7 +17,7 @@ import AccountMenu from '../../components/AccountMenu';
 import { AppBar, Drawer } from '../../components/styles';
 import StudentAttendance from '../admin/studentRelated/StudentAttendance';
 
-import TeacherClassDetails from './TeacherClassDetails';
+import TeacherMajorDetails from './TeacherMajorDetails';
 import TeacherComplain from './TeacherComplain';
 import TeacherHomePage from './TeacherHomePage';
 import TeacherProfile from './TeacherProfile';
@@ -81,11 +81,11 @@ const TeacherDashboard = () => {
 
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
 
-                        <Route path="/Teacher/class" element={<TeacherClassDetails />} />
-                        <Route path="/Teacher/class/student/:id" element={<TeacherViewStudent />} />
+                        <Route path="/Teacher/major" element={<TeacherMajorDetails />} />
+                        <Route path="/Teacher/major/student/:id" element={<TeacherViewStudent />} />
 
-                        <Route path="/Teacher/class/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
-                        <Route path="/Teacher/class/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
+                        <Route path="/Teacher/major/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
+                        <Route path="/Teacher/major/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
 
                         <Route path="/logout" element={<Logout />} />
                     </Routes>

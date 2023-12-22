@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteUser } from '../../../redux/userRelated/userHandle';
-import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
+import { getAllMajors } from '../../../redux/majorRelated/majorHandle';
 import { BlueButton, GreenButton } from '../../../components/buttonStyles';
 import TableTemplate from '../../../components/TableTemplate';
 
@@ -16,17 +16,17 @@ import styled from 'styled-components';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
 
-const ShowClasses = () => {
+const ShowMajors = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch();
 
-  const { sclassesList, loading, error, getresponse } = useSelector((state) => state.sclass);
+  const { majorsList, loading, error, getresponse } = useSelector((state) => state.major);
   const { currentUser } = useSelector(state => state.user)
 
   const adminID = currentUser._id
 
   useEffect(() => {
-    dispatch(getAllSclasses(adminID, "Sclass"));
+    dispatch(getAllMajors(adminID, "Major"));
   }, [adminID, dispatch]);
 
   if (error) {
@@ -43,33 +43,33 @@ const ShowClasses = () => {
     setShowPopup(true)
     // dispatch(deleteUser(deleteID, address))
     //   .then(() => {
-    //     dispatch(getAllSclasses(adminID, "Sclass"));
+    //     dispatch(getAllMajors(adminID, "Major"));
     //   })
   }
 
-  const sclassColumns = [
-    { id: 'name', label: 'Class Name', minWidth: 170 },
+  const majorColumns = [
+    { id: 'name', label: 'Major Name', minWidth: 170 },
   ]
 
-  const sclassRows = sclassesList && sclassesList.length > 0 && sclassesList.map((sclass) => {
+  const majorRows = majorsList && majorsList.length > 0 && majorsList.map((major) => {
     return {
-      name: sclass.sclassName,
-      id: sclass._id,
+      name: major.majorName,
+      id: major._id,
     };
   })
 
-  const SclassButtonHaver = ({ row }) => {
+  const MajorButtonHaver = ({ row }) => {
     const actions = [
       { icon: <PostAddIcon />, name: 'Add Subjects', action: () => navigate("/Admin/addsubject/" + row.id) },
-      { icon: <PersonAddAlt1Icon />, name: 'Add Student', action: () => navigate("/Admin/class/addstudents/" + row.id) },
+      { icon: <PersonAddAlt1Icon />, name: 'Add Student', action: () => navigate("/Admin/major/addstudents/" + row.id) },
     ];
     return (
       <ButtonContainer>
-        <IconButton onClick={() => deleteHandler(row.id, "Sclass")} color="secondary">
+        <IconButton onClick={() => deleteHandler(row.id, "Major")} color="secondary">
           <DeleteIcon color="error" />
         </IconButton>
         <BlueButton variant="contained"
-          onClick={() => navigate("/Admin/classes/class/" + row.id)}>
+          onClick={() => navigate("/Admin/majors/major/" + row.id)}>
           View
         </BlueButton>
         <ActionMenu actions={actions} />
@@ -133,12 +133,12 @@ const ShowClasses = () => {
 
   const actions = [
     {
-      icon: <AddCardIcon color="primary" />, name: 'Add New Class',
-      action: () => navigate("/Admin/addclass")
+      icon: <AddCardIcon color="primary" />, name: 'Add New Major',
+      action: () => navigate("/Admin/addmajor")
     },
     {
-      icon: <DeleteIcon color="error" />, name: 'Delete All Classes',
-      action: () => deleteHandler(adminID, "Sclasses")
+      icon: <DeleteIcon color="error" />, name: 'Delete All Majors',
+      action: () => deleteHandler(adminID, "Majors")
     },
   ];
 
@@ -150,14 +150,14 @@ const ShowClasses = () => {
         <>
           {getresponse ?
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
-              <GreenButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
-                Add Class
+              <GreenButton variant="contained" onClick={() => navigate("/Admin/addmajor")}>
+                Add Major
               </GreenButton>
             </Box>
             :
             <>
-              {Array.isArray(sclassesList) && sclassesList.length > 0 &&
-                <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
+              {Array.isArray(majorsList) && majorsList.length > 0 &&
+                <TableTemplate buttonHaver={MajorButtonHaver} columns={majorColumns} rows={majorRows} />
               }
               <SpeedDialTemplate actions={actions} />
             </>}
@@ -169,7 +169,7 @@ const ShowClasses = () => {
   );
 };
 
-export default ShowClasses;
+export default ShowMajors;
 
 const styles = {
   styledPaper: {

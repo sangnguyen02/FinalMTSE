@@ -11,7 +11,7 @@ const studentRegister = async (req, res) => {
             studentID: req.body.studentID,
             email: req.body.email,
             school: req.body.adminID,
-            sclassName: req.body.sclassName,
+            majorName: req.body.majorName,
         });
 
         if (existingStudent) {
@@ -41,7 +41,7 @@ const studentLogIn = async (req, res) => {
             const validated = await bcrypt.compare(req.body.password, student.password);
             if (validated) {
                 student = await student.populate("school", "schoolName")
-                student = await student.populate("sclassName", "sclassName")
+                student = await student.populate("majorName", "majorName")
                 student.password = undefined;
                 student.examResult = undefined;
                 student.attendance = undefined;
@@ -59,7 +59,7 @@ const studentLogIn = async (req, res) => {
 
 const getStudents = async (req, res) => {
     try {
-        let students = await Student.find({ school: req.params.id }).populate("sclassName", "sclassName");
+        let students = await Student.find({ school: req.params.id }).populate("majorName", "majorName");
         if (students.length > 0) {
             let modifiedStudents = students.map((student) => {
                 return { ...student._doc, password: undefined };
@@ -77,7 +77,7 @@ const getStudentDetail = async (req, res) => {
     try {
         let student = await Student.findById(req.params.id)
             .populate("school", "schoolName")
-            .populate("sclassName", "sclassName")
+            .populate("majorName", "majorName")
             .populate("examResult.projectName", "projectName")
             .populate("attendance.projectName", "projectName sessions");
         if (student) {
@@ -114,9 +114,9 @@ const deleteStudents = async (req, res) => {
     }
 }
 
-const deleteStudentsByClass = async (req, res) => {
+const deleteStudentsByMajor = async (req, res) => {
     try {
-        const result = await Student.deleteMany({ sclassName: req.params.id })
+        const result = await Student.deleteMany({ majorName: req.params.id })
         if (result.deletedCount === 0) {
             res.send({ message: "No students found to delete" })
         } else {
@@ -282,7 +282,7 @@ module.exports = {
     deleteStudent,
     updateStudent,
     studentAttendance,
-    deleteStudentsByClass,
+    deleteStudentsByMajor,
     updateExamResult,
 
     clearAllStudentsAttendanceByProject,

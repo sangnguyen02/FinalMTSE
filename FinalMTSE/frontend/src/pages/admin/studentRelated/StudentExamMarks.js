@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getUserDetails } from '../../../redux/userRelated/userHandle';
-import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../../redux/majorRelated/majorHandle';
 import { updateStudentFields } from '../../../redux/studentRelated/studentHandle';
 
 import Popup from '../../../components/Popup';
@@ -17,7 +17,7 @@ import {
 const StudentExamMarks = ({ situation }) => {
     const dispatch = useDispatch();
     const { currentUser, userDetails, loading } = useSelector((state) => state.user);
-    const { projectsList } = useSelector((state) => state.sclass);
+    const { projectsList } = useSelector((state) => state.major);
     const { response, error, statestatus } = useSelector((state) => state.student);
     const params = useParams()
 
@@ -45,8 +45,8 @@ const StudentExamMarks = ({ situation }) => {
     }, [situation]);
 
     useEffect(() => {
-        if (userDetails && userDetails.sclassName && situation === "Student") {
-            dispatch(getProjectList(userDetails.sclassName._id, "ClassProjects"));
+        if (userDetails && userDetails.majorName && situation === "Student") {
+            dispatch(getProjectList(userDetails.majorName._id, "MajorProjects"));
         }
     }, [dispatch, userDetails]);
 

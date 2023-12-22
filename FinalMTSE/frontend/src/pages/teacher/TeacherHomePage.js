@@ -6,7 +6,7 @@ import Students from "../../assets/img1.png";
 import Projects from "../../assets/img4.png";
 import Tests from "../../assets/assignment.svg";
 import Time from "../../assets/time.svg";
-import { getClassStudents, getProjectDetails } from '../../redux/sclassRelated/sclassHandle';
+import { getMajorStudents, getProjectDetails } from '../../redux/majorRelated/majorHandle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -14,17 +14,17 @@ const TeacherHomePage = () => {
     const dispatch = useDispatch();
 
     const { currentUser } = useSelector((state) => state.user);
-    const { projectLists, sclassStudents } = useSelector((state) => state.sclass);
+    const { projectLists, majorStudents } = useSelector((state) => state.major);
 
-    const classID = currentUser.teachSclass?._id
+    const majorID = currentUser.teachMajor?._id
     const projectID = currentUser.teachProject?._id
 
     useEffect(() => {
         dispatch(getProjectDetails(projectID, "Project"));
-        dispatch(getClassStudents(classID));
-    }, [dispatch, projectID, classID]);
+        dispatch(getMajorStudents(majorID));
+    }, [dispatch, projectID, majorID]);
 
-    const numberOfStudents = sclassStudents && sclassStudents.length;
+    const numberOfStudents = majorStudents && majorStudents.length;
     const numberOfProjects = projectLists && projectLists.length;
 
     return (
@@ -35,7 +35,7 @@ const TeacherHomePage = () => {
                         <StyledPaper>
                             <img src={Students} alt="Students" />
                             <Title>
-                                Class Students
+                                Major Students
                             </Title>
                             <Data start={0} end={numberOfStudents} duration={2.5} />
                         </StyledPaper>

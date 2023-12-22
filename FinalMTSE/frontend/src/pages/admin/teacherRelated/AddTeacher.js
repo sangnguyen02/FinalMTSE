@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getProjectDetails } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectDetails } from '../../../redux/majorRelated/majorHandle';
 import Popup from '../../../components/Popup';
 import { registerUser } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
@@ -15,7 +15,7 @@ const AddTeacher = () => {
   const projectID = params.id
 
   const { status, response, error } = useSelector(state => state.user);
-  const { projectDetails } = useSelector((state) => state.sclass);
+  const { projectDetails } = useSelector((state) => state.major);
 
   useEffect(() => {
     dispatch(getProjectDetails(projectID, "Project"));
@@ -32,9 +32,9 @@ const AddTeacher = () => {
   const role = "Teacher"
   const school = projectDetails && projectDetails.school
   const teachProject = projectDetails && projectDetails._id
-  const teachSclass = projectDetails && projectDetails.sclassName && projectDetails.sclassName._id
+  const teachMajor = projectDetails && projectDetails.majorName && projectDetails.majorName._id
 
-  const fields = { name, email, password, role, school, teachProject, teachSclass }
+  const fields = { name, email, password, role, school, teachProject, teachMajor }
 
   const submitHandler = (event) => {
     event.preventDefault()
@@ -69,7 +69,7 @@ const AddTeacher = () => {
             Project : {projectDetails && projectDetails.projectName}
           </label>
           <label>
-            Class : {projectDetails && projectDetails.sclassName && projectDetails.sclassName.sclassName}
+            Major : {projectDetails && projectDetails.majorName && projectDetails.majorName.majorName}
           </label>
           <label>Name</label>
           <input className="registerInput" type="text" placeholder="Enter teacher's name..."

@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 const { adminRegister, adminLogIn, getAdminDetail} = require('../controllers/admin-controller.js');
 
-const { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents } = require('../controllers/class-controller.js');
+const { majorCreate, majorList, deleteMajor, deleteMajors, getMajorDetail, getMajorStudents } = require('../controllers/major-controller.js');
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
 const { noticeCreate, noticeList, deleteNotices, deleteNotice, updateNotice } = require('../controllers/notice-controller.js');
 const {
@@ -16,14 +16,14 @@ const {
     deleteStudent,
     updateStudent,
     studentAttendance,
-    deleteStudentsByClass,
+    deleteStudentsByMajor,
     updateExamResult,
     clearAllStudentsAttendanceByProject,
     clearAllStudentsAttendance,
     removeStudentAttendanceByProject,
     removeStudentAttendance } = require('../controllers/student_controller.js');
-const { projectCreate, classProjects, deleteProjectsByClass, getProjectDetail, deleteProject, freeProjectList, allProjects, deleteProjects } = require('../controllers/project-controller.js');
-const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
+const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, deleteProject, freeProjectList, allProjects, deleteProjects } = require('../controllers/project-controller.js');
+const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByMajor, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
 
 // Admin
 router.post('/AdminReg', adminRegister);
@@ -43,7 +43,7 @@ router.get("/Students/:id", getStudents)
 router.get("/Student/:id", getStudentDetail)
 
 router.delete("/Students/:id", deleteStudents)
-router.delete("/StudentsClass/:id", deleteStudentsByClass)
+router.delete("/StudentsMajor/:id", deleteStudentsByMajor)
 router.delete("/Student/:id", deleteStudent)
 
 router.put("/Student/:id", updateStudent)
@@ -67,7 +67,7 @@ router.get("/Teachers/:id", getTeachers)
 router.get("/Teacher/:id", getTeacherDetail)
 
 router.delete("/Teachers/:id", deleteTeachers)
-router.delete("/TeachersClass/:id", deleteTeachersByClass)
+router.delete("/TeachersMajor/:id", deleteTeachersByMajor)
 router.delete("/Teacher/:id", deleteTeacher)
 
 router.put("/TeacherProject", updateTeacherProject)
@@ -91,29 +91,29 @@ router.post('/ComplainCreate', complainCreate);
 
 router.get('/ComplainList/:id', complainList);
 
-// Sclass
+// Major
 
-router.post('/SclassCreate', sclassCreate);
+router.post('/MajorCreate', majorCreate);
 
-router.get('/SclassList/:id', sclassList);
-router.get("/Sclass/:id", getSclassDetail)
+router.get('/MajorList/:id', majorList);
+router.get("/Major/:id", getMajorDetail)
 
-router.get("/Sclass/Students/:id", getSclassStudents)
+router.get("/Major/Students/:id", getMajorStudents)
 
-router.delete("/Sclasses/:id", deleteSclasses)
-router.delete("/Sclass/:id", deleteSclass)
+router.delete("/Majors/:id", deleteMajors)
+router.delete("/Major/:id", deleteMajor)
 
 // Project
 
 router.post('/ProjectCreate', projectCreate);
 
 router.get('/AllProjects/:id', allProjects);
-router.get('/ClassProjects/:id', classProjects);
+router.get('/MajorProjects/:id', majorProjects);
 router.get('/FreeProjectList/:id', freeProjectList);
 router.get("/Project/:id", getProjectDetail)
 
 router.delete("/Project/:id", deleteProject)
 router.delete("/Projects/:id", deleteProjects)
-router.delete("/ProjectsClass/:id", deleteProjectsByClass)
+router.delete("/ProjectsMajor/:id", deleteProjectsByMajor)
 
 module.exports = router;

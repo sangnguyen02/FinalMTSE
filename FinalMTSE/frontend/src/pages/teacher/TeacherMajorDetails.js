@@ -2,24 +2,24 @@ import { useEffect } from "react";
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
-import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
+import { getMajorStudents } from "../../redux/majorRelated/majorHandle";
 import { Paper, Box, Typography, ButtonGroup, Button, Popper, Grow, ClickAwayListener, MenuList, MenuItem } from '@mui/material';
 import { BlackButton, BlueButton} from "../../components/buttonStyles";
 import TableTemplate from "../../components/TableTemplate";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
-const TeacherClassDetails = () => {
+const TeacherMajorDetails = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { sclassStudents, loading, error, getresponse } = useSelector((state) => state.sclass);
+    const { majorStudents, loading, error, getresponse } = useSelector((state) => state.major);
 
     const { currentUser } = useSelector((state) => state.user);
-    const classID = currentUser.teachSclass?._id
+    const majorID = currentUser.teachMajor?._id
     const subjectID = currentUser.teachSubject?._id
 
     useEffect(() => {
-        dispatch(getClassStudents(classID));
-    }, [dispatch, classID])
+        dispatch(getMajorStudents(majorID));
+    }, [dispatch, majorID])
 
     if (error) {
         console.log(error)
@@ -30,7 +30,7 @@ const TeacherClassDetails = () => {
         { id: 'rollNum', label: 'Roll Number', minWidth: 100 },
     ]
 
-    const studentRows = sclassStudents.map((student) => {
+    const studentRows = majorStudents.map((student) => {
         return {
             name: student.name,
             rollNum: student.rollNum,
@@ -55,10 +55,10 @@ const TeacherClassDetails = () => {
         };
 
         const handleAttendance = () => {
-            navigate(`/Teacher/class/student/attendance/${row.id}/${subjectID}`)
+            navigate(`/Teacher/major/student/attendance/${row.id}/${subjectID}`)
         }
         const handleMarks = () => {
-            navigate(`/Teacher/class/student/marks/${row.id}/${subjectID}`)
+            navigate(`/Teacher/major/student/marks/${row.id}/${subjectID}`)
         };
 
         const handleMenuItemClick = (event, index) => {
@@ -82,7 +82,7 @@ const TeacherClassDetails = () => {
                 <BlueButton
                     variant="contained"
                     onClick={() =>
-                        navigate("/Teacher/class/student/" + row.id)
+                        navigate("/Teacher/major/student/" + row.id)
                     }
                 >
                     View
@@ -150,7 +150,7 @@ const TeacherClassDetails = () => {
             ) : (
                 <>
                     <Typography variant="h4" align="center" gutterBottom>
-                        Class Details
+                        Major Details
                     </Typography>
                     {getresponse ? (
                         <>
@@ -164,7 +164,7 @@ const TeacherClassDetails = () => {
                                 Students List:
                             </Typography>
 
-                            {Array.isArray(sclassStudents) && sclassStudents.length > 0 &&
+                            {Array.isArray(majorStudents) && majorStudents.length > 0 &&
                                 <TableTemplate buttonHaver={StudentsButtonHaver} columns={studentColumns} rows={studentRows} />
                             }
                         </Paper>
@@ -175,4 +175,4 @@ const TeacherClassDetails = () => {
     );
 };
 
-export default TeacherClassDetails;
+export default TeacherMajorDetails;

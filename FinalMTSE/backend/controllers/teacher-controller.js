@@ -3,12 +3,12 @@ const Teacher = require('../models/teacherSchema.js');
 const Project = require('../models/projectSchema.js');
 
 const teacherRegister = async (req, res) => {
-    const { name, email, password, role, school, teachProject, teachSclass } = req.body;
+    const { name, email, password, role, school, teachProject, teachMajor } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
 
-        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachProject, teachSclass });
+        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachProject, teachMajor });
 
         const existingTeacherByEmail = await Teacher.findOne({ email });
 
@@ -34,7 +34,7 @@ const teacherLogIn = async (req, res) => {
             if (validated) {
                 teacher = await teacher.populate("teachProject", "projectName sessions")
                 teacher = await teacher.populate("school", "schoolName")
-                teacher = await teacher.populate("teachSclass", "sclassName")
+                teacher = await teacher.populate("teachMajor", "majorName")
                 teacher.password = undefined;
                 res.send(teacher);
             } else {
@@ -52,7 +52,7 @@ const getTeachers = async (req, res) => {
     try {
         let teachers = await Teacher.find({ school: req.params.id })
             .populate("teachProject", "projectName")
-            .populate("teachSclass", "sclassName");
+            .populate("teachMajor", "majorName");
         if (teachers.length > 0) {
             let modifiedTeachers = teachers.map((teacher) => {
                 return { ...teacher._doc, password: undefined };
@@ -71,7 +71,7 @@ const getTeacherDetail = async (req, res) => {
         let teacher = await Teacher.findById(req.params.id)
             .populate("teachProject", "projectName sessions")
             .populate("school", "schoolName")
-            .populate("teachSclass", "sclassName")
+            .populate("teachMajor", "majorName")
         if (teacher) {
             teacher.password = undefined;
             res.send(teacher);
@@ -140,9 +140,9 @@ const deleteTeachers = async (req, res) => {
     }
 };
 
-const deleteTeachersByClass = async (req, res) => {
+const deleteTeachersByMajor = async (req, res) => {
     try {
-        const deletionResult = await Teacher.deleteMany({ sclassName: req.params.id });
+        const deletionResult = await Teacher.deleteMany({ majorName: req.params.id });
 
         const deletedCount = deletionResult.deletedCount || 0;
 
@@ -151,7 +151,7 @@ const deleteTeachersByClass = async (req, res) => {
             return;
         }
 
-        const deletedTeachers = await Teacher.find({ sclassName: req.params.id });
+        const deletedTeachers = await Teacher.find({ majorName: req.params.id });
 
         await Project.updateMany(
             { teacher: { $in: deletedTeachers.map(teacher => teacher._id) }, teacher: { $exists: true } },
@@ -200,6 +200,6 @@ module.exports = {
     updateTeacherProject,
     deleteTeacher,
     deleteTeachers,
-    deleteTeachersByClass,
+    deleteTeachersByMajor,
     teacherAttendance
 };

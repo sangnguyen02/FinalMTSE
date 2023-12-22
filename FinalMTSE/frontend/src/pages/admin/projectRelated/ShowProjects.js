@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../../redux/majorRelated/majorHandle';
 import { deleteUser } from '../../../redux/userRelated/userHandle';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import {
@@ -16,7 +16,7 @@ import Popup from '../../../components/Popup';
 const ShowProjects = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { projectsList, loading, error, response } = useSelector((state) => state.sclass);
+    const { projectsList, loading, error, response } = useSelector((state) => state.major);
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
@@ -45,15 +45,15 @@ const ShowProjects = () => {
     const projectColumns = [
         { id: 'projectName', label: 'Project Name', minWidth: 170 },
         { id: 'sessions', label: 'Sessions', minWidth: 170 },
-        { id: 'sclassName', label: 'Class', minWidth: 170 },
+        { id: 'majorName', label: 'Major', minWidth: 170 },
     ]
 
     // const projectRows = projectList.map((project) => {
     //     return {
     //         projectName: project.projectName,
     //         sessions: project.sessions,
-    //         sclassName: project.sclassName.sclassName,
-    //         sclassID: project.sclassName._id,
+    //         majorName: project.majorName.majorName,
+    //         majorID: project.majorName._id,
     //         id: project._id,
     //     };
     // })
@@ -61,8 +61,8 @@ const ShowProjects = () => {
         projectsList.map((project) => ({
           projectName: project.projectName,
           sessions: project.sessions,
-          sclassName: project.sclassName.sclassName,
-          sclassID: project.sclassName._id,
+          majorName: project.majorName.majorName,
+          majorID: project.majorName._id,
           id: project._id,
         }))
       ) : [];
@@ -74,7 +74,7 @@ const ShowProjects = () => {
                     <DeleteIcon color="error" />
                 </IconButton>
                 <BlueButton variant="contained"
-                    onClick={() => navigate(`/Admin/projects/project/${row.sclassID}/${row.id}`)}>
+                    onClick={() => navigate(`/Admin/projects/project/${row.majorID}/${row.id}`)}>
                     View
                 </BlueButton>
             </>
@@ -84,7 +84,7 @@ const ShowProjects = () => {
     const actions = [
         {
             icon: <PostAddIcon color="primary" />, name: 'Add New Project',
-            action: () => navigate("/Admin/projects/chooseclass")
+            action: () => navigate("/Admin/projects/choosemajor")
         },
         {
             icon: <DeleteIcon color="error" />, name: 'Delete All Projects',
@@ -101,7 +101,7 @@ const ShowProjects = () => {
                     {response ?
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"
-                                onClick={() => navigate("/Admin/projects/chooseclass")}>
+                                onClick={() => navigate("/Admin/projects/choosemajor")}>
                                 Add Project
                             </GreenButton>
                         </Box>

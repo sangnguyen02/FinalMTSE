@@ -16,7 +16,7 @@ const ProjectForm = () => {
     const userState = useSelector(state => state.user);
     const { status, currentUser, response, error } = userState;
 
-    const sclassName = params.id
+    const majorName = params.id
     const adminID = currentUser._id
     const address = "Project"
 
@@ -53,7 +53,7 @@ const ProjectForm = () => {
     };
 
     const fields = {
-        sclassName,
+        majorName,
         projects: projects.map((project) => ({
             projectName: project.projectName,
             projectCode: project.projectCode,

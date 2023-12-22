@@ -52,8 +52,8 @@ const ViewStdAttendance = () => {
         return {
             project: projectName,
             attendancePercentage: projectAttendancePercentage,
-            totalClasses: sessions,
-            attendedClasses: present
+            totalMajors: sessions,
+            attendedMajors: present
         };
     });
 

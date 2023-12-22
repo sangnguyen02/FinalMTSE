@@ -9,7 +9,7 @@ const TeacherProfile = () => {
   if (response) { console.log(response) }
   else if (error) { console.log(error) }
 
-  const teachSclass = currentUser.teachSclass
+  const teachMajor = currentUser.teachMajor
   const teachProject = currentUser.teachProject
   const teachSchool = currentUser.school
 
@@ -19,7 +19,7 @@ const TeacherProfile = () => {
         <ProfileCardContent>
           <ProfileText>Name: {currentUser.name}</ProfileText>
           <ProfileText>Email: {currentUser.email}</ProfileText>
-          <ProfileText>Class: {teachSclass.sclassName}</ProfileText>
+          <ProfileText>Major: {teachMajor.majorName}</ProfileText>
           <ProfileText>Project: {teachProject.projectName}</ProfileText>
           <ProfileText>School: {teachSchool.schoolName}</ProfileText>
         </ProfileCardContent>
