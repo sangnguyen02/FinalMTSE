@@ -1,5 +1,7 @@
 const { getGoogleOauthToken, getGoogleUser }= require('./googleServer')
-
+const Admin = require("../models/adminSchema")
+const Student = require("../models/studentSchema")
+const Teacher = require("../models/teacherSchema")
 exports.googleOauthHandler = async (req, res, next) => {
     try {
         const code = req.query.code;
@@ -18,6 +20,20 @@ exports.googleOauthHandler = async (req, res, next) => {
             access_token
           });
           console.log(email)
+          let admin = await Admin.findOne({ email });
+          if(admin) {
+            const cookieOption = {
+              expires: new Date(
+                Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+              ),
+              httpOnly: false
+            };
+        
+            res.cookie('user', admin, cookieOption);
+            res.redirect("http://localhost:3000/")
+          }
+          let student = await Student.findOne({ email: req.body.email });
+          let teacher = await Teacher.findOne({ email: req.body.email });
     }
     catch (err) {
         console.error(err)

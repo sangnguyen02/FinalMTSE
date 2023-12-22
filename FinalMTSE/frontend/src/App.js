@@ -8,13 +8,36 @@ import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import LoginPage from './pages/LoginPage';
 import AdminRegisterPage from './pages/admin/AdminRegisterPage';
 import ChooseUser from './pages/ChooseUser';
-
+import {useCookies} from "react-cookie";
+import {
+  authRequest,
+  stuffAdded,
+  authSuccess,
+  authFailed,
+  authError,
+  authLogout,
+  doneSuccess,
+  getDeleteSuccess,
+  getRequest,
+  getFailed,
+  getError,
+} from '../src/redux/userRelated/userSlice';
 const App = () => {
+  let currentUser;
+  const [cookies] = useCookies();
+  const user = cookies.user
   const { currentRole } = useSelector(state => state.user);
+  console.log(cookies)
+  currentUser = currentRole
+  if(user) {
+    authSuccess(user)
+   
+ 
+  }
 
   return (
     <Router>
-      {currentRole === null &&
+      {currentUser === null &&
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/choose" element={<ChooseUser visitor="normal" />} />
@@ -29,19 +52,19 @@ const App = () => {
           <Route path='*' element={<Navigate to="/" />} />
         </Routes>}
 
-      {currentRole === "Admin" &&
+      {currentUser === "Admin" &&
         <>
           <AdminDashboard />
         </>
       }
 
-      {currentRole === "Student" &&
+      {currentUser === "Student" &&
         <>
           <StudentDashboard />
         </>
       }
 
-      {currentRole === "Teacher" &&
+      {currentUser === "Teacher" &&
         <>
           <TeacherDashboard />
         </>
