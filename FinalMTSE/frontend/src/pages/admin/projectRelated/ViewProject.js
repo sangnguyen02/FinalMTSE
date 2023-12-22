@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getClassStudents, getProjectDetails } from '../../../redux/sclassRelated/sclassHandle';
+import { getMajorStudents, getProjectDetails } from '../../../redux/majorRelated/majorHandle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Tab, Container, Typography, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
@@ -18,14 +18,14 @@ const ViewProject = () => {
   const navigate = useNavigate()
   const params = useParams()
   const dispatch = useDispatch();
-  const { subloading, projectDetails, sclassStudents, getresponse, error } = useSelector((state) => state.sclass);
+  const { subloading, projectDetails, majorStudents, getresponse, error } = useSelector((state) => state.major);
 
-  const { classID, projectID } = params
+  const { majorID, projectID } = params
 
   useEffect(() => {
     dispatch(getProjectDetails(projectID, "Project"));
-    dispatch(getClassStudents(classID));
-  }, [dispatch, projectID, classID]);
+    dispatch(getMajorStudents(majorID));
+  }, [dispatch, projectID, majorID]);
 
   if (error) {
     console.log(error)
@@ -47,7 +47,7 @@ const ViewProject = () => {
     { id: 'name', label: 'Name', minWidth: 170 },
   ]
 
-  const studentRows = sclassStudents.map((student) => {
+  const studentRows = majorStudents.map((student) => {
     return {
       studentID: student.studentID,
       name: student.name,
@@ -101,7 +101,7 @@ const ViewProject = () => {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
               <GreenButton
                 variant="contained"
-                onClick={() => navigate("/Admin/class/addstudents/" + classID)}
+                onClick={() => navigate("/Admin/major/addstudents/" + majorID)}
               >
                 Add Students
               </GreenButton>
@@ -142,7 +142,7 @@ const ViewProject = () => {
   }
 
   const ProjectDetailsSection = () => {
-    const numberOfStudents = sclassStudents.length;
+    const numberOfStudents = majorStudents.length;
 
     return (
       <>
@@ -162,7 +162,7 @@ const ViewProject = () => {
           Number of Students: {numberOfStudents}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Class Name : {projectDetails && projectDetails.sclassName && projectDetails.sclassName.sclassName}
+          Major Name : {projectDetails && projectDetails.majorName && projectDetails.majorName.majorName}
         </Typography>
         {projectDetails && projectDetails.teacher ?
           <Typography variant="h6" gutterBottom>

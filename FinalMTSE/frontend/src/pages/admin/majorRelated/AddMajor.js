@@ -9,8 +9,8 @@ import Popup from "../../../components/Popup";
 import Classroom from "../../../assets/classroom.png";
 import styled from "styled-components";
 
-const AddClass = () => {
-    const [sclassName, setSclassName] = useState("");
+const AddMajor = () => {
+    const [majorName, setMajorName] = useState("");
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -19,14 +19,14 @@ const AddClass = () => {
     const { status, currentUser, response, error, tempDetails } = userState;
 
     const adminID = currentUser._id
-    const address = "Sclass"
+    const address = "Major"
 
     const [loader, setLoader] = useState(false)
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
 
     const fields = {
-        sclassName,
+        majorName,
         adminID,
     };
 
@@ -38,7 +38,7 @@ const AddClass = () => {
 
     useEffect(() => {
         if (status === 'added' && tempDetails) {
-            navigate("/Admin/classes/class/" + tempDetails._id)
+            navigate("/Admin/majors/major/" + tempDetails._id)
             dispatch(underControl())
             setLoader(false)
         }
@@ -70,11 +70,11 @@ const AddClass = () => {
                     <form onSubmit={submitHandler}>
                         <Stack spacing={3}>
                             <TextField
-                                label="Create a class"
+                                label="Create a major"
                                 variant="outlined"
-                                value={sclassName}
+                                value={majorName}
                                 onChange={(event) => {
-                                    setSclassName(event.target.value);
+                                    setMajorName(event.target.value);
                                 }}
                                 required
                             />
@@ -100,7 +100,7 @@ const AddClass = () => {
     )
 }
 
-export default AddClass
+export default AddMajor
 
 const StyledContainer = styled(Box)`
   flex: 1 1 auto;

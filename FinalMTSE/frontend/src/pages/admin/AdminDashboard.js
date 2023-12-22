@@ -32,14 +32,14 @@ import ProjectForm from './projectRelated/ProjectForm';
 import ViewProject from './projectRelated/ViewProject';
 
 import AddTeacher from './teacherRelated/AddTeacher';
-import ChooseClass from './teacherRelated/ChooseClass';
+import ChooseMajor from './teacherRelated/ChooseMajor';
 import ChooseProject from './teacherRelated/ChooseProject';
 import ShowTeachers from './teacherRelated/ShowTeachers';
 import TeacherDetails from './teacherRelated/TeacherDetails';
 
-import AddClass from './classRelated/AddClass';
-import ClassDetails from './classRelated/ClassDetails';
-import ShowClasses from './classRelated/ShowClasses';
+import AddMajor from './majorRelated/AddMajor';
+import MajorDetails from './majorRelated/MajorDetails';
+import ShowMajors from './majorRelated/ShowMajors';
 import AccountMenu from '../../components/AccountMenu';
 
 const AdminDashboard = () => {
@@ -104,20 +104,20 @@ const AdminDashboard = () => {
 
                         {/* Project */}
                         <Route path="/Admin/projects" element={<ShowProjects />} />
-                        <Route path="/Admin/projects/project/:classID/:projectID" element={<ViewProject />} />
-                        <Route path="/Admin/projects/chooseclass" element={<ChooseClass situation="Project" />} />
+                        <Route path="/Admin/projects/project/:majorID/:projectID" element={<ViewProject />} />
+                        <Route path="/Admin/projects/choosemajor" element={<ChooseMajor situation="Project" />} />
 
                         <Route path="/Admin/addproject/:id" element={<ProjectForm />} />
-                        <Route path="/Admin/class/project/:classID/:projectID" element={<ViewProject />} />
+                        <Route path="/Admin/major/project/:majorID/:projectID" element={<ViewProject />} />
 
                         <Route path="/Admin/project/student/attendance/:studentID/:projectID" element={<StudentAttendance situation="Project" />} />
                         <Route path="/Admin/project/student/marks/:studentID/:projectID" element={<StudentExamMarks situation="Project" />} />
 
-                        {/* Class */}
-                        <Route path="/Admin/addclass" element={<AddClass />} />
-                        <Route path="/Admin/classes" element={<ShowClasses />} />
-                        <Route path="/Admin/classes/class/:id" element={<ClassDetails />} />
-                        <Route path="/Admin/class/addstudents/:id" element={<AddStudent situation="Class" />} />
+                        {/* Major */}
+                        <Route path="/Admin/addmajor" element={<AddMajor />} />
+                        <Route path="/Admin/majors" element={<ShowMajors />} />
+                        <Route path="/Admin/majors/major/:id" element={<MajorDetails />} />
+                        <Route path="/Admin/major/addstudents/:id" element={<AddStudent situation="Major" />} />
 
                         {/* Student */}
                         <Route path="/Admin/addstudents" element={<AddStudent situation="Student" />} />
@@ -129,9 +129,9 @@ const AdminDashboard = () => {
                         {/* Teacher */}
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
                         <Route path="/Admin/teachers/teacher/:id" element={<TeacherDetails />} />
-                        <Route path="/Admin/teachers/chooseclass" element={<ChooseClass situation="Teacher" />} />
+                        <Route path="/Admin/teachers/choosemajor" element={<ChooseMajor situation="Teacher" />} />
                         <Route path="/Admin/teachers/chooseproject/:id" element={<ChooseProject situation="Norm" />} />
-                        <Route path="/Admin/teachers/chooseproject/:classID/:teacherID" element={<ChooseProject situation="Teacher" />} />
+                        <Route path="/Admin/teachers/chooseproject/:majorID/:teacherID" element={<ChooseProject situation="Teacher" />} />
                         <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
 
                         <Route path="/logout" element={<Logout />} />

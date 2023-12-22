@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getUserDetails, updateUser } from '../../../redux/userRelated/userHandle';
 import { useNavigate, useParams } from 'react-router-dom'
-import { getProjectList } from '../../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../../redux/majorRelated/majorHandle';
 import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container, Grid, RadioGroup, FormControl, FormLabel, FormControlLabel, Radio } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -36,8 +36,8 @@ const ViewStudent = () => {
     }, [dispatch, studentID])
 
     useEffect(() => {
-        if (userDetails && userDetails.sclassName && userDetails.sclassName._id !== undefined) {
-            dispatch(getProjectList(userDetails.sclassName._id, "ClassProjects"));
+        if (userDetails && userDetails.majorName && userDetails.majorName._id !== undefined) {
+            dispatch(getProjectList(userDetails.majorName._id, "MajorProjects"));
         }
     }, [dispatch, userDetails]);
 
@@ -47,7 +47,7 @@ const ViewStudent = () => {
     const [name, setName] = useState('');
     const [studentId, setStudentID] = useState('');
     const [password, setPassword] = useState('');
-    const [sclassName, setSclassName] = useState('');
+    const [majorName, setMajorName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
@@ -87,7 +87,7 @@ const ViewStudent = () => {
         if (userDetails) {
             setName(userDetails.name || '');
             setStudentID(userDetails.studentID || '');
-            setSclassName(userDetails.sclassName || '');
+            setMajorName(userDetails.majorName || '');
             setStudentSchool(userDetails.school || '');
             setEmail(userDetails.email || '');
             setAddress(userDetails.address || '');
@@ -154,8 +154,8 @@ const ViewStudent = () => {
         return {
             project: projectName,
             attendancePercentage: projectAttendancePercentage,
-            totalClasses: sessions,
-            attendedClasses: present
+            totalMajors: sessions,
+            attendedMajors: present
         };
     });
 
@@ -362,7 +362,7 @@ const ViewStudent = () => {
                 <br />
                 Student ID: {userDetails.studentID}
                 <br />
-                Class: {sclassName.sclassName}
+                Major: {majorName.majorName}
                 <br />
                 Email: {userDetails.email}
                 <br />

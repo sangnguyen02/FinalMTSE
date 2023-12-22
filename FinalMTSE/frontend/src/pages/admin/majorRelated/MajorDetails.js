@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
-import { getClassDetails, getClassStudents, getProjectList } from "../../../redux/sclassRelated/sclassHandle";
+import { getMajorDetails, getMajorStudents, getProjectList } from "../../../redux/majorRelated/majorHandle";
 import { deleteUser } from '../../../redux/userRelated/userHandle';
 import {
     Box, Container, Typography, Tab, IconButton
@@ -9,7 +9,7 @@ import {
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { resetProjects } from "../../../redux/sclassRelated/sclassSlice";
+import { resetProjects } from "../../../redux/majorRelated/majorSlice";
 import { BlueButton, GreenButton, PurpleButton } from "../../../components/buttonStyles";
 import TableTemplate from "../../../components/TableTemplate";
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -19,19 +19,19 @@ import Popup from "../../../components/Popup";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
-const ClassDetails = () => {
+const MajorDetails = () => {
     const params = useParams()
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { projectsList, sclassStudents, sclassDetails, loading, error, response, getresponse } = useSelector((state) => state.sclass);
+    const { projectsList, majorStudents, majorDetails, loading, error, response, getresponse } = useSelector((state) => state.major);
 
-    const classID = params.id
+    const majorID = params.id
 
     useEffect(() => {
-        dispatch(getClassDetails(classID, "Sclass"));
-        dispatch(getProjectList(classID, "ClassProjects"))
-        dispatch(getClassStudents(classID));
-    }, [dispatch, classID])
+        dispatch(getMajorDetails(majorID, "Major"));
+        dispatch(getProjectList(majorID, "MajorProjects"))
+        dispatch(getMajorStudents(majorID));
+    }, [dispatch, majorID])
 
     if (error) {
         console.log(error)
@@ -53,9 +53,9 @@ const ClassDetails = () => {
         setShowPopup(true)
         // dispatch(deleteUser(deleteID, address))
         //     .then(() => {
-        //         dispatch(getClassStudents(classID));
+        //         dispatch(getMajorStudents(majorID));
         //         dispatch(resetProjects())
-        //         dispatch(getProjectList(classID, "ClassProjects"))
+        //         dispatch(getProjectList(majorID, "MajorProjects"))
         //     })
     }
 
@@ -81,7 +81,7 @@ const ClassDetails = () => {
                 <BlueButton
                     variant="contained"
                     onClick={() => {
-                        navigate(`/Admin/class/project/${classID}/${row.id}`)
+                        navigate(`/Admin/major/project/${majorID}/${row.id}`)
                     }}
                 >
                     View
@@ -93,22 +93,22 @@ const ClassDetails = () => {
     const projectActions = [
         {
             icon: <PostAddIcon color="primary" />, name: 'Add New Project',
-            action: () => navigate("/Admin/addproject/" + classID)
+            action: () => navigate("/Admin/addproject/" + majorID)
         },
         {
             icon: <DeleteIcon color="error" />, name: 'Delete All Projects',
-            action: () => deleteHandler(classID, "ProjectsClass")
+            action: () => deleteHandler(majorID, "ProjectsMajor")
         }
     ];
 
-    const ClassProjectsSection = () => {
+    const MajorProjectsSection = () => {
         return (
             <>
                 {response ?
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                         <GreenButton
                             variant="contained"
-                            onClick={() => navigate("/Admin/addproject/" + classID)}
+                            onClick={() => navigate("/Admin/addproject/" + majorID)}
                         >
                             Add Projects
                         </GreenButton>
@@ -132,7 +132,7 @@ const ClassDetails = () => {
         { id: 'rollNum', label: 'Roll Number', minWidth: 100 },
     ]
 
-    const studentRows = sclassStudents.map((student) => {
+    const studentRows = majorStudents.map((student) => {
         return {
             name: student.name,
             rollNum: student.rollNum,
@@ -167,15 +167,15 @@ const ClassDetails = () => {
     const studentActions = [
         {
             icon: <PersonAddAlt1Icon color="primary" />, name: 'Add New Student',
-            action: () => navigate("/Admin/class/addstudents/" + classID)
+            action: () => navigate("/Admin/major/addstudents/" + majorID)
         },
         {
             icon: <PersonRemoveIcon color="error" />, name: 'Delete All Students',
-            action: () => deleteHandler(classID, "StudentsClass")
+            action: () => deleteHandler(majorID, "StudentsMajor")
         },
     ];
 
-    const ClassStudentsSection = () => {
+    const MajorStudentsSection = () => {
         return (
             <>
                 {getresponse ? (
@@ -183,7 +183,7 @@ const ClassDetails = () => {
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton
                                 variant="contained"
-                                onClick={() => navigate("/Admin/class/addstudents/" + classID)}
+                                onClick={() => navigate("/Admin/major/addstudents/" + majorID)}
                             >
                                 Add Students
                             </GreenButton>
@@ -203,7 +203,7 @@ const ClassDetails = () => {
         )
     }
 
-    const ClassTeachersSection = () => {
+    const MajorTeachersSection = () => {
         return (
             <>
                 Teachers
@@ -211,17 +211,17 @@ const ClassDetails = () => {
         )
     }
 
-    const ClassDetailsSection = () => {
+    const MajorDetailsSection = () => {
         const numberOfProjects = projectsList.length;
-        const numberOfStudents = sclassStudents.length;
+        const numberOfStudents = majorStudents.length;
 
         return (
             <>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Class Details
+                    Major Details
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    This is Class {sclassDetails && sclassDetails.sclassName}
+                    This is Major {majorDetails && majorDetails.majorName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     Number of Projects: {numberOfProjects}
@@ -232,7 +232,7 @@ const ClassDetails = () => {
                 {getresponse &&
                     <GreenButton
                         variant="contained"
-                        onClick={() => navigate("/Admin/class/addstudents/" + classID)}
+                        onClick={() => navigate("/Admin/major/addstudents/" + majorID)}
                     >
                         Add Students
                     </GreenButton>
@@ -240,7 +240,7 @@ const ClassDetails = () => {
                 {response &&
                     <GreenButton
                         variant="contained"
-                        onClick={() => navigate("/Admin/addproject/" + classID)}
+                        onClick={() => navigate("/Admin/addproject/" + majorID)}
                     >
                         Add Projects
                     </GreenButton>
@@ -267,16 +267,16 @@ const ClassDetails = () => {
                             </Box>
                             <Container sx={{ marginTop: "3rem", marginBottom: "4rem" }}>
                                 <TabPanel value="1">
-                                    <ClassDetailsSection />
+                                    <MajorDetailsSection />
                                 </TabPanel>
                                 <TabPanel value="2">
-                                    <ClassProjectsSection />
+                                    <MajorProjectsSection />
                                 </TabPanel>
                                 <TabPanel value="3">
-                                    <ClassStudentsSection />
+                                    <MajorStudentsSection />
                                 </TabPanel>
                                 <TabPanel value="4">
-                                    <ClassTeachersSection />
+                                    <MajorTeachersSection />
                                 </TabPanel>
                             </Container>
                         </TabContext>
@@ -288,4 +288,4 @@ const ClassDetails = () => {
     );
 };
 
-export default ClassDetails;
+export default MajorDetails;

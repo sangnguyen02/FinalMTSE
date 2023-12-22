@@ -23,7 +23,7 @@ const TeacherDetails = () => {
     const isProjectNamePresent = teacherDetails?.teachProject?.projectName;
 
     const handleAddProject = () => {
-        navigate(`/Admin/teachers/chooseproject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`);
+        navigate(`/Admin/teachers/chooseproject/${teacherDetails?.teachMajor?._id}/${teacherDetails?._id}`);
     };
 
     return (
@@ -39,7 +39,7 @@ const TeacherDetails = () => {
                         Teacher Name: {teacherDetails?.name}
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                        Class Name: {teacherDetails?.teachSclass?.sclassName}
+                        Major Name: {teacherDetails?.teachMajor?.majorName}
                     </Typography>
                     {isProjectNamePresent ? (
                         <>

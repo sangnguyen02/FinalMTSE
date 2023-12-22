@@ -32,9 +32,9 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    sclassName: {
+    majorName: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'sclass',
+        ref: 'major',
         required: true,
     },
     school: {

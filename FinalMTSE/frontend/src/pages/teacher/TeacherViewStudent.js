@@ -28,7 +28,7 @@ const TeacherViewStudent = () => {
     if (response) { console.log(response) }
     else if (error) { console.log(error) }
 
-    const [sclassName, setSclassName] = useState('');
+    const [majorName, setMajorName] = useState('');
     const [studentSchool, setStudentSchool] = useState('');
     const [projectMarks, setProjectMarks] = useState('');
     const [projectAttendance, setProjectAttendance] = useState([]);
@@ -44,7 +44,7 @@ const TeacherViewStudent = () => {
 
     useEffect(() => {
         if (userDetails) {
-            setSclassName(userDetails.sclassName || '');
+            setMajorName(userDetails.majorName || '');
             setStudentSchool(userDetails.school || '');
             setProjectMarks(userDetails.examResult || '');
             setProjectAttendance(userDetails.attendance || []);
@@ -72,7 +72,7 @@ const TeacherViewStudent = () => {
                     <br />
                     Roll Number: {userDetails.rollNum}
                     <br />
-                    Class: {sclassName.sclassName}
+                    Major: {majorName.majorName}
                     <br />
                     School: {studentSchool.schoolName}
                     <br /><br />
@@ -162,7 +162,7 @@ const TeacherViewStudent = () => {
                         variant="contained"
                         onClick={() =>
                             navigate(
-                                `/Teacher/class/student/attendance/${studentID}/${teachProjectID}`
+                                `/Teacher/major/student/attendance/${studentID}/${teachProjectID}`
                             )
                         }
                     >
@@ -202,7 +202,7 @@ const TeacherViewStudent = () => {
                     <PurpleButton variant="contained"
                         onClick={() =>
                             navigate(
-                                `/Teacher/class/student/marks/${studentID}/${teachProjectID}`
+                                `/Teacher/major/student/marks/${studentID}/${teachProjectID}`
                             )}>
                         Add Marks
                     </PurpleButton>

@@ -10,9 +10,9 @@ import {
     getProjectsSuccess,
     getProjectDetailsSuccess,
     getProjectDetailsRequest
-} from './sclassSlice';
+} from './majorSlice';
 
-export const getAllSclasses = (id, address) => async (dispatch) => {
+export const getAllMajors = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
@@ -27,11 +27,11 @@ export const getAllSclasses = (id, address) => async (dispatch) => {
     }
 }
 
-export const getClassStudents = (id) => async (dispatch) => {
+export const getMajorStudents = (id) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/Sclass/Students/${id}`);
+        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/Major/Students/${id}`);
         if (result.data.message) {
             dispatch(getFailedTwo(result.data.message));
         } else {
@@ -42,7 +42,7 @@ export const getClassStudents = (id) => async (dispatch) => {
     }
 }
 
-export const getClassDetails = (id, address) => async (dispatch) => {
+export const getMajorDetails = (id, address) => async (dispatch) => {
     dispatch(getRequest());
 
     try {
@@ -70,7 +70,7 @@ export const getProjectList = (id, address) => async (dispatch) => {
     }
 }
 
-export const getTeacherFreeClassProjects = (id) => async (dispatch) => {
+export const getTeacherFreeMajorProjects = (id) => async (dispatch) => {
     dispatch(getRequest());
 
     try {

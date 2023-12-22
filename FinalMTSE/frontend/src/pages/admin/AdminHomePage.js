@@ -8,14 +8,14 @@ import styled from 'styled-components';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
+import { getAllMajors } from '../../redux/majorRelated/majorHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
     const { studentsList } = useSelector((state) => state.student);
-    const { sclassesList } = useSelector((state) => state.sclass);
+    const { majorsList } = useSelector((state) => state.major);
     const { teachersList } = useSelector((state) => state.teacher);
 
     const { currentUser } = useSelector(state => state.user)
@@ -24,12 +24,12 @@ const AdminHomePage = () => {
 
     useEffect(() => {
         dispatch(getAllStudents(adminID));
-        dispatch(getAllSclasses(adminID, "Sclass"));
+        dispatch(getAllMajors(adminID, "Major"));
         dispatch(getAllTeachers(adminID));
     }, [adminID, dispatch]);
 
     const numberOfStudents = studentsList && studentsList.length;
-    const numberOfClasses = sclassesList && sclassesList.length;
+    const numberOfMajors = majorsList && majorsList.length;
     const numberOfTeachers = teachersList && teachersList.length;
 
     return (
@@ -49,9 +49,9 @@ const AdminHomePage = () => {
                         <StyledPaper>
                             <img src={Classes} alt="Classes" />
                             <Title>
-                                Total Classes
+                                Total Majors
                             </Title>
-                            <Data start={0} end={numberOfClasses} duration={5} />
+                            <Data start={0} end={numberOfMajors} duration={5} />
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={3} lg={3}>
@@ -61,15 +61,6 @@ const AdminHomePage = () => {
                                 Total Teachers
                             </Title>
                             <Data start={0} end={numberOfTeachers} duration={2.5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Projects} alt="Projects" />
-                            <Title>
-                                Total Projects
-                            </Title>
-                            <Data start={0} end={0} duration={2.5} />                        
                         </StyledPaper>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12}>

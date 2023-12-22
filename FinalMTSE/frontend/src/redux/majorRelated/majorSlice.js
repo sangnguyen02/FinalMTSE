@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    sclassesList: [],
-    sclassStudents: [],
-    sclassDetails: [],
+    majorsList: [],
+    majorStudents: [],
+    majorDetails: [],
     projectsList: [],
     projectDetails: [],
     loading: false,
@@ -13,8 +13,8 @@ const initialState = {
     getresponse: null,
 };
 
-const sclassSlice = createSlice({
-    name: 'sclass',
+const majorSlice = createSlice({
+    name: 'major',
     initialState,
     reducers: {
         getRequest: (state) => {
@@ -24,13 +24,13 @@ const sclassSlice = createSlice({
             state.subloading = true;
         },
         getSuccess: (state, action) => {
-            state.sclassesList = action.payload;
+            state.majorsList = action.payload;
             state.loading = false;
             state.error = null;
             state.getresponse = null;
         },
         getStudentsSuccess: (state, action) => {
-            state.sclassStudents = action.payload;
+            state.majorStudents = action.payload;
             state.loading = false;
             state.error = null;
             state.getresponse = null;
@@ -48,8 +48,8 @@ const sclassSlice = createSlice({
             state.error = null;
         },
         getFailedTwo: (state, action) => {
-            state.sclassesList = [];
-            state.sclassStudents = [];
+            state.majorsList = [];
+            state.majorStudents = [];
             state.getresponse = action.payload;
             state.loading = false;
             state.error = null;
@@ -59,7 +59,7 @@ const sclassSlice = createSlice({
             state.error = action.payload;
         },
         detailsSuccess: (state, action) => {
-            state.sclassDetails = action.payload;
+            state.majorDetails = action.payload;
             state.loading = false;
             state.error = null;
         },
@@ -70,7 +70,7 @@ const sclassSlice = createSlice({
         },
         resetProjects: (state) => {
             state.projectsList = [];
-            state.sclassesList = [];
+            state.majorsList = [];
         },
     },
 });
@@ -87,6 +87,6 @@ export const {
     resetProjects,
     getProjectDetailsSuccess,
     getProjectDetailsRequest
-} = sclassSlice.actions;
+} = majorSlice.actions;
 
-export const sclassReducer = sclassSlice.reducer;
+export const majorReducer = majorSlice.reducer;

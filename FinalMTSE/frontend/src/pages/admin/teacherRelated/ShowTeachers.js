@@ -35,7 +35,7 @@ const ShowTeachers = () => {
     } else if (response) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
-                <GreenButton variant="contained" onClick={() => navigate("/Admin/teachers/chooseclass")}>
+                <GreenButton variant="contained" onClick={() => navigate("/Admin/teachers/choosemajor")}>
                     Add Teacher
                 </GreenButton>
             </Box>
@@ -58,15 +58,15 @@ const ShowTeachers = () => {
     const columns = [
         { id: 'name', label: 'Name', minWidth: 170 },
         { id: 'teachProject', label: 'Project', minWidth: 100 },
-        { id: 'teachSclass', label: 'Class', minWidth: 170 },
+        { id: 'teachMajor', label: 'Major', minWidth: 170 },
     ];
 
     const rows = teachersList.map((teacher) => {
         return {
             name: teacher.name,
             teachProject: teacher.teachProject?.projectName || null,
-            teachSclass: teacher.teachSclass.sclassName,
-            teachSclassID: teacher.teachSclass._id,
+            teachMajor: teacher.teachMajor.majorName,
+            teachMajorID: teacher.teachMajor._id,
             id: teacher._id,
         };
     });
@@ -74,7 +74,7 @@ const ShowTeachers = () => {
     const actions = [
         {
             icon: <PersonAddAlt1Icon color="primary" />, name: 'Add New Teacher',
-            action: () => navigate("/Admin/teachers/chooseclass")
+            action: () => navigate("/Admin/teachers/choosemajor")
         },
         {
             icon: <PersonRemoveIcon color="error" />, name: 'Delete All Teachers',
@@ -118,7 +118,7 @@ const ShowTeachers = () => {
                                                         ) : (
                                                             <Button variant="contained"
                                                                 onClick={() => {
-                                                                    navigate(`/Admin/teachers/chooseproject/${row.teachSclassID}/${row.id}`)
+                                                                    navigate(`/Admin/teachers/chooseproject/${row.teachMajorID}/${row.id}`)
                                                                 }}>
                                                                 Add Project
                                                             </Button>

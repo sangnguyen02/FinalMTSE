@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../../redux/userRelated/userHandle';
 import Popup from '../../../components/Popup';
 import { underControl } from '../../../redux/userRelated/userSlice';
-import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
+import { getAllMajors } from '../../../redux/majorRelated/majorHandle';
 import { CircularProgress } from '@mui/material';
 
 const AddStudent = ({ situation }) => {
@@ -14,14 +14,14 @@ const AddStudent = ({ situation }) => {
 
     const userState = useSelector(state => state.user);
     const { status, currentUser, response, error } = userState;
-    const { sclassesList } = useSelector((state) => state.sclass);
+    const { majorsList } = useSelector((state) => state.major);
 
     const [name, setName] = useState('');
     const [studentID, setStudentID] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
-    const [className, setClassName] = useState('')
-    const [sclassName, setSclassName] = useState('')
+    const [majorName, setMajorName] = useState('')
+    const [smajorName, setSmajorName] = useState('')
     const [DoB, setDoB] = useState('')
     const [address, setAddress] = useState('')
     const [gender, setGender] = useState('')
@@ -32,8 +32,8 @@ const AddStudent = ({ situation }) => {
     const attendance = []
 
     useEffect(() => {
-        if (situation === "Class") {
-            setSclassName(params.id);
+        if (situation === "Major") {
+            setSmajorName(params.id);
         }
     }, [params.id, situation]);
 
@@ -42,28 +42,28 @@ const AddStudent = ({ situation }) => {
     const [loader, setLoader] = useState(false)
 
     useEffect(() => {
-        dispatch(getAllSclasses(adminID, "Sclass"));
+        dispatch(getAllMajors(adminID, "Major"));
     }, [adminID, dispatch]);
 
     const changeHandler = (event) => {
-        if (event.target.value === 'Select Class') {
-            setClassName('Select Class');
-            setSclassName('');
+        if (event.target.value === 'Select Major') {
+            setMajorName('Select Major');
+            setSmajorName('');
         } else {
-            const selectedClass = sclassesList.find(
-                (classItem) => classItem.sclassName === event.target.value
+            const selectedMajor = majorsList.find(
+                (majorItem) => majorItem.majorName === event.target.value
             );
-            setClassName(selectedClass.sclassName);
-            setSclassName(selectedClass._id);
+            setMajorName(selectedMajor._id);
+            setSmajorName(selectedMajor._id);
         }
     }
 
-    const fields = { name, studentID, email, password, sclassName, adminID, role, attendance }
+    const fields = { name, studentID, email, password, majorName, adminID, role, attendance }
 
     const submitHandler = (event) => {
         event.preventDefault()
-        if (sclassName === "") {
-            setMessage("Please select a classname")
+        if (majorName === "") {
+            setMessage("Please select a majorname")
             setShowPopup(true)
         }
         else {
@@ -103,15 +103,15 @@ const AddStudent = ({ situation }) => {
                     {
                         situation === "Student" &&
                         <>
-                            <label>Class</label>
+                            <label>Major</label>
                             <select
                                 className="registerInput"
-                                value={className}
+                                value={majorName}
                                 onChange={changeHandler} required>
-                                <option value='Select Class'>Select Class</option>
-                                {sclassesList.map((classItem, index) => (
-                                    <option key={index} value={classItem.sclassName}>
-                                        {classItem.sclassName}
+                                <option value='Select Major'>Select Major</option>
+                                {majorsList.map((majorItem, index) => (
+                                    <option key={index} value={majorItem.majorName}>
+                                        {majorItem.majorName}
                                     </option>
                                 ))}
                             </select>

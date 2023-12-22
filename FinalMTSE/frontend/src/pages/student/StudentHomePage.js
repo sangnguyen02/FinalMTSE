@@ -9,22 +9,22 @@ import SeeNotice from '../../components/SeeNotice';
 import CountUp from 'react-countup';
 import Project from "../../assets/img4.png";
 import Assignment from "../../assets/assignment.svg";
-import { getProjectList } from '../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../redux/majorRelated/majorHandle';
 
 const StudentHomePage = () => {
     const dispatch = useDispatch();
 
     const { userDetails, currentUser, loading, response } = useSelector((state) => state.user);
-    const { subjectsList } = useSelector((state) => state.sclass);
+    const { subjectsList } = useSelector((state) => state.major);
 
     const [subjectAttendance, setSubjectAttendance] = useState([]);
 
-    const classID = currentUser.sclassName._id
+    const majorID = currentUser.majorName._id
 
     useEffect(() => {
         dispatch(getUserDetails(currentUser._id, "Student"));
-        dispatch(getProjectList(classID, "ClassSubjects"));
-    }, [dispatch, currentUser._id, classID]);
+        dispatch(getProjectList(majorID, "MajorSubjects"));
+    }, [dispatch, currentUser._id, majorID]);
 
     const numberOfSubjects = subjectsList && subjectsList.length;
 

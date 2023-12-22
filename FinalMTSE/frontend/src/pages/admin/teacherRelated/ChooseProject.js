@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Table, TableBody, TableContainer, TableHead, Typography, Paper } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom';
-import { getTeacherFreeClassProjects } from '../../../redux/sclassRelated/sclassHandle';
+import { getTeacherFreeMajorProjects } from '../../../redux/majorRelated/majorHandle';
 import { updateTeachProject } from '../../../redux/teacherRelated/teacherHandle';
 import { GreenButton, PurpleButton } from '../../../components/buttonStyles';
 import { StyledTableCell, StyledTableRow } from '../../../components/styles';
@@ -12,23 +12,23 @@ const ChooseProject = ({ situation }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
 
-    const [classID, setClassID] = useState("");
+    const [majorID, setMajorID] = useState("");
     const [teacherID, setTeacherID] = useState("");
     const [loader, setLoader] = useState(false)
 
-    const { projectsList, loading, error, response } = useSelector((state) => state.sclass);
+    const { projectsList, loading, error, response } = useSelector((state) => state.major);
 
     useEffect(() => {
         if (situation === "Norm") {
-            setClassID(params.id);
-            const classID = params.id
-            dispatch(getTeacherFreeClassProjects(classID));
+            setMajorID(params.id);
+            const majorID = params.id
+            dispatch(getTeacherFreeMajorProjects(majorID));
         }
         else if (situation === "Teacher") {
-            const { classID, teacherID } = params
-            setClassID(classID);
+            const { majorID, teacherID } = params
+            setMajorID(majorID);
             setTeacherID(teacherID);
-            dispatch(getTeacherFreeClassProjects(classID));
+            dispatch(getTeacherFreeMajorProjects(majorID));
         }
     }, [situation]);
 
@@ -39,7 +39,7 @@ const ChooseProject = ({ situation }) => {
             <h1>Sorry all projects have teachers assigned already</h1>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                 <PurpleButton variant="contained"
-                    onClick={() => navigate("/Admin/addproject/" + classID)}>
+                    onClick={() => navigate("/Admin/addproject/" + majorID)}>
                     Add Projects
                 </PurpleButton>
             </Box>
@@ -61,7 +61,7 @@ const ChooseProject = ({ situation }) => {
             </Typography>
             <>
                 <TableContainer>
-                    <Table aria-label="sclasses table">
+                    <Table aria-label="majors table">
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell></StyledTableCell>

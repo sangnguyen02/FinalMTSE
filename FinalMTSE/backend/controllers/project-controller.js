@@ -20,7 +20,7 @@ const projectCreate = async (req, res) => {
         } else {
             const newProjects = projects.map((project) => ({
                 ...project,
-                sclassName: req.body.sclassName,
+                majorName: req.body.majorName,
                 school: req.body.adminID,
             }));
 
@@ -35,7 +35,7 @@ const projectCreate = async (req, res) => {
 const allProjects = async (req, res) => {
     try {
         let projects = await Project.find({ school: req.params.id })
-            .populate("sclassName", "sclassName")
+            .populate("majorName", "majorName")
         if (projects.length > 0) {
             res.send(projects)
         } else {
@@ -46,9 +46,9 @@ const allProjects = async (req, res) => {
     }
 };
 
-const classProjects = async (req, res) => {
+const majorProjects = async (req, res) => {
     try {
-        let projects = await Project.find({ sclassName: req.params.id })
+        let projects = await Project.find({ majorName: req.params.id })
         if (projects.length > 0) {
             res.send(projects)
         } else {
@@ -61,7 +61,7 @@ const classProjects = async (req, res) => {
 
 const freeProjectList = async (req, res) => {
     try {
-        let projects = await Project.find({ sclassName: req.params.id, teacher: { $exists: false } });
+        let projects = await Project.find({ majorName: req.params.id, teacher: { $exists: false } });
         if (projects.length > 0) {
             res.send(projects);
         } else {
@@ -76,7 +76,7 @@ const getProjectDetail = async (req, res) => {
     try {
         let project = await Project.findById(req.params.id);
         if (project) {
-            project = await project.populate("sclassName", "sclassName")
+            project = await project.populate("majorName", "majorName")
             project = await project.populate("teacher", "name")
             res.send(project);
         }
@@ -138,9 +138,9 @@ const deleteProjects = async (req, res) => {
     }
 };
 
-const deleteProjectsByClass = async (req, res) => {
+const deleteProjectsByMajor = async (req, res) => {
     try {
-        const deletedProjects = await Project.deleteMany({ sclassName: req.params.id });
+        const deletedProjects = await Project.deleteMany({ majorName: req.params.id });
 
         // Set the teachProject field to null in teachers
         await Teacher.updateMany(
@@ -161,4 +161,4 @@ const deleteProjectsByClass = async (req, res) => {
 };
 
 
-module.exports = { projectCreate, freeProjectList, classProjects, getProjectDetail, deleteProjectsByClass, deleteProjects, deleteProject, allProjects };
+module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getProjectList } from '../../redux/sclassRelated/sclassHandle';
+import { getProjectList } from '../../redux/majorRelated/majorHandle';
 import { BottomNavigation, BottomNavigationAction, Container, Paper, Table, TableBody, TableHead, Typography } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
@@ -14,7 +14,7 @@ import { StyledTableCell, StyledTableRow } from '../../components/styles';
 const StudentProjects = () => {
 
     const dispatch = useDispatch();
-    const { projectsList, sclassDetails } = useSelector((state) => state.sclass);
+    const { projectsList, majorDetails } = useSelector((state) => state.major);
     const { userDetails, currentUser, loading, response, error } = useSelector((state) => state.user);
 
     useEffect(() => {
@@ -35,9 +35,9 @@ const StudentProjects = () => {
 
     useEffect(() => {
         if (projectMarks === []) {
-            dispatch(getProjectList(currentUser.sclassName._id, "ClassProjects"));
+            dispatch(getProjectList(currentUser.majorName._id, "MajorProjects"));
         }
-    }, [projectMarks, dispatch, currentUser.sclassName._id]);
+    }, [projectMarks, dispatch, currentUser.majorName._id]);
 
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
@@ -78,14 +78,14 @@ const StudentProjects = () => {
         return <CustomBarChart chartData={projectMarks} dataKey="marksObtained" />;
     };
 
-    const renderClassDetailsSection = () => {
+    const renderMajorDetailsSection = () => {
         return (
             <Container>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Class Details
+                    Major Details
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    You are currently in Class {sclassDetails && sclassDetails.sclassName}
+                    You are currently in Major {majorDetails && majorDetails.majorName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     And these are the projects:
@@ -131,7 +131,7 @@ const StudentProjects = () => {
                         </>)
                         :
                         (<>
-                            {renderClassDetailsSection()}
+                            {renderMajorDetailsSection()}
                         </>)
                     }
                 </div>
