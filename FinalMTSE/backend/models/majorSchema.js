@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require('validator');
 
 const majorSchema = new mongoose.Schema({
     majorName: {
@@ -9,13 +10,19 @@ const majorSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admin'
     },
-    timeRegistrationStart: {
-        type: Date,
-        default: Date.now
+    timeRegistrationProjectStart: {
+      type: Date,
+      default: Date.now
     },
-    timeRegistrationEnd: {
-        type: Date,
-        default: Date.now
+    timeRegistrationProjectEnd: {
+      type: Date,
+      default: Date.now,
+      validate: {
+        validator: function (value) {
+          return value >= this.timeRegistrationProjectStart;
+        },
+        message: 'Time end must greater than or equal time start'
+      }
     }
 }, { timestamps: true });
 
