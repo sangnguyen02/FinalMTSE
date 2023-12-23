@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -10,34 +10,23 @@ import AdminRegisterPage from './pages/admin/AdminRegisterPage';
 import ChooseUser from './pages/ChooseUser';
 import {useCookies} from "react-cookie";
 import {
-  authRequest,
-  stuffAdded,
   authSuccess,
-  authFailed,
-  authError,
-  authLogout,
-  doneSuccess,
-  getDeleteSuccess,
-  getRequest,
-  getFailed,
-  getError,
 } from '../src/redux/userRelated/userSlice';
 const App = () => {
-  let currentUser;
-  const [cookies] = useCookies();
-  const user = cookies.user
-  const { currentRole } = useSelector(state => state.user);
-  console.log(cookies)
-  currentUser = currentRole
-  if(user) {
-    authSuccess(user)
-   
- 
-  }
+  const [cookies] = useCookies(['user']);
+  const { currentRole } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (cookies.user) {
+      const userObject = typeof cookies.user === 'string' ? JSON.parse(cookies.user) : cookies.user;
+      dispatch(authSuccess(userObject));
+    }
+  }, [cookies.user, dispatch]);
 
   return (
     <Router>
-      {currentUser === null &&
+      {currentRole === null &&
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/choose" element={<ChooseUser visitor="normal" />} />
@@ -52,19 +41,19 @@ const App = () => {
           <Route path='*' element={<Navigate to="/" />} />
         </Routes>}
 
-      {currentUser === "Admin" &&
+      {currentRole === "Admin" &&
         <>
           <AdminDashboard />
         </>
       }
 
-      {currentUser === "Student" &&
+      {currentRole === "Student" &&
         <>
           <StudentDashboard />
         </>
       }
 
-      {currentUser === "Teacher" &&
+      {currentRole === "Teacher" &&
         <>
           <TeacherDashboard />
         </>

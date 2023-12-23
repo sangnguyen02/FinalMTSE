@@ -94,9 +94,12 @@ const LoginPage = ({ role }) => {
             dispatch(loginUser(fields, role))
         }
     }
+    
 
     useEffect(() => {
+        console.log('Redux state changed:', { status, currentRole, currentUser, error, response });
         if (status === 'success' || currentUser !== null) {
+            console.log('Redirecting based on role:', currentRole);
             if (currentRole === 'Admin') {
                 navigate('/Admin/dashboard');
             } else if (currentRole === 'Student') {

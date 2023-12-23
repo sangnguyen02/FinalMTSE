@@ -21,6 +21,8 @@ exports.googleOauthHandler = async (req, res, next) => {
           });
           console.log(email)
           let admin = await Admin.findOne({ email });
+          let student = await Student.findOne({ email });
+          let teacher = await Teacher.findOne({ email });
           if(admin) {
             const cookieOption = {
               expires: new Date(
@@ -31,9 +33,29 @@ exports.googleOauthHandler = async (req, res, next) => {
         
             res.cookie('user', admin, cookieOption);
             res.redirect("http://localhost:3000/")
+          } else if (student) {
+            const cookieOption = {
+              expires: new Date(
+                Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+              ),
+              httpOnly: false
+            };
+            res.cookie('user', student, cookieOption);
+            res.redirect("http://localhost:3000/");
+          } else if (teacher) {
+            const cookieOption = {
+              expires: new Date(
+                Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+              ),
+              httpOnly: false
+            };
+            res.cookie('user', teacher, cookieOption);
+            res.redirect("http://localhost:3000/");
+          } else {
+            console.error("User not found");
+            // Redirect to an error page or handle it as needed
+            res.redirect("http://localhost:3000/error");
           }
-          let student = await Student.findOne({ email: req.body.email });
-          let teacher = await Teacher.findOne({ email: req.body.email });
     }
     catch (err) {
         console.error(err)

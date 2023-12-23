@@ -38,6 +38,12 @@ const userSlice = createSlice({
             localStorage.setItem('user', JSON.stringify(action.payload));
             state.response = null;
             state.error = null;
+            // state.status = 'success';
+            // state.currentUser = action.payload;
+            // state.currentRole = action.payload.role;
+            // localStorage.setItem('user', JSON.stringify({ role: action.payload.role }));
+            // state.response = null;
+            // state.error = null;
         },
         authFailed: (state, action) => {
             state.status = 'failed';
