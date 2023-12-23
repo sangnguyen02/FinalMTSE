@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Homepage from './pages/Homepage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -8,9 +8,21 @@ import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import LoginPage from './pages/LoginPage';
 import AdminRegisterPage from './pages/admin/AdminRegisterPage';
 import ChooseUser from './pages/ChooseUser';
-
+import {useCookies} from "react-cookie";
+import {
+  authSuccess,
+} from '../src/redux/userRelated/userSlice';
 const App = () => {
-  const { currentRole } = useSelector(state => state.user);
+  const [cookies] = useCookies(['user']);
+  const { currentRole } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (cookies.user) {
+      const userObject = typeof cookies.user === 'string' ? JSON.parse(cookies.user) : cookies.user;
+      dispatch(authSuccess(userObject));
+    }
+  }, [cookies.user, dispatch]);
 
   return (
     <Router>

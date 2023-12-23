@@ -54,7 +54,7 @@ const AddStudent = ({ situation }) => {
                 (majorItem) => majorItem.majorName === event.target.value
             );
             setMajorName(selectedMajor._id);
-            setSmajorName(selectedMajor._id);
+            setSmajorName(selectedMajor.majorName);
         }
     }
 

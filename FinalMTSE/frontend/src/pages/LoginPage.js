@@ -9,6 +9,8 @@ import { LightPurpleButton } from '../components/buttonStyles';
 import styled from 'styled-components';
 import { loginUser } from '../redux/userRelated/userHandle';
 import Popup from '../components/Popup';
+import {getGoogleUrl} from '../ultil/until'
+import { useLocation } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
@@ -24,6 +26,8 @@ const LoginPage = ({ role }) => {
     const [loader, setLoader] = useState(false)
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
+    const location = useLocation();
+    let from = ((location.state)?.from?.pathname ) || '/';
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
@@ -90,13 +94,15 @@ const LoginPage = ({ role }) => {
             dispatch(loginUser(fields, role))
         }
     }
+    
 
     useEffect(() => {
+        console.log('Redux state changed:', { status, currentRole, currentUser, error, response });
         if (status === 'success' || currentUser !== null) {
+            console.log('Redirecting based on role:', currentRole);
             if (currentRole === 'Admin') {
                 navigate('/Admin/dashboard');
-            }
-            else if (currentRole === 'Student') {
+            } else if (currentRole === 'Student') {
                 navigate('/Student/dashboard');
             } else if (currentRole === 'Teacher') {
                 navigate('/Teacher/dashboard');
@@ -220,6 +226,16 @@ const LoginPage = ({ role }) => {
                             >
                                 Login as Guest
                             </Button>
+                            <Button
+                                fullWidth
+                                href={getGoogleUrl(from)}
+                                
+                                variant="outlined"
+                                sx={{ mt: 2, mb: 3, color: "#7f56da", borderColor: "#7f56da" }}
+                            >
+                                Login Google
+                            </Button>
+                            
                             {role === "Admin" &&
                                 <Grid container>
                                     <Grid>

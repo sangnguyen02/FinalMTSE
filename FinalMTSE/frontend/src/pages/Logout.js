@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authLogout } from '../redux/userRelated/userSlice';
+import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 
 const Logout = () => {
@@ -9,9 +10,11 @@ const Logout = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
     const handleLogout = () => {
         dispatch(authLogout());
+        removeCookie('user');
         navigate('/');
     };
 

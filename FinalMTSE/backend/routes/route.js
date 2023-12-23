@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+
 // const { adminRegister, adminLogIn, deleteAdmin, getAdminDetail, updateAdmin } = require('../controllers/admin-controller.js');
 
 const { adminRegister, adminLogIn, getAdminDetail} = require('../controllers/admin-controller.js');
@@ -28,12 +29,12 @@ const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeac
 // Admin
 router.post('/AdminReg', adminRegister);
 router.post('/AdminLogin', adminLogIn);
-
+const {googleOauthHandler}=require('../controllers/auth-controller.js');
 router.get("/Admin/:id", getAdminDetail)
 // router.delete("/Admin/:id", deleteAdmin)
 
 // router.put("/Admin/:id", updateAdmin)
-
+router.get("/api/v1/users/oauth/google",googleOauthHandler);
 // Student
 
 router.post('/StudentReg', studentRegister);
