@@ -24,6 +24,7 @@ const AddTeacher = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
+  const [isHoD, setIsHoD] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
@@ -34,12 +35,14 @@ const AddTeacher = () => {
   const teachProject = projectDetails && projectDetails._id
   const teachMajor = projectDetails && projectDetails.majorName && projectDetails.majorName._id
 
-  const fields = { name, email, password, role, school, teachProject, teachMajor }
+  const fields = { name, email, password, role, school, teachProject, teachMajor, isHoD }
 
   const submitHandler = (event) => {
     event.preventDefault()
+    console.log("isHoD value before dispatch:", isHoD);
     setLoader(true)
     dispatch(registerUser(fields, role))
+    console.log("isHoD value after dispatch:", isHoD);
   }
 
   useEffect(() => {
@@ -88,6 +91,15 @@ const AddTeacher = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="new-password" required />
+
+          <label style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ marginRight: '5px' }}>Head of Department:</span>
+            <input
+              type="checkbox"
+              checked={isHoD}
+              onChange={() => setIsHoD((prev) => !prev)}
+            />
+          </label>
 
           <button className="registerButton" type="submit" disabled={loader}>
             {loader ? (

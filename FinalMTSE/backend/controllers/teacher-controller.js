@@ -3,12 +3,12 @@ const Teacher = require('../models/teacherSchema.js');
 const Project = require('../models/projectSchema.js');
 
 const teacherRegister = async (req, res) => {
-    const { name, email, password, role, school, teachProject, teachMajor } = req.body;
+    const { name, email, password, role, school, teachProject, teachMajor, isHoD } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
 
-        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachProject, teachMajor });
+        const teacher = new Teacher({ name, email, password: hashedPass, role, isHoD, school, teachProject, teachMajor });
 
         const existingTeacherByEmail = await Teacher.findOne({ email });
 

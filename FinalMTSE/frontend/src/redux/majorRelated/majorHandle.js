@@ -5,6 +5,7 @@ import {
     getFailed,
     getError,
     getStudentsSuccess,
+    getProjectsByTeacherSuccess,
     detailsSuccess,
     getFailedTwo,
     getProjectsSuccess,
@@ -64,6 +65,22 @@ export const getProjectList = (id, address) => async (dispatch) => {
             dispatch(getFailed(result.data.message));
         } else {
             dispatch(getProjectsSuccess(result.data));
+        }
+    } catch (error) {
+        dispatch(getError(error));
+    }
+}
+
+export const getProjectListByTeacher = (id, address) => async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        console.log(result)
+        if (result.data.message) {
+            dispatch(getFailed(result.data.message));
+        } else {
+            dispatch(getProjectsByTeacherSuccess([result.data]));
         }
     } catch (error) {
         dispatch(getError(error));

@@ -41,6 +41,12 @@ const majorSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+        getProjectsByTeacherSuccess: (state, action) => {
+            state.projectsListByTeacher = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
         getFailed: (state, action) => {
             state.projectsList = [];
             state.response = action.payload;
@@ -82,6 +88,7 @@ export const {
     getError,
     getStudentsSuccess,
     getProjectsSuccess,
+    getProjectsByTeacherSuccess,
     detailsSuccess,
     getFailedTwo,
     resetProjects,

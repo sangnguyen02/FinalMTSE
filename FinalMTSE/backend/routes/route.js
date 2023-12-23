@@ -23,7 +23,7 @@ const {
     clearAllStudentsAttendance,
     removeStudentAttendanceByProject,
     removeStudentAttendance } = require('../controllers/student_controller.js');
-const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, deleteProject, freeProjectList, allProjects, deleteProjects } = require('../controllers/project-controller.js');
+const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, getProjectByTeacher, deleteProject, freeProjectList, allProjects, deleteProjects } = require('../controllers/project-controller.js');
 const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByMajor, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
 
 // Admin
@@ -112,6 +112,7 @@ router.get('/AllProjects/:id', allProjects);
 router.get('/MajorProjects/:id', majorProjects);
 router.get('/FreeProjectList/:id', freeProjectList);
 router.get("/Project/:id", getProjectDetail)
+router.get('/TeacherProject/:id', getProjectByTeacher);
 
 router.delete("/Project/:id", deleteProject)
 router.delete("/Projects/:id", deleteProjects)

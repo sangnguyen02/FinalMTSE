@@ -23,6 +23,7 @@ import TeacherHomePage from './TeacherHomePage';
 import TeacherProfile from './TeacherProfile';
 import TeacherViewStudent from './TeacherViewStudent';
 import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
+import TeacherProjects from './TeacherProjects';
 
 const TeacherDashboard = () => {
     const [open, setOpen] = useState(true);
@@ -80,6 +81,8 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/profile" element={<TeacherProfile />} />
 
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
+
+                        <Route path="/Teacher/projects" element={<TeacherProjects />} />
 
                         <Route path="/Teacher/major" element={<TeacherMajorDetails />} />
                         <Route path="/Teacher/major/student/:id" element={<TeacherViewStudent />} />

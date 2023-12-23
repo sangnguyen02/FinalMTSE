@@ -12,7 +12,7 @@ const projectCreate = async (req, res) => {
         }));
 
         const existingProjectByProjectCode = await Project.findOne({
-            'projects.proCode': projects[0].projectCode,
+            'projects.projectCode': projects[0].projectCode,
             school: req.body.adminID,
         });
 
@@ -89,6 +89,27 @@ const getProjectDetail = async (req, res) => {
     }
 }
 
+const getProjectByTeacher = async (req, res) => {
+    try {
+        const teacherId = req.params.id;
+        console.log(teacherId)
+
+        const projects = await Project.find({ teacher: teacherId })
+            .populate("majorName", "majorName")
+            .populate("school", "schoolName")
+            .populate("teacher", "name");
+        console.log("Projects:", projects);
+
+        if (projects.length > 0) {
+            res.send(projects);
+        } else {
+            res.send({ message: "No projects found for the specified teacher" });
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 const deleteProject = async (req, res) => {
     try {
         const deletedProject = await Project.findByIdAndDelete(req.params.id);
@@ -162,4 +183,4 @@ const deleteProjectsByMajor = async (req, res) => {
 };
 
 
-module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };
+module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, getProjectByTeacher, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };
