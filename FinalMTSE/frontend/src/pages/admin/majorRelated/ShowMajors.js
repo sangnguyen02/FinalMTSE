@@ -60,7 +60,7 @@ const ShowMajors = () => {
 
   const MajorButtonHaver = ({ row }) => {
     const actions = [
-      { icon: <PostAddIcon />, name: 'Add Subjects', action: () => navigate("/Admin/addsubject/" + row.id) },
+      { icon: <PostAddIcon />, name: 'Add Projects', action: () => navigate("/Admin/addproject/" + row.id) },
       { icon: <PersonAddAlt1Icon />, name: 'Add Student', action: () => navigate("/Admin/major/addstudents/" + row.id) },
     ];
     return (
@@ -91,7 +91,7 @@ const ShowMajors = () => {
     return (
       <>
         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-          <Tooltip title="Add Students & Subjects">
+          <Tooltip title="Add Students & Projects">
             <IconButton
               onClick={handleClick}
               size="small"

@@ -3,12 +3,12 @@ const Teacher = require('../models/teacherSchema.js');
 const Project = require('../models/projectSchema.js');
 
 const teacherRegister = async (req, res) => {
-    const { name, email, password, role, school, teachProject, teachMajor } = req.body;
+    const { name, email, password, role, school, teachProject, teachMajor, isHoD } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
 
-        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachProject, teachMajor });
+        const teacher = new Teacher({ name, email, password: hashedPass, role, isHoD, school, teachProject, teachMajor });
 
         const existingTeacherByEmail = await Teacher.findOne({ email });
 
@@ -55,6 +55,24 @@ const getTeachers = async (req, res) => {
             .populate("teachMajor", "majorName");
         if (teachers.length > 0) {
             let modifiedTeachers = teachers.map((teacher) => {
+                return { ...teacher._doc, password: undefined };
+            });
+            res.send(modifiedTeachers);
+        } else {
+            res.send({ message: "No teachers found" });
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const getTeachersNotHoD = async (req, res) => {
+    try {
+        const teachers = await Teacher.find({ isHoD: false, teachProject: { $exists: false }})
+        .populate("teachMajor", "majorName");
+        
+        if (teachers.length > 0) {
+            const modifiedTeachers = teachers.map((teacher) => {
                 return { ...teacher._doc, password: undefined };
             });
             res.send(modifiedTeachers);
@@ -196,6 +214,7 @@ module.exports = {
     teacherRegister,
     teacherLogIn,
     getTeachers,
+    getTeachersNotHoD,
     getTeacherDetail,
     updateTeacherProject,
     deleteTeacher,

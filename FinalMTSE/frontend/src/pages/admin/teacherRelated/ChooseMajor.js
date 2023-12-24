@@ -23,7 +23,7 @@ const ChooseMajor = ({ situation }) => {
 
     const navigateHandler = (majorID) => {
         if (situation === "Teacher") {
-            navigate("/Admin/teachers/chooseproject/" + majorID)
+            navigate(`/Admin/teachers/addteacher/${majorID}`)
         }
         else if (situation === "Project") {
             navigate("/Admin/addproject/" + majorID)

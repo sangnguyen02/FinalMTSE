@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, CircularProgress, Stack, TextField } from "@mui/material";
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
@@ -11,6 +16,8 @@ import styled from "styled-components";
 
 const AddMajor = () => {
     const [majorName, setMajorName] = useState("");
+    const [selectedStartDate, setSelectedStartDate] = useState(dayjs);
+    const [selectedEndDate, setSelectedEndDate] = useState(dayjs);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -25,12 +32,18 @@ const AddMajor = () => {
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
 
+    const formattedStartDate = selectedStartDate.format('YYYY-MM-DD');
+    const formattedEndDate = selectedEndDate.format('YYYY-MM-DD');
+
     const fields = {
         majorName,
         adminID,
+        timeRegistrationProjectStart: formattedStartDate,
+        timeRegistrationProjectEnd: formattedEndDate,
     };
 
     const submitHandler = (event) => {
+        console.log(fields)
         event.preventDefault()
         setLoader(true)
         dispatch(addStuff(fields, address))
@@ -78,6 +91,20 @@ const AddMajor = () => {
                                 }}
                                 required
                             />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                
+                                <DatePicker
+                                    label="Time registration start"  
+                                    value={selectedStartDate}
+                                    onChange={(newValue) => setSelectedStartDate(newValue)}
+                                    />
+                                <DatePicker
+                                    label="Time registration end"
+                                    value={selectedEndDate}
+                                    onChange={(newValue) => setSelectedEndDate(newValue)}
+                                />
+                                
+                            </LocalizationProvider>
                             <BlueButton
                                 fullWidth
                                 size="large"

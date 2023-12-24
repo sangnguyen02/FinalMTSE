@@ -33,7 +33,7 @@ import ViewProject from './projectRelated/ViewProject';
 
 import AddTeacher from './teacherRelated/AddTeacher';
 import ChooseMajor from './teacherRelated/ChooseMajor';
-import ChooseProject from './teacherRelated/ChooseProject';
+import ChooseProject from '../teacher/ChooseProject';
 import ShowTeachers from './teacherRelated/ShowTeachers';
 import TeacherDetails from './teacherRelated/TeacherDetails';
 
@@ -129,10 +129,10 @@ const AdminDashboard = () => {
                         {/* Teacher */}
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
                         <Route path="/Admin/teachers/teacher/:id" element={<TeacherDetails />} />
-                        <Route path="/Admin/teachers/choosemajor" element={<ChooseMajor situation="Teacher" />} />
-                        <Route path="/Admin/teachers/chooseproject/:id" element={<ChooseProject situation="Norm" />} />
-                        <Route path="/Admin/teachers/chooseproject/:majorID/:teacherID" element={<ChooseProject situation="Teacher" />} />
-                        <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
+                        <Route path="/Admin/teachers/choosemajor/" element={<ChooseMajor situation="Teacher" />} />
+                        // <Route path="/Admin/teachers/chooseproject/:id" element={<ChooseProject situation="Norm" />} />
+                        // <Route path="/Admin/teachers/chooseproject/:majorID/:teacherID" element={<ChooseProject situation="Teacher" />} />
+                        <Route path="/Admin/teachers/addteacher/:majorID" element={<AddTeacher />} />
 
                         <Route path="/logout" element={<Logout />} />
                     </Routes>

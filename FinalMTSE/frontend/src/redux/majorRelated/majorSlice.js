@@ -35,11 +35,34 @@ const majorSlice = createSlice({
             state.error = null;
             state.getresponse = null;
         },
+        getStudentsSuccessByTeacher: (state, action) => {
+            state.majorStudentsByTeacher = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.getresponse = null;
+        },
         getProjectsSuccess: (state, action) => {
             state.projectsList = action.payload;
             state.loading = false;
             state.error = null;
             state.response = null;
+        },
+        getProjectsSuccessTeacher: (state, action) => {
+            state.projectsListFreeTeacher = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
+        getProjectsByTeacherSuccess: (state, action) => {
+            state.projectsListByTeacher = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
+        getProjectDetailsByTeacherSuccess: (state, action) => {
+            state.projectDetailsByTeacher = action.payload;
+            state.subloading = false;
+            state.error = null;
         },
         getFailed: (state, action) => {
             state.projectsList = [];
@@ -63,6 +86,11 @@ const majorSlice = createSlice({
             state.loading = false;
             state.error = null;
         },
+        detailsSuccessAddTeacher: (state, action) => {
+            state.majorDetailsAddTeacher = action.payload;
+            state.loading = false;
+            state.error = null;
+        },
         getProjectDetailsSuccess: (state, action) => {
             state.projectDetails = action.payload;
             state.subloading = false;
@@ -81,8 +109,13 @@ export const {
     getFailed,
     getError,
     getStudentsSuccess,
+    getProjectsSuccessTeacher,
+    getStudentsSuccessByTeacher,
     getProjectsSuccess,
+    getProjectsByTeacherSuccess,
+    getProjectDetailsByTeacherSuccess,
     detailsSuccess,
+    detailsSuccessAddTeacher,
     getFailedTwo,
     resetProjects,
     getProjectDetailsSuccess,

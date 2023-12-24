@@ -7,6 +7,7 @@ import {
     authError,
     authLogout,
     doneSuccess,
+    doneSuccessStudent,
     getDeleteSuccess,
     getRequest,
     getFailed,
@@ -101,6 +102,24 @@ export const updateUser = (fields, id, address) => async (dispatch) => {
         }
         else {
             dispatch(doneSuccess(result.data));
+        }
+    } catch (error) {
+        dispatch(getError(error));
+    }
+}
+
+export const updateUserStudent = (fields, id, address) => async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+        const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`, fields, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        if (result.data.schoolName) {
+            dispatch(authSuccess(result.data));
+        }
+        else {
+            dispatch(doneSuccessStudent(result.data));
         }
     } catch (error) {
         dispatch(getError(error));

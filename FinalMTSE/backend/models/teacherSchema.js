@@ -18,6 +18,10 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         default: "Teacher"
     },
+    isHoD: {
+        type: Boolean,
+        default: true,
+    },
     school: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'admin',

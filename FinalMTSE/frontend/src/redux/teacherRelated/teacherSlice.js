@@ -27,6 +27,12 @@ const teacherSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+        getSuccessIsNotHoD: (state, action) => {
+            state.teachersListNotHoD = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
         getFailed: (state, action) => {
             state.response = action.payload;
             state.loading = false;
@@ -47,6 +53,7 @@ const teacherSlice = createSlice({
 export const {
     getRequest,
     getSuccess,
+    getSuccessIsNotHoD,
     getFailed,
     getError,
     doneSuccess,

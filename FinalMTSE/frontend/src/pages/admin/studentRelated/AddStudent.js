@@ -51,10 +51,10 @@ const AddStudent = ({ situation }) => {
             setSmajorName('');
         } else {
             const selectedMajor = majorsList.find(
-                (majorItem) => majorItem.majorName === event.target.value
+                (majorItem) => majorItem._id === event.target.value
             );
             setMajorName(selectedMajor._id);
-            setSmajorName(selectedMajor.majorName);
+            setSmajorName(selectedMajor._id);
         }
     }
 
@@ -109,8 +109,8 @@ const AddStudent = ({ situation }) => {
                                 value={majorName}
                                 onChange={changeHandler} required>
                                 <option value='Select Major'>Select Major</option>
-                                {majorsList.map((majorItem, index) => (
-                                    <option key={index} value={majorItem.majorName}>
+                                {majorsList.map((majorItem) => (
+                                    <option key={majorItem._id} value={majorItem._id}>
                                         {majorItem.majorName}
                                     </option>
                                 ))}
