@@ -2,33 +2,35 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Table, TableBody, TableContainer, TableHead, Typography, Paper } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom';
-import { getTeacherFreeMajorProjects } from '../../../redux/majorRelated/majorHandle';
-import { updateTeachProject } from '../../../redux/teacherRelated/teacherHandle';
-import { GreenButton, PurpleButton } from '../../../components/buttonStyles';
-import { StyledTableCell, StyledTableRow } from '../../../components/styles';
+import { getTeacherFreeMajorProjectsTeacher } from '../../redux/majorRelated/majorHandle';
+import { updateTeachProject } from '../../redux/teacherRelated/teacherHandle';
+import { GreenButton, PurpleButton } from '../../components/buttonStyles';
+import { StyledTableCell, StyledTableRow } from '../../components/styles';
 
 const ChooseProject = ({ situation }) => {
     const params = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [majorID, setMajorID] = useState("");
     const [teacherID, setTeacherID] = useState("");
     const [loader, setLoader] = useState(false)
 
-    const { projectsList, loading, error, response } = useSelector((state) => state.major);
+    const { projectsListFreeTeacher, loading, error, response } = useSelector((state) => state.major);
+
+    console.log(projectsListFreeTeacher)
 
     useEffect(() => {
         if (situation === "Norm") {
             setMajorID(params.id);
             const majorID = params.id
-            dispatch(getTeacherFreeMajorProjects(majorID));
+            dispatch(getTeacherFreeMajorProjectsTeacher(majorID));
         }
         else if (situation === "Teacher") {
             const { majorID, teacherID } = params
             setMajorID(majorID);
             setTeacherID(teacherID);
-            dispatch(getTeacherFreeMajorProjects(majorID));
+            dispatch(getTeacherFreeMajorProjectsTeacher(majorID));
         }
     }, [situation]);
 
@@ -71,7 +73,7 @@ const ChooseProject = ({ situation }) => {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                            {Array.isArray(projectsList) && projectsList.length > 0 && projectsList.map((project, index) => (
+                            {Array.isArray(projectsListFreeTeacher) && projectsListFreeTeacher.length > 0 && projectsListFreeTeacher.map((project, index) => (
                                 <StyledTableRow key={project._id}>
                                     <StyledTableCell component="th" scope="row" style={{ color: "white" }}>
                                         {index + 1}

@@ -1,16 +1,60 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { Card, CardContent, Typography, Grid, Box, Avatar, Container, Paper } from '@mui/material';
-import { useSelector } from 'react-redux';
-
+import { Card, CardContent, Typography, Grid, Box, Avatar, Container, Paper, Button, RadioGroup, FormControl, FormLabel, FormControlLabel, Radio  } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom'
+import { getUserDetails, updateUserStudent } from '../../../src/redux/userRelated/userHandle';
+import { StyledTableCell, StyledTableRow } from '../../../src/components/styles';
 const StudentProfile = () => {
   const { currentUser, response, error } = useSelector((state) => state.user);
+  const [editMode, setEditMode] = useState(false);
+  const params = useParams()
+  const dispatch = useDispatch()
+  const studentID = currentUser._id
+  const Address = "Student"
+  const major = currentUser.majorName
+  const school = currentUser.school
 
-  if (response) { console.log(response) }
-  else if (error) { console.log(error) }
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [majorName, setMajorName] = useState('');
+  const [studentSchool, setStudentSchool] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('Male');
 
-  const majorName = currentUser.majorName
-  const studentSchool = currentUser.school
+  useEffect(() => {
+    dispatch(getUserDetails(studentID, Address));
+}, [dispatch, studentID])
+
+
+const handleEditClick = () => {
+  setEditMode(true);
+};
+
+const handleCancelEdit = () => {
+  setEditMode(false);
+};
+
+
+const submitHandler = (event) => {
+  const fields = password === ""
+        ? { name, phone, address, gender }
+        : { name, phone, address, gender, password }
+  console.log(fields)
+  event.preventDefault()
+  dispatch(updateUserStudent(fields, studentID, Address))
+      .then(() => {
+          setEditMode(false);
+          dispatch(getUserDetails(studentID, Address));
+      })
+      .catch((error) => {
+          console.error(error)
+      })
+}
+
+if (response) { console.log(response) }
+else if (error) { console.log(error) }
 
   return (
     <>
@@ -41,19 +85,81 @@ const StudentProfile = () => {
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="subtitle1" component="p" textAlign="center">
-                  Major: {majorName.majorName}
+                  Major: {major.majorName}
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="center">
                 <Typography variant="subtitle1" component="p" textAlign="center">
-                  School: {studentSchool.schoolName}
+                  School: {school.schoolName}
                 </Typography>
               </Box>
             </Grid>
           </Grid>
         </StyledPaper>
+        <Box display="flex" flexDirection="row">
+          {editMode ? (
+              <Button variant="contained" color="secondary" onClick={handleCancelEdit}>
+              Cancel Edit
+              </Button>
+          ) : (
+              <Button variant="contained"  color="primary" onClick={handleEditClick}>
+              Edit
+              </Button>
+          )}
+        </Box>
+
+        <br/>
+        {editMode && (
+            <Grid item xs={12}>
+                <div className="register">
+                    <form className="registerForm" onSubmit={submitHandler}>
+                        <span className="registerTitle">Edit Details</span>
+                        <label>Name</label>
+                        <input className="registerInput" type="text" placeholder="Enter user's name..."
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            autoComplete="name" required />
+
+                        <FormControl>
+                            <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="Male"
+                                name="radio-buttons-group"
+                                value={gender}
+                                onChange={(event) => setGender(event.target.value)}
+                            >
+                                <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                            </RadioGroup>
+                        </FormControl>
+
+                        <label>Student Phone</label>
+                        <input className="registerInput" type="text" placeholder="Enter user's phone..."
+                            value={phone}
+                            onChange={(event) => setPhone(event.target.value)}
+                            required />
+
+
+                        <label>Student Address</label>
+                        <input className="registerInput" type="text" placeholder="Enter user's address..."
+                            value={address}
+                            onChange={(event) => setAddress(event.target.value)}
+                            required />
+
+                        <label>Password</label>
+                        <input className="registerInput" type="password" placeholder="Enter user's password..."
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            autoComplete="new-password" />
+
+                        <button className="registerButton" type="submit" >Update</button>
+                    </form>
+                </div>
+            </Grid>
+          )}
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>

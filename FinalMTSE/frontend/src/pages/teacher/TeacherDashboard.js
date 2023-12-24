@@ -16,14 +16,16 @@ import Logout from '../Logout'
 import AccountMenu from '../../components/AccountMenu';
 import { AppBar, Drawer } from '../../components/styles';
 import StudentAttendance from '../admin/studentRelated/StudentAttendance';
-
+import ChooseProject from './ChooseProject';
 import TeacherMajorDetails from './TeacherMajorDetails';
 import TeacherComplain from './TeacherComplain';
 import TeacherHomePage from './TeacherHomePage';
 import TeacherProfile from './TeacherProfile';
 import TeacherViewStudent from './TeacherViewStudent';
 import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
-import TeacherProjects from './TeacherProjects';
+import TeacherProject from './TeacherProject';
+import HoDAssignProjects from './HoDAssignProjects'
+import TeacherProjectDetail from './TeacherProjectDetail';
 
 const TeacherDashboard = () => {
     const [open, setOpen] = useState(true);
@@ -81,8 +83,12 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/profile" element={<TeacherProfile />} />
 
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
+                        <Route path="/Teacher/project" element={<TeacherProject />} />
+                        <Route path="/Teacher/projects/project/:majorID/:projectID" element={<TeacherProjectDetail />} />
 
-                        <Route path="/Teacher/projects" element={<TeacherProjects />} />
+                        <Route path="/Teacher/projects" element={<HoDAssignProjects />} />
+                        
+                        <Route path="/Teacher/projects/chooseproject/:majorID/:teacherID" element={<ChooseProject situation="Teacher" />} />
 
                         <Route path="/Teacher/major" element={<TeacherMajorDetails />} />
                         <Route path="/Teacher/major/student/:id" element={<TeacherViewStudent />} />

@@ -13,7 +13,7 @@ import { BlueButton, GreenButton } from '../../../src/components/buttonStyles';
 import SpeedDialTemplate from '../../../src/components/SpeedDialTemplate';
 import Popup from '../../../src/components/Popup';
 
-const TeacherProjects = () => {
+const TeacherProject = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const { projectsListByTeacher, loading, error, response } = useSelector((state) => state.major);
@@ -64,7 +64,7 @@ const TeacherProjects = () => {
           sessions: project.teachProject.sessions,
           majorName: project.teachMajor.majorName,
           majorID: project.teachMajor._id,
-          id: project._id,
+          id: project.teachProject._id,
         }))
       ) : [];
 
@@ -75,7 +75,7 @@ const TeacherProjects = () => {
                     <DeleteIcon color="error" />
                 </IconButton>
                 <BlueButton variant="contained"
-                    onClick={() => navigate(`/Admin/projects/project/${row.majorID}/${row.id}`)}>
+                    onClick={() => navigate(`/Teacher/projects/project/${row.majorID}/${row.id}`)}>
                     View
                 </BlueButton>
             </>
@@ -122,4 +122,4 @@ const TeacherProjects = () => {
     );
 };
 
-export default TeacherProjects;
+export default TeacherProject;

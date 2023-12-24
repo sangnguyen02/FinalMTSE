@@ -66,6 +66,24 @@ const getTeachers = async (req, res) => {
     }
 };
 
+const getTeachersNotHoD = async (req, res) => {
+    try {
+        const teachers = await Teacher.find({ isHoD: false, teachProject: { $exists: false }})
+        .populate("teachMajor", "majorName");
+        
+        if (teachers.length > 0) {
+            const modifiedTeachers = teachers.map((teacher) => {
+                return { ...teacher._doc, password: undefined };
+            });
+            res.send(modifiedTeachers);
+        } else {
+            res.send({ message: "No teachers found" });
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
 const getTeacherDetail = async (req, res) => {
     try {
         let teacher = await Teacher.findById(req.params.id)
@@ -196,6 +214,7 @@ module.exports = {
     teacherRegister,
     teacherLogIn,
     getTeachers,
+    getTeachersNotHoD,
     getTeacherDetail,
     updateTeacherProject,
     deleteTeacher,

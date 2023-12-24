@@ -13,7 +13,8 @@ import { useSelector } from 'react-redux';
 const TeacherSideBar = () => {
     const { currentUser } = useSelector((state) => state.user);
     const { isHoD } = currentUser;
-    const majorName = currentUser.teachMajor
+    const project = currentUser?.teachProject
+
 
     const location = useLocation();
     return (
@@ -25,11 +26,11 @@ const TeacherSideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Home" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/Teacher/major">
+                <ListItemButton component={Link} to="/Teacher/project">
                     <ListItemIcon>
-                        <ClassOutlinedIcon color={location.pathname.startsWith("/Teacher/major") ? 'primary' : 'inherit'} />
+                        <ClassOutlinedIcon color={location.pathname.startsWith("/Teacher/project") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
-                    <ListItemText primary={`Major ${majorName.majorName}`} />
+                    <ListItemText primary={`${project.projectName}`} />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Teacher/complain">
                     <ListItemIcon>
@@ -37,12 +38,16 @@ const TeacherSideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Complain" />
                 </ListItemButton>               
-                <ListItemButton component={Link} to="/Teacher/projects">
-                    <ListItemIcon>
-                    <AssignmentIcon color={location.pathname.startsWith("/Teacher/projects") ? 'primary' : 'inherit'} />
-                    </ListItemIcon>
-                    <ListItemText primary="Manage Project" />
-                </ListItemButton>
+                {isHoD && (
+                    <React.Fragment>
+                        <ListItemButton component={Link} to="/Teacher/projects">
+                            <ListItemIcon>
+                                <AssignmentIcon color={location.pathname.startsWith("/Teacher/projects") ? 'primary' : 'inherit'} />
+                            </ListItemIcon>
+                            <ListItemText primary="Manage Project" />
+                        </ListItemButton>
+                    </React.Fragment>
+                )}
             </React.Fragment>
             <Divider sx={{ my: 1 }} />
             <React.Fragment>

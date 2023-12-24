@@ -23,8 +23,8 @@ const {
     clearAllStudentsAttendance,
     removeStudentAttendanceByProject,
     removeStudentAttendance } = require('../controllers/student_controller.js');
-const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, getProjectByTeacher, deleteProject, freeProjectList, allProjects, deleteProjects } = require('../controllers/project-controller.js');
-const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByMajor, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
+const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, getProjectByTeacher, deleteProject, freeProjectList, allProjects, deleteProjects, getProjectDetailByTeacher } = require('../controllers/project-controller.js');
+const { teacherRegister, teacherLogIn, getTeachers, getTeachersNotHoD, getTeacherDetail, deleteTeachers, deleteTeachersByMajor, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
 
 // Admin
 router.post('/AdminReg', adminRegister);
@@ -65,6 +65,7 @@ router.post('/TeacherReg', teacherRegister);
 router.post('/TeacherLogin', teacherLogIn)
 
 router.get("/Teachers/:id", getTeachers)
+router.get('/TeachersNotHoD', getTeachersNotHoD)
 router.get("/Teacher/:id", getTeacherDetail)
 
 router.delete("/Teachers/:id", deleteTeachers)
@@ -113,6 +114,7 @@ router.get('/MajorProjects/:id', majorProjects);
 router.get('/FreeProjectList/:id', freeProjectList);
 router.get("/Project/:id", getProjectDetail)
 router.get('/TeacherProject/:id', getProjectByTeacher);
+router.get('/TeacherProject/projects/:id', getProjectDetailByTeacher)
 
 router.delete("/Project/:id", deleteProject)
 router.delete("/Projects/:id", deleteProjects)

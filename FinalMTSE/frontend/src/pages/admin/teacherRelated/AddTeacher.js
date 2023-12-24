@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getProjectDetails } from '../../../redux/majorRelated/majorHandle';
+import { getMajorDetailsAddTeacher } from '../../../redux/majorRelated/majorHandle';
 import Popup from '../../../components/Popup';
 import { registerUser } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
@@ -12,14 +12,20 @@ const AddTeacher = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const projectID = params.id
+  const majorID = params.majorID;
+  console.log(majorID)
 
   const { status, response, error } = useSelector(state => state.user);
-  const { projectDetails } = useSelector((state) => state.major);
+  const { majorDetailsAddTeacher } = useSelector((state) => state.major);
+
+  
 
   useEffect(() => {
-    dispatch(getProjectDetails(projectID, "Project"));
-  }, [dispatch, projectID]);
+    console.log("run")
+    dispatch(getMajorDetailsAddTeacher(majorID, "Major"));
+  }, [dispatch, majorID]);
+
+  console.log(majorDetailsAddTeacher)
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,11 +37,11 @@ const AddTeacher = () => {
   const [loader, setLoader] = useState(false)
 
   const role = "Teacher"
-  const school = projectDetails && projectDetails.school
-  const teachProject = projectDetails && projectDetails._id
-  const teachMajor = projectDetails && projectDetails.majorName && projectDetails.majorName._id
+  const school = majorDetailsAddTeacher?.data && majorDetailsAddTeacher?.data.school._id
+  const teachMajor = majorDetailsAddTeacher?.data && majorDetailsAddTeacher?.data._id
 
-  const fields = { name, email, password, role, school, teachProject, teachMajor, isHoD }
+  const fields = { name, email, password, role, school, teachMajor, isHoD }
+  console.log(fields)
 
   const submitHandler = (event) => {
     event.preventDefault()
@@ -69,10 +75,7 @@ const AddTeacher = () => {
           <span className="registerTitle">Add Teacher</span>
           <br />
           <label>
-            Project : {projectDetails && projectDetails.projectName}
-          </label>
-          <label>
-            Major : {projectDetails && projectDetails.majorName && projectDetails.majorName.majorName}
+            Major : {majorDetailsAddTeacher?.data.majorName}
           </label>
           <label>Name</label>
           <input className="registerInput" type="text" placeholder="Enter teacher's name..."

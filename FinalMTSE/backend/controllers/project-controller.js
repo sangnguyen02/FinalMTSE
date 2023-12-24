@@ -110,6 +110,22 @@ const getProjectByTeacher = async (req, res) => {
     }
 }
 
+const getProjectDetailByTeacher = async (req, res) => {
+    try {
+        let project = await Project.findById(req.params.id);
+        if (project) {
+            project = await project.populate("majorName", "majorName")
+            project = await project.populate("teacher", "name")
+            res.send(project);
+        }
+        else {
+            res.send({ message: "No project found" });
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
 const deleteProject = async (req, res) => {
     try {
         const deletedProject = await Project.findByIdAndDelete(req.params.id);
@@ -183,4 +199,4 @@ const deleteProjectsByMajor = async (req, res) => {
 };
 
 
-module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, getProjectByTeacher, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };
+module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, getProjectDetailByTeacher, getProjectByTeacher, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };
