@@ -6,6 +6,7 @@ const initialState = {
     majorDetails: [],
     projectsList: [],
     projectDetails: [],
+    projectTotals: [],
     loading: false,
     subloading: false,
     error: null,
@@ -59,6 +60,12 @@ const majorSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+        getProjectsByStudentSuccess: (state, action) => {
+            state.projectsListByStudent = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
         getProjectDetailsByTeacherSuccess: (state, action) => {
             state.projectDetailsByTeacher = action.payload;
             state.subloading = false;
@@ -96,6 +103,11 @@ const majorSlice = createSlice({
             state.subloading = false;
             state.error = null;
         },
+        getTotalProjectsSuccess: (state, action) => {
+            state.projectTotals = action.payload;
+            state.subloading = false;
+            state.error = null;
+        },
         resetProjects: (state) => {
             state.projectsList = [];
             state.majorsList = [];
@@ -113,9 +125,11 @@ export const {
     getStudentsSuccessByTeacher,
     getProjectsSuccess,
     getProjectsByTeacherSuccess,
+    getProjectsByStudentSuccess,
     getProjectDetailsByTeacherSuccess,
     detailsSuccess,
     detailsSuccessAddTeacher,
+    getTotalProjectsSuccess,
     getFailedTwo,
     resetProjects,
     getProjectDetailsSuccess,

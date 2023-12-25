@@ -6,7 +6,7 @@ import Students from "../../assets/img1.png";
 import Projects from "../../assets/img4.png";
 import Tests from "../../assets/assignment.svg";
 import Time from "../../assets/time.svg";
-import { getMajorStudents, getProjectDetails } from '../../redux/majorRelated/majorHandle';
+import { getMajorStudents, getProjectDetails, getProjectTotalByTeacher } from '../../redux/majorRelated/majorHandle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -14,32 +14,24 @@ const TeacherHomePage = () => {
     const dispatch = useDispatch();
 
     const { currentUser } = useSelector((state) => state.user);
-    const { projectLists, majorStudents } = useSelector((state) => state.major);
+    const { projectLists, projectDetails, projectTotals } = useSelector((state) => state.major);
 
     const majorID = currentUser.teachMajor?._id
     const projectID = currentUser.teachProject?._id
+    const teacherID = currentUser._id
 
     useEffect(() => {
-        dispatch(getProjectDetails(projectID, "Project"));
+        // dispatch(getProjectDetails(projectID, "Project"));
         dispatch(getMajorStudents(majorID));
-    }, [dispatch, projectID, majorID]);
+        dispatch(getProjectTotalByTeacher(teacherID, "TeacherProjects"))
+    }, [dispatch, teacherID, projectID, majorID]);
 
-    const numberOfStudents = majorStudents && majorStudents.length;
-    const numberOfProjects = projectLists && projectLists.length;
+    const numberOfProjects = projectTotals && projectTotals.totalProjects;
 
     return (
         <>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Students} alt="Students" />
-                            <Title>
-                                Major Students
-                            </Title>
-                            <Data start={0} end={numberOfStudents} duration={2.5} />
-                        </StyledPaper>
-                    </Grid>
                     <Grid item xs={12} md={3} lg={3}>
                         <StyledPaper>
                             <img src={Projects} alt="Projects" />

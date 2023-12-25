@@ -34,7 +34,7 @@ const StudentProjects = () => {
     }, [userDetails])
 
     useEffect(() => {
-        if (projectMarks === []) {
+        if (projectMarks === 0) {
             dispatch(getProjectList(currentUser.majorName._id, "MajorProjects"));
         }
     }, [projectMarks, dispatch, currentUser.majorName._id]);
@@ -42,6 +42,8 @@ const StudentProjects = () => {
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
     };
+
+    console.log(projectsList)
 
     const renderTableSection = () => {
         return (
@@ -85,7 +87,7 @@ const StudentProjects = () => {
                     Major Details
                 </Typography>
                 <Typography variant="h5" gutterBottom>
-                    You are currently in Major {majorDetails && majorDetails.majorName}
+                    You are currently in Major {currentUser && currentUser.majorName.majorName}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
                     And these are the projects:

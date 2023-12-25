@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getMajorStudentsByTeacher, getProjectDetailsByTeacher } from '../../../src/redux/majorRelated/majorHandle';
+import { getStudentsSameProject } from '../../../src/redux/studentRelated/studentHandle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Tab, Container, Typography, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
@@ -19,19 +20,25 @@ const ViewProject = () => {
   const params = useParams()
   const dispatch = useDispatch();
   const { subloading, projectDetailsByTeacher, majorStudentsByTeacher, getresponse, error } = useSelector((state) => state.major);
-
+  const { studentsProjectList} = useSelector((state) => state.student);
   const { majorID, projectID } = params
 
   useEffect(() => {
     dispatch(getProjectDetailsByTeacher(projectID, "Project"));
     dispatch(getMajorStudentsByTeacher(majorID));
+    dispatch(getStudentsSameProject(projectID, "StudentsProject"))
   }, [dispatch, projectID, majorID]);
   console.log("Project ID",projectID)
   console.log("Major ID",majorID)
+  console.log("Project detail", projectDetailsByTeacher)
 
   if (error) {
     console.log(error)
   }
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
 
   const [value, setValue] = useState('1');
 
@@ -39,17 +46,18 @@ const ViewProject = () => {
     setValue(newValue);
   };
 
-  const [selectedSection, setSelectedSection] = useState('attendance');
+  const [selectedSection, setSelectedSection] = useState('marks');
   const handleSectionChange = (event, newSection) => {
     setSelectedSection(newSection);
   };
+  console.log("student same project", studentsProjectList)
 
   const studentColumns = [
     { id: 'studentID', label: 'StudentID', minWidth: 100 },
     { id: 'name', label: 'Name', minWidth: 170 },
   ]
 
-  const studentRows = majorStudentsByTeacher?.map((student) => {
+  const studentRows = studentsProjectList?.map((student) => {
     return {
       studentID: student.studentID,
       name: student.name,
@@ -83,12 +91,12 @@ const ViewProject = () => {
       <>
         <BlueButton
           variant="contained"
-          onClick={() => navigate("/Admin/students/student/" + row.id)}
+          onClick={() => navigate("/Teacher/students/student/" + row.id)}
         >
           View
         </BlueButton>
         <PurpleButton variant="contained"
-          onClick={() => navigate(`/Admin/project/student/marks/${row.id}/${projectID}`)}>
+          onClick={() => navigate(`/Teacher/project/student/marks/${row.id}/${projectID}`)}>
           Provide Marks
         </PurpleButton>
       </>
@@ -145,7 +153,6 @@ const ViewProject = () => {
   console.log(majorStudentsByTeacher)
   console.log("Data project",projectDetailsByTeacher)
   const ProjectDetailsSection = () => {
-    const numberOfStudents = majorStudentsByTeacher?.length;
 
     return (
       <>
@@ -165,9 +172,6 @@ const ViewProject = () => {
           Project Description : {projectDetailsByTeacher && projectDetailsByTeacher.description}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Number of Students: {numberOfStudents}
-        </Typography>
-        <Typography variant="h6" gutterBottom>
           Major Name : {projectDetailsByTeacher && projectDetailsByTeacher.majorName && projectDetailsByTeacher.majorName.majorName}
         </Typography>
         {projectDetailsByTeacher && projectDetailsByTeacher.teacher ?
@@ -184,6 +188,28 @@ const ViewProject = () => {
     );
   }
 
+  const Submission = () => {
+  
+    
+    return (
+      <>
+      <a  href={`http://localhost:5000/uploads/${projectDetailsByTeacher.submissions[0].filePath}`} 
+          target="_blank" 
+          rel="noopener noreferrer">
+          File Name: {projectDetailsByTeacher.submissions[0].filePath}
+      </a>
+      
+      <br />
+      <Typography variant="h7" align="center" gutterBottom>
+          Lasted upload date: {formatDate(projectDetailsByTeacher.submissions[0].submissionDate)}
+      </Typography>
+      
+
+
+      </>
+    );
+  }
+
   return (
     <>
       {subloading ?
@@ -196,6 +222,7 @@ const ViewProject = () => {
                 <TabList onChange={handleChange} sx={{ position: 'fixed', width: '100%', bgcolor: 'background.paper', zIndex: 1 }}>
                   <Tab label="Details" value="1" />
                   <Tab label="Students" value="2" />
+                  <Tab label="Submission" value="3" />
                 </TabList>
               </Box>
               <Container sx={{ marginTop: "3rem", marginBottom: "4rem" }}>
@@ -204,6 +231,9 @@ const ViewProject = () => {
                 </TabPanel>
                 <TabPanel value="2">
                   <ProjectStudentsSection />
+                </TabPanel>
+                <TabPanel value="3">
+                  <Submission />
                 </TabPanel>
               </Container>
             </TabContext>

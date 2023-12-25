@@ -26,6 +26,8 @@ import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
 import TeacherProject from './TeacherProject';
 import HoDAssignProjects from './HoDAssignProjects'
 import TeacherProjectDetail from './TeacherProjectDetail';
+import TeacherMarksStudent from './TeacherMarksStudent';
+import ViewStudent from './ViewStudent';
 
 const TeacherDashboard = () => {
     const [open, setOpen] = useState(true);
@@ -85,7 +87,8 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
                         <Route path="/Teacher/project" element={<TeacherProject />} />
                         <Route path="/Teacher/projects/project/:majorID/:projectID" element={<TeacherProjectDetail />} />
-
+                        <Route path="/Teacher/students/student/:id" element={<ViewStudent />} />
+                        <Route path="/Teacher/project/student/marks/:studentID/:projectID" element={<TeacherMarksStudent situation="Project" />} />
                         <Route path="/Teacher/projects" element={<HoDAssignProjects />} />
                         
                         <Route path="/Teacher/projects/chooseproject/:majorID/:teacherID" element={<ChooseProject situation="Teacher" />} />

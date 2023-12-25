@@ -30,7 +30,7 @@ const TeacherSideBar = () => {
                     <ListItemIcon>
                         <ClassOutlinedIcon color={location.pathname.startsWith("/Teacher/project") ? 'primary' : 'inherit'} />
                     </ListItemIcon>
-                    <ListItemText primary={`${project.projectName}`} />
+                    <ListItemText primary={project? project.projectName:"Project"} />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/Teacher/complain">
                     <ListItemIcon>
@@ -44,7 +44,7 @@ const TeacherSideBar = () => {
                             <ListItemIcon>
                                 <AssignmentIcon color={location.pathname.startsWith("/Teacher/projects") ? 'primary' : 'inherit'} />
                             </ListItemIcon>
-                            <ListItemText primary="Manage Project" />
+                            <ListItemText primary="Assign Project" />
                         </ListItemButton>
                     </React.Fragment>
                 )}

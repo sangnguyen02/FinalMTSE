@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { getProjectListByTeacher } from '../../../src/redux/majorRelated/majorHandle';
-import { deleteUser } from '../../../src/redux/userRelated/userHandle';
+import { getProjectListByStudent } from '../../../redux/majorRelated/majorHandle';
+import { deleteUser } from '../../../redux/userRelated/userHandle';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import {
     Paper, Box, IconButton,
 } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
-import TableTemplate from '../../../src/components/TableTemplate';
-import { BlueButton, GreenButton } from '../../../src/components/buttonStyles';
-import SpeedDialTemplate from '../../../src/components/SpeedDialTemplate';
-import Popup from '../../../src/components/Popup';
+import TableTemplate from '../../../components/TableTemplate';
+import { BlueButton, GreenButton } from '../../../components/buttonStyles';
+import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
+import Popup from '../../../components/Popup';
 
-const TeacherProject = () => {
+const ShowProjects = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { projectsListByTeacher, loading, error, response } = useSelector((state) => state.major);
+    const { projectsListByStudent, loading, error, response } = useSelector((state) => state.major);
     const { currentUser } = useSelector(state => state.user)
 
     useEffect(() => {
-        dispatch(getProjectListByTeacher(currentUser._id, "Teacher"));
+        dispatch(getProjectListByStudent(currentUser._id, "Student"));
     }, [currentUser._id, dispatch]);
 
     if (error) {
         console.log(error);
     }
+
+    console.log(projectsListByStudent)
 
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage] = useState("");
@@ -42,6 +44,9 @@ const TeacherProject = () => {
         //     })
     }
 
+    const majorID = currentUser.majorName._id
+    console.log(majorID)
+
     const projectColumns = [
         { id: 'projectName', label: 'Project Name', minWidth: 170 },
         { id: 'sessions', label: 'Sessions', minWidth: 170 },
@@ -57,14 +62,13 @@ const TeacherProject = () => {
     //         id: project._id,
     //     };
     // })
-    console.log(projectsListByTeacher)
-    const projectRows = projectsListByTeacher ? (
-        projectsListByTeacher.map((project) => ({
-          projectName: project?.teachProject?.projectName,
-          sessions: project?.teachProject?.sessions,
-          majorName: project?.teachMajor?.majorName,
-          majorID: project?.teachMajor?._id,
-          id: project?.teachProject?._id,
+    const projectRows = projectsListByStudent ? (
+        projectsListByStudent.map((project) => ({
+          projectName: project.projectName,
+          sessions: project.sessions,
+          majorName: project.majorName?.majorName,
+          majorID: project.majorName?._id,
+          id: project._id,
         }))
       ) : [];
 
@@ -75,7 +79,7 @@ const TeacherProject = () => {
                     <DeleteIcon color="error" />
                 </IconButton>
                 <BlueButton variant="contained"
-                    onClick={() => navigate(`/Teacher/projects/project/${row.majorID}/${row.id}`)}>
+                    onClick={() => navigate(`/Student/projects/${row.majorID}/${row.id}`)}>
                     View
                 </BlueButton>
             </>
@@ -85,7 +89,7 @@ const TeacherProject = () => {
     const actions = [
         {
             icon: <PostAddIcon color="primary" />, name: 'Add New Project',
-            action: () => navigate("/Admin/projects/choosemajor")
+            action: () => navigate(`/Student/projects/${majorID}`)
         },
         {
             icon: <DeleteIcon color="error" />, name: 'Delete All Projects',
@@ -102,13 +106,13 @@ const TeacherProject = () => {
                     {response ?
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton variant="contained"
-                                onClick={() => navigate("/Admin/projects/choosemajor")}>
+                                onClick={() => navigate(`/Student/projects/${majorID}`)}>
                                 Add Project
                             </GreenButton>
                         </Box>
                         :
                         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            {Array.isArray(projectsListByTeacher) && projectsListByTeacher.length > 0 &&
+                            {Array.isArray(projectsListByStudent) && projectsListByStudent.length > 0 &&
                                 <TableTemplate buttonHaver={ProjectsButtonHaver} columns={projectColumns} rows={projectRows} />
                             }
                             <SpeedDialTemplate actions={actions} />
@@ -122,4 +126,4 @@ const TeacherProject = () => {
     );
 };
 
-export default TeacherProject;
+export default ShowProjects;

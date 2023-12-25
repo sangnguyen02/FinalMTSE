@@ -89,6 +89,8 @@ const AddStudent = ({ situation }) => {
         }
     }, [status, navigate, error, response, dispatch]);
 
+    console.log(majorsList)
+
     return (
         <>
             <div className="register">
