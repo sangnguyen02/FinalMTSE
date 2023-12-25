@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     studentsList: [],
+    studentsMajorList: [],
+    studentsProjectList: [],
     loading: false,
     error: null,
     response: null,
@@ -27,6 +29,18 @@ const studentSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+        getSuccessStudentsProject: (state, action) => {
+            state.studentsProjectList = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
+        getSuccessStudentsMajor: (state, action) => {
+            state.studentsMajorList = action.payload;
+            state.loading = false;
+            state.error = null;
+            state.response = null;
+        },
         getFailed: (state, action) => {
             state.response = action.payload;
             state.loading = false;
@@ -48,6 +62,8 @@ const studentSlice = createSlice({
 export const {
     getRequest,
     getSuccess,
+    getSuccessStudentsProject,
+    getSuccessStudentsMajor,
     getFailed,
     getError,
     underStudentControl,

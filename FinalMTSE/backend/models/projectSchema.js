@@ -8,6 +8,7 @@ const projectSchema = new mongoose.Schema({
     projectCode: {
         type: String,
         required: true,
+        unique:true,
     },
     sessions: {
         type: String,
@@ -43,7 +44,24 @@ const projectSchema = new mongoose.Schema({
             },
             message: 'Time end must greater than or equal time start'
         }
-    }
+    },
+    students: [{
+        student: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'student',
+        },
+        
+    }],
+    submissions: [{
+        filePath: {
+            type: String,
+            default: "",
+        },
+        submissionDate: {
+            type: Date,
+            default: Date.now,
+        },
+    }]
 
 }, { timestamps: true });
 

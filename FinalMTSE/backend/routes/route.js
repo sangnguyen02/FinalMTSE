@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const pdfMiddleware = require("../controllers/pdfMiddleware")
+
 
 // const { adminRegister, adminLogIn, deleteAdmin, getAdminDetail, updateAdmin } = require('../controllers/admin-controller.js');
 
@@ -12,6 +14,8 @@ const {
     studentRegister,
     studentLogIn,
     getStudents,
+    getStudentsWithSameProject,
+    getStudentsWithSameMajor,
     getStudentDetail,
     deleteStudents,
     deleteStudent,
@@ -23,7 +27,7 @@ const {
     clearAllStudentsAttendance,
     removeStudentAttendanceByProject,
     removeStudentAttendance } = require('../controllers/student_controller.js');
-const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, getProjectByTeacher, deleteProject, freeProjectList, allProjects, deleteProjects, getProjectDetailByTeacher } = require('../controllers/project-controller.js');
+const { projectCreate, majorProjects, deleteProjectsByMajor, getProjectDetail, getProjectByTeacher, getProjectByStudent, deleteProject, freeProjectList, allProjects, deleteProjects, getProjectDetailByTeacher, uploadProject, setPDF, getTotalProjectByTeacher } = require('../controllers/project-controller.js');
 const { teacherRegister, teacherLogIn, getTeachers, getTeachersNotHoD, getTeacherDetail, deleteTeachers, deleteTeachersByMajor, deleteTeacher, updateTeacherProject, teacherAttendance } = require('../controllers/teacher-controller.js');
 
 // Admin
@@ -42,6 +46,8 @@ router.post('/StudentLogin', studentLogIn)
 
 router.get("/Students/:id", getStudents)
 router.get("/Student/:id", getStudentDetail)
+router.get("/StudentsProject/:id", getStudentsWithSameProject)
+router.get("/StudentsMajor/:id", getStudentsWithSameMajor)
 
 router.delete("/Students/:id", deleteStudents)
 router.delete("/StudentsMajor/:id", deleteStudentsByMajor)
@@ -110,12 +116,14 @@ router.delete("/Major/:id", deleteMajor)
 router.post('/ProjectCreate', projectCreate);
 
 router.get('/AllProjects/:id', allProjects);
+router.get('/TeacherProjects/:id', getTotalProjectByTeacher)
+router.get('/Student/project/:studentId', getProjectByStudent)
 router.get('/MajorProjects/:id', majorProjects);
 router.get('/FreeProjectList/:id', freeProjectList);
 router.get("/Project/:id", getProjectDetail)
 router.get('/TeacherProject/:id', getProjectByTeacher);
 router.get('/TeacherProject/projects/:id', getProjectDetailByTeacher)
-
+router.patch('/Student/projects/:id', pdfMiddleware.upload.array('report', 5),setPDF,uploadProject)
 router.delete("/Project/:id", deleteProject)
 router.delete("/Projects/:id", deleteProjects)
 router.delete("/ProjectsMajor/:id", deleteProjectsByMajor)

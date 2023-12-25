@@ -73,6 +73,45 @@ const getStudents = async (req, res) => {
     }
 };
 
+const getStudentsWithSameProject = async (req, res) => {
+    try {
+        const projectId = req.params.id; // Đảm bảo bạn có projectId từ request params hoặc nơi khác
+
+        // Tìm dự án theo projectId
+        const project = await Project.findById(projectId).populate('students.student');
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        // Lấy danh sách sinh viên từ thuộc tính students của dự án
+        const students = project.students.map(studentObj => studentObj.student);
+
+        res.status(200).json(students);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+const getStudentsWithSameMajor = async (req, res) => {
+    try {
+        let students = await Student.find({ majorName: req.params.id });
+        if (students.length > 0) {
+            let modifiedStudents = students.map((student) => {
+                return { ...student._doc, password: undefined };
+            });
+            res.status(200).json(modifiedStudents);  // Di chuyển dòng này xuống dưới
+        } else {
+            res.status(200).json({ message: "No students found" });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Request Error' });
+    }
+};
+
+
 const getStudentDetail = async (req, res) => {
     try {
         let student = await Student.findById(req.params.id)
@@ -277,6 +316,7 @@ module.exports = {
     studentRegister,
     studentLogIn,
     getStudents,
+    getStudentsWithSameProject,
     getStudentDetail,
     deleteStudents,
     deleteStudent,
@@ -284,7 +324,7 @@ module.exports = {
     studentAttendance,
     deleteStudentsByMajor,
     updateExamResult,
-
+    getStudentsWithSameMajor,
     clearAllStudentsAttendanceByProject,
     clearAllStudentsAttendance,
     removeStudentAttendanceByProject,

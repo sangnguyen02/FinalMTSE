@@ -1,32 +1,22 @@
 const Project = require('../models/projectSchema.js');
 const Teacher = require('../models/teacherSchema.js');
 const Student = require('../models/studentSchema.js');
-
+const setPDF = (req, res, next) => {
+    if (req.files) {
+      const media = req.files.map((file) => ({ filePath: file.filename }));
+      req.body.submissions = media;
+    } else if (req.file) {
+      const media = { filePath: req.file.filename };
+      req.body.submissions = media;
+    }
+    next();
+  };
 const projectCreate = async (req, res) => {
     try {
-        const projects = req.body.projects.map((project) => ({
-            projectName: project.projectName,
-            projectCode: project.projectCode,
-            sessions: project.sessions,
-            description: project.description
-        }));
-
-        const existingProjectByProjectCode = await Project.findOne({
-            'projects.projectCode': projects[0].projectCode,
-            school: req.body.adminID,
-        });
-
-        if (existingProjectByProjectCode) {
-            res.send({ message: 'Sorry this project code must be unique as it already exists' });
-        } else {
-            const newProjects = projects.map((project) => ({
-                ...project,
-                majorName: req.body.majorName,
-                school: req.body.adminID,
-            }));
-            const result = await Project.insertMany(newProjects);
-            
-            res.send(result);
+        const data = req.body;
+        if(data) {
+            const project = await Project.create(data)
+            res.status(200).send(project);
         }
     } catch (err) {
         res.status(500).json(err);
@@ -37,6 +27,22 @@ const allProjects = async (req, res) => {
     try {
         let projects = await Project.find({ school: req.params.id })
             .populate("majorName", "majorName")
+        if (projects.length > 0) {
+            res.send(projects)
+        } else {
+            res.send({ message: "No projects found" });
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const getProjectByStudent = async (req, res) => {
+    try {
+        let projects = await Project.find({ "students.student": req.params.studentId })
+            .populate("majorName", "majorName")
+            .populate("teacher", "teacherName")
+
         if (projects.length > 0) {
             res.send(projects)
         } else {
@@ -126,6 +132,16 @@ const getProjectDetailByTeacher = async (req, res) => {
     }
 }
 
+const getTotalProjectByTeacher = async (req, res) => {
+    try {
+        const totalProjects = await Project.countDocuments({ teacher: req.params.id });
+        res.status(200).json({ totalProjects });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ message: 'Request Error' });
+    }
+};
+
 const deleteProject = async (req, res) => {
     try {
         const deletedProject = await Project.findByIdAndDelete(req.params.id);
@@ -197,6 +213,21 @@ const deleteProjectsByMajor = async (req, res) => {
         res.status(500).json(error);
     }
 };
+const uploadProject = async (req, res) => {
+    try {
+        const projectID = req.params.id
+        const data = req.body;
+        if(data) {
+            const project = await Project.findByIdAndUpdate(projectID, data, {
+                new: true,
+                runValidators: true
+              }
+          )
+            res.status(200).send(project);
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
-
-module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, getProjectDetailByTeacher, getProjectByTeacher, deleteProjectsByMajor, deleteProjects, deleteProject, allProjects };
+module.exports = { projectCreate, freeProjectList, majorProjects, getProjectDetail, getProjectDetailByTeacher, getProjectByTeacher, deleteProjectsByMajor, getProjectByStudent, deleteProjects, deleteProject, allProjects, uploadProject,setPDF, getTotalProjectByTeacher };
